@@ -1,0 +1,341 @@
+---
+title: "exercise A"
+subtitle: "Python randomizer"
+date: today
+author: Jaykumar Patel
+format:
+  html:
+    toc: true
+    embed-resources: true
+mainfont: TeX Gyre Schola
+monofont: JetBrainsMono Nerd Font
+mathfont: TeX Gyre Schola Math Regular
+jupyter: python3
+---
+
+# Requirements
+
+This documents my attempts to create a Python program using an LLM. The purpose of the program is to choose a random order for students to make presentations about their prompt engineering exploits to the Prompt Engineering class.
+
+The constraints are that
+
+- everyone in class must present once
+- no more than three may present on a given day
+- no fewer than two may present on a given day
+- there are twelve days on which students may present (from week 2 to week 13)
+
+# First attempt
+
+## Initial prompt
+
+I have a class, and I need to schedule students to present on certain class days.
+Here are some constraints:
+- everyone in class must present once and only once
+- no more than three may present on a given day
+- no fewer than two may present on a given day
+
+Assume there are N names where N is a variable that can be modified. Assume students are numbered 1 through N. Also assume that there at M weeks where M is a variable that can be modified. Additionally, there is only one presentation day per week.
+
+Write me a python program to schedule this. The output of the program should be M lines (for 1 to M weeks), and each line should specify which students should present that day. Also use randomization to add variation.
+
+## Initial result
+
+```{python}
+import random
+
+def schedule_presentations(N, M):
+    """
+    Schedule students for presentations.
+
+    Parameters:
+        N (int): Number of students.
+        M (int): Number of weeks (presentation days).
+
+    Returns:
+        list: A schedule of M lists, each containing students presenting on that day.
+    """
+    if M * 3 < N or M * 2 > N:
+        raise ValueError("Constraints cannot be satisfied with the given N and M.")
+
+    students = list(range(1, N + 1))
+    random.shuffle(students)
+
+    schedule = [[] for _ in range(M)]
+
+    # Assign students to each week while maintaining constraints
+    for i in range(N):
+        schedule[i % M].append(students[i])
+
+    # Ensure each day has between 2 and 3 presenters
+    for day in schedule:
+        while len(day) < 2:
+            donor_day = random.choice([d for d in schedule if len(d) > 2])
+            day.append(donor_day.pop())
+
+    return schedule
+
+# Example usage
+N = 32  # Number of students
+M = 12   # Number of weeks
+schedule = schedule_presentations(N, M)
+
+print("Presentation Schedule:")
+for week, presenters in enumerate(schedule, 1):
+    print(f"Week {week}: Students {presenters}")
+```
+
+# Second attempt
+
+## Prompt
+
+Modify the code such that I can change the starting week. So if the starting week is week 2, then the schedule should be from 2 to M + 1.
+
+## Result
+
+```{python}
+import random
+
+def schedule_presentations(N, M, starting_week=1):
+    """
+    Schedule students for presentations.
+
+    Parameters:
+        N (int): Number of students.
+        M (int): Number of weeks (presentation days).
+        starting_week (int): The starting week number.
+
+    Returns:
+        list: A schedule of M lists, each containing students presenting on that day.
+    """
+    if M * 3 < N or M * 2 > N:
+        raise ValueError("Constraints cannot be satisfied with the given N and M.")
+
+    students = list(range(1, N + 1))
+    random.shuffle(students)
+
+    schedule = [[] for _ in range(M)]
+
+    # Assign students to each week while maintaining constraints
+    for i in range(N):
+        schedule[i % M].append(students[i])
+
+    # Ensure each day has between 2 and 3 presenters
+    for day in schedule:
+        while len(day) < 2:
+            donor_day = random.choice([d for d in schedule if len(d) > 2])
+            day.append(donor_day.pop())
+
+    return {week: schedule[i] for i, week in enumerate(range(starting_week, starting_week + M))}
+
+# Example usage
+N = 32  # Number of students
+M = 12   # Number of weeks
+starting_week = 2  # Starting week
+schedule = schedule_presentations(N, M, starting_week)
+
+print("Presentation Schedule:")
+for week, presenters in schedule.items():
+    print(f"Week {week}: Students {presenters}")
+
+```
+
+# Third Attempt
+
+## Prompt
+
+Ok now instead of passing N where N is the number of students, I will just pass the name of the students. So instead of N, create another variable, such as "names", where names is a list of strings (names of students). The output should have a list of students that will present for each week.
+
+## Result
+
+```{python}
+import random
+
+def schedule_presentations(names, M, starting_week=1):
+    """
+    Schedule students for presentations.
+
+    Parameters:
+        names (list): List of student names.
+        M (int): Number of weeks (presentation days).
+        starting_week (int): The starting week number.
+
+    Returns:
+        dict: A schedule of M lists, each containing students presenting on that day.
+    """
+    N = len(names)
+    if M * 3 < N or M * 2 > N:
+        raise ValueError("Constraints cannot be satisfied with the given number of students and weeks.")
+
+    random.shuffle(names)
+
+    schedule = [[] for _ in range(M)]
+
+    # Assign students to each week while maintaining constraints
+    for i in range(N):
+        schedule[i % M].append(names[i])
+
+    # Ensure each day has between 2 and 3 presenters
+    for day in schedule:
+        while len(day) < 2:
+            donor_day = random.choice([d for d in schedule if len(d) > 2])
+            day.append(donor_day.pop())
+
+    return {week: schedule[i] for i, week in enumerate(range(starting_week, starting_week + M))}
+
+# Example usage
+names = ["jui-chien", "xinyan", "john", "siddarth", "ansh",
+            "palak", "akhil", "dhruvi", "maitreyee", "xiuer",
+            "kylie", "miranda", "emily", "jasmine", "nina",
+            "shadrack", "tianhao", "sharon", "vibha", "jaykumar",
+            "sneha", "anusha", "sainath", "zeel", "srishti",
+            "tianyu", "vanshita", "puneeth", "shuai", "tianyi",
+            "ziqi", "harold", "jieting"]
+M = 12   # Number of weeks
+starting_week = 2  # Starting week
+schedule = schedule_presentations(names, M, starting_week)
+
+print("Presentation Schedule:")
+for week, presenters in schedule.items():
+    print(f"Week {week}: Students {presenters}")
+
+```
+
+# Fourth Attempt
+
+## Prompt
+
+Lastly, I want the output to be pretty. I don't want to include brackets or any "data structures" like lists. Can you modify the code such that the output is prettier?
+
+## Result
+
+```{python}
+import random
+
+def schedule_presentations(names, M, starting_week=1):
+    """
+    Schedule students for presentations.
+
+    Parameters:
+        names (list): List of student names.
+        M (int): Number of weeks (presentation days).
+        starting_week (int): The starting week number.
+
+    Returns:
+        dict: A schedule of M lists, each containing students presenting on that day.
+    """
+    N = len(names)
+    if M * 3 < N or M * 2 > N:
+        raise ValueError("Constraints cannot be satisfied with the given number of students and weeks.")
+
+    random.shuffle(names)
+
+    schedule = [[] for _ in range(M)]
+
+    # Assign students to each week while maintaining constraints
+    for i in range(N):
+        schedule[i % M].append(names[i])
+
+    # Ensure each day has between 2 and 3 presenters
+    for day in schedule:
+        while len(day) < 2:
+            donor_day = random.choice([d for d in schedule if len(d) > 2])
+            day.append(donor_day.pop())
+
+    return {week: schedule[i] for i, week in enumerate(range(starting_week, starting_week + M))}
+
+# Example usage
+names = ["jui-chien", "xinyan", "john", "siddarth", "ansh",
+            "palak", "akhil", "dhruvi", "maitreyee", "xiuer",
+            "kylie", "miranda", "emily", "jasmine", "nina",
+            "shadrack", "tianhao", "sharon", "vibha", "jaykumar",
+            "sneha", "anusha", "sainath", "zeel", "srishti",
+            "tianyu", "vanshita", "puneeth", "shuai", "tianyi",
+            "ziqi", "harold", "jieting"]
+M = 12   # Number of weeks
+starting_week = 2  # Starting week
+schedule = schedule_presentations(names, M, starting_week)
+
+print("Presentation Schedule:")
+for week, presenters in schedule.items():
+    print(f"Week {week}: {', '.join(presenters)}")
+
+```
+
+# Fifth Attempt
+
+## Prompt
+
+Right now, all the names I am passing are lowercase. I want to capitalize the first letter. Can you make that update?
+
+## Result
+
+```{python}
+import random
+
+def schedule_presentations(names, M, starting_week=1):
+    """
+    Schedule students for presentations.
+
+    Parameters:
+        names (list): List of student names.
+        M (int): Number of weeks (presentation days).
+        starting_week (int): The starting week number.
+
+    Returns:
+        dict: A schedule of M lists, each containing students presenting on that day.
+    """
+    names = [name.capitalize() for name in names]
+    N = len(names)
+    if M * 3 < N or M * 2 > N:
+        raise ValueError("Constraints cannot be satisfied with the given number of students and weeks.")
+
+    random.shuffle(names)
+
+    schedule = [[] for _ in range(M)]
+
+    # Assign students to each week while maintaining constraints
+    for i in range(N):
+        schedule[i % M].append(names[i])
+
+    # Ensure each day has between 2 and 3 presenters
+    for day in schedule:
+        while len(day) < 2:
+            donor_day = random.choice([d for d in schedule if len(d) > 2])
+            day.append(donor_day.pop())
+
+    return {week: schedule[i] for i, week in enumerate(range(starting_week, starting_week + M))}
+
+# Example usage
+names = ["jui-chien", "xinyan", "john", "siddarth", "ansh",
+            "palak", "akhil", "dhruvi", "maitreyee", "xiuer",
+            "kylie", "miranda", "emily", "jasmine", "nina",
+            "shadrack", "tianhao", "sharon", "vibha", "jaykumar",
+            "sneha", "anusha", "sainath", "zeel", "srishti",
+            "tianyu", "vanshita", "puneeth", "shuai", "tianyi",
+            "ziqi", "harold", "jieting"]
+M = 12   # Number of weeks
+starting_week = 2  # Starting week
+schedule = schedule_presentations(names, M, starting_week)
+
+print("Presentation Schedule:")
+for week, presenters in schedule.items():
+    print(f"Week {week}: {', '.join(presenters)}")
+
+```
+
+
+# Conclusion
+
+- I utilized ChatGPT 4o for this exercise.
+- I also utilized Canvas to retrieve the list of students in the course.
+- When working with ChatGPT, I noticed that the results met my specifications precisely. This could be because I tried make the instructions (the prompt) clear and unambiguous. Additionally, all the code provided by ChatGPT was correct and ran without any run-time errors. I suspect that this is because the task is relatively simple, and ChatGPT is able to complete it easily.
+- I noticed that it was important to be as specific as possible when prompting. If I wanted ChatGPT to do a specific task, such as starting at a specific week or making the output pretty, I had to explicitly say it. 
+- Additionally, I found the process of creating a Python program using ChatGPT very iterative. As I prompted ChatGPT, I realized what was missing or what was incorrect about the result. With that information, I was able to prompt again to fix the mistakes or improve on the previous iteration. I repeated this feedback-loop until I had a satisfactory solution that met my needs. Here is an overview of the iterations:
+  - After the first solution, I noticed that the scheduling started at Week 1. Thus, I prompted ChatGPT to make the start week a variable.
+  - Then I realized that using numbers (where the number represents the index of a student) isn't user-friendly. Thus, I prompted ChatGPT to take the list of student's names as an input and output student's names instead of student's indexes.
+  - Then, I noticed that the output had brackets and wasn't "pretty". Thus, I prompted ChatGPT to remove the brackets and make the output prettier.
+  - Finally, I noticed that all the names were lower case. To fix this, I prompted ChatGPT to capitalize the first letter of every name in the output.
+- Application of the program:
+  - The final application requires the user to set the variable $names$ to a the list of students, the variable $M$ to the total number of weeks where presentations will occur, and the variable $starting\_week$ to the week number where presentations will start. Additionally, the user must understand that a presentation for a week will occur on the Wednesday of that week during class.
+  - The final output lists weeks 2 through 13, and the names of the students that will present for each of those weeks.
+- Overall, I think the result was good! I took a few iterations, but ChatGPT was able to produce a program that met my needs.

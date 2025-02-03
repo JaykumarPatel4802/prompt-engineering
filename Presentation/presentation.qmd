@@ -1,0 +1,451 @@
+---
+title: "GenAI: Success and Challenge"
+author: "Jaykumar Patel"
+format: 
+  revealjs:
+    embed-resources: true
+    scrollable: true
+editor: visual
+---
+
+## Agenda
+- Success
+  - Background
+  - Prompts and Results
+  - Takeaways
+- Challenge
+  - Background
+  - Prompts and Results
+  - Takeaways
+- Conclusion
+
+# Success
+
+## Background
+
+- I want to create a frontend application to view historical stock data
+- The application should utilize an existing backend in `helper.py` to retrieve and display data
+- This streamlines stock and a company's historical performance analysis
+
+## Prompt 1
+
+I am creating a Streamlit application where I want to display some stock data. I already have the backend coded in a helper.py. The helper.py file contains a DataRetriever class, and its constructor takes a stock ticker as string input. Then the DataRetriever class has various methods that return data, such as stock price, earnings history, and options data.
+
+I want your help in create a main.py which will be the Streamlit application that displays the stock data. This will be a iterative process, where I will tell you a series of tasks that build on each other.
+
+Firstly, I don't want everyone to be able to use this application. I want it to be password protected. Using Python, can you write me a Steamlit application where I can enter a custom password that will be used to "unlock" the rest of the application? I also don't want the password to be visible when I am typing it on the application.
+
+## Result 1
+
+Here's a basic `main.py` for your Streamlit application with password protection. It ensures that only users who enter the correct password can access the rest of the app. The password input is hidden while typing.
+
+```python
+import streamlit as st
+
+# Define your custom password
+CORRECT_PASSWORD = "your_secret_password"
+
+# Streamlit app
+st.title("Stock Data Viewer")
+
+# Password input
+password = st.text_input("Enter Password:", type="password")
+
+# Authenticate user
+if password == CORRECT_PASSWORD:
+    st.success("Access granted!")
+    st.write("Now you can proceed with the application.")
+else:
+    if password:
+        st.error("Incorrect password. Please try again.")
+```
+
+This setup ensures that:
+
+- The password is hidden while typing.
+- Users see a success message if they enter the correct password.
+- If the password is incorrect, they get an error message.
+
+Let me know the next step you want to add!
+
+## Result 1 Video 
+
+{{< video https://youtu.be/YW0Na2Y2pWk width="100%" height="85%" >}}
+
+
+## Prompt 2
+
+Ok, now I want to add a field that takes in the Stock's ticker as input. Can you do that?
+
+## Result 2
+
+Here's an updated version of `main.py` that includes a field for entering a stock ticker after the correct password is provided:  
+
+```python
+import streamlit as st
+
+# Define your custom password
+CORRECT_PASSWORD = "your_secret_password"
+
+# Streamlit app
+st.title("Stock Data Viewer")
+
+# Password input
+password = st.text_input("Enter Password:", type="password")
+
+# Authenticate user
+if password == CORRECT_PASSWORD:
+    st.success("Access granted!")
+
+    # Input for stock ticker
+    ticker = st.text_input("Enter Stock Ticker:", value="", max_chars=10)
+
+    if ticker:
+        st.write(f"You entered: {ticker}")
+
+else:
+    if password:
+        st.error("Incorrect password. Please try again.")
+```
+
+### Changes:
+
+- After entering the correct password, a text input field appears for the stock ticker.
+- The entered ticker is displayed below the input field.
+
+Let me know what you want to add next!
+
+## Result 2 Video 
+
+{{< video https://youtu.be/dcXkcyoyDek width="100%" height="85%" >}}
+
+## Prompt 3:
+
+Great, now I want to display the stock price for the given ticker. In helper.py, the DataRetriever class has a method called getStockPrice that takes the receiver object as an input and returns the stock price. Can you create a DataRetriever object with the specified ticker, get the stock's price, and display it on the app? I also want to ensure that if there is no ticker inputted, then there should be no stock price to display.
+
+## Result 3:
+
+Here's the updated `main.py` that integrates with `helper.py` to fetch and display the stock price:  
+
+```python
+import streamlit as st
+from helper import DataRetriever  # Import the DataRetriever class
+
+# Define your custom password
+CORRECT_PASSWORD = "your_secret_password"
+
+# Streamlit app
+st.title("Stock Data Viewer")
+
+# Password input
+password = st.text_input("Enter Password:", type="password")
+
+# Authenticate user
+if password == CORRECT_PASSWORD:
+    st.success("Access granted!")
+
+    # Input for stock ticker
+    ticker = st.text_input("Enter Stock Ticker:", value="", max_chars=10)
+
+    if ticker:
+        try:
+            # Create DataRetriever object and fetch stock price
+            data_retriever = DataRetriever(ticker)
+            stock_price = data_retriever.getStockPrice()
+
+            # Display stock price
+            st.write(f"**Stock Price for {ticker}:** ${stock_price}")
+
+        except Exception as e:
+            st.error(f"Error fetching stock price: {e}")
+
+else:
+    if password:
+        st.error("Incorrect password. Please try again.")
+```
+
+### Updates:
+
+- Imports `DataRetriever` from `helper.py`.
+- Creates a `DataRetriever` object using the provided stock ticker.
+- Calls `getStockPrice()` to retrieve and display the stock price.
+- Ensures that the stock price is displayed only when a ticker is entered.
+- Adds error handling in case `getStockPrice()` encounters an issue.
+
+Let me know what you want to enhance next! 🚀
+
+## Result 3 Video 
+
+{{< video https://youtu.be/TTTQGcLfGE4 width="100%" height="85%" >}}
+
+## Prompt 4:
+
+Next, I want to display the some earnings history data. Particularily, I want to display the "reportedDate" and "reportedTime" (before or after market) for previous X earnings. X should be an input that the user can enter.
+
+DataRetriever has a method called "getEarningsHistory" which the number of earnings (integer) to show as an input. Thus, pass X as an integer as an input to that method. "getEarningsHistory" will return a list of tuples, containing pairs of (reportedDate, reportedTime). I want to display this as a table on the application, where the colum names are "reportedDate" and "reportedTime". Again, I want to ensure that if there is no ticker inputted, then there should be no field to enter X and no earnings history data shown on the table.
+
+## Result 4:
+
+Here's the updated `main.py` that adds the earnings history display:  
+
+```python
+import streamlit as st
+from helper import DataRetriever  # Import the DataRetriever class
+import pandas as pd  # For displaying earnings history in a table
+
+# Define your custom password
+CORRECT_PASSWORD = "your_secret_password"
+
+# Streamlit app
+st.title("Stock Data Viewer")
+
+# Password input
+password = st.text_input("Enter Password:", type="password")
+
+# Authenticate user
+if password == CORRECT_PASSWORD:
+    st.success("Access granted!")
+
+    # Input for stock ticker
+    ticker = st.text_input("Enter Stock Ticker:", value="", max_chars=10)
+
+    if ticker:
+        try:
+            # Create DataRetriever object
+            data_retriever = DataRetriever(ticker)
+
+            # Fetch and display stock price
+            stock_price = data_retriever.getStockPrice()
+            st.write(f"**Stock Price for {ticker}:** ${stock_price}")
+
+            # Input for number of earnings history entries
+            X = st.number_input("Enter number of earnings to display:", min_value=1, step=1, format="%d")
+
+            if X:
+                # Fetch earnings history
+                earnings_history = data_retriever.getEarningsHistory(int(X))
+
+                # Convert to DataFrame and display as a table
+                if earnings_history:
+                    df = pd.DataFrame(earnings_history, columns=["reportedDate", "reportedTime"])
+                    st.table(df)
+                else:
+                    st.write("No earnings history available.")
+
+        except Exception as e:
+            st.error(f"Error fetching data: {e}")
+
+else:
+    if password:
+        st.error("Incorrect password. Please try again.")
+```
+
+### Updates:
+
+- Added `pandas` to format the earnings history as a table.
+- Included a `number_input` field for users to specify `X`, the number of earnings entries.
+- Called `getEarningsHistory(X)` to fetch earnings history.
+- Displayed earnings history in a table with `reportedDate` and `reportedTime` columns.
+- Ensured that the earnings input field and table only appear when a valid ticker is entered.
+
+Let me know what you’d like to add next! 🚀
+
+## Result 4 Video 
+
+{{< video https://youtu.be/cmPIIHc1Puc width="100%" height="85%" >}}
+
+## Prompt 5:
+
+Then, I want to display some options data. DataRetriever has a method called "getOptionsData" that takes the receiver object as an input and returns a tuple, where the first element of that tuple is the "date" for which the options data is retrieved, and the second element being the dataframe containing the stocks options data for that "date" over various expiration dates. In the dataframe that "getOptionsData" returns, there is a column called "expiration" that contains the expiration date. 
+
+I also want to display the "date" that the "getOptionsData" method returns. Also, I don't want to display all of the dataframe at once. I want to split the options data by the expiration date. Thus for each expiration date, there should be a separate dataframe, with each dataframe labeled with its respective expiration date. Again, I want to ensure that if there is no ticker inputted, then there should be no options data shown.
+
+## Result 5:
+
+Here's how you can integrate the options data display into your `main.py`. The options data will be split by expiration date and displayed separately for each expiration date:
+
+```python
+import streamlit as st
+from helper import DataRetriever  # Import the DataRetriever class
+import pandas as pd  # For handling and displaying dataframes
+
+# Define your custom password
+CORRECT_PASSWORD = "your_secret_password"
+
+# Streamlit app
+st.title("Stock Data Viewer")
+
+# Password input
+password = st.text_input("Enter Password:", type="password")
+
+# Authenticate user
+if password == CORRECT_PASSWORD:
+    st.success("Access granted!")
+
+    # Input for stock ticker
+    ticker = st.text_input("Enter Stock Ticker:", value="", max_chars=10)
+
+    if ticker:
+        try:
+            # Create DataRetriever object
+            data_retriever = DataRetriever(ticker)
+
+            # Fetch and display stock price
+            stock_price = data_retriever.getStockPrice()
+            st.write(f"**Stock Price for {ticker}:** ${stock_price}")
+
+            # Input for number of earnings history entries
+            X = st.number_input("Enter number of earnings to display:", min_value=1, step=1, format="%d")
+
+            if X:
+                # Fetch earnings history
+                earnings_history = data_retriever.getEarningsHistory(int(X))
+
+                # Convert to DataFrame and display as a table
+                if earnings_history:
+                    df = pd.DataFrame(earnings_history, columns=["reportedDate", "reportedTime"])
+                    st.table(df)
+                else:
+                    st.write("No earnings history available.")
+
+            # Fetch options data
+            options_date, options_df = data_retriever.getOptionsData()
+
+            if options_df is not None:
+                st.write(f"**Options Data for {ticker} on {options_date}:**")
+                
+                # Split options data by expiration date and display
+                expiration_dates = options_df['expiration'].unique()
+
+                for expiration in expiration_dates:
+                    st.subheader(f"Expiration Date: {expiration}")
+                    expiration_data = options_df[options_df['expiration'] == expiration]
+                    st.dataframe(expiration_data)
+            else:
+                st.write("No options data available.")
+
+        except Exception as e:
+            st.error(f"Error fetching data: {e}")
+
+else:
+    if password:
+        st.error("Incorrect password. Please try again.")
+```
+
+### Updates:
+
+- **Options Data Display**: After retrieving options data using `getOptionsData()`, I added code to split the data by `expiration` date.
+- **Separate DataFrames for Expiration Dates**: For each unique expiration date in the options data, the dataframe for that expiration is displayed separately using `st.dataframe`.
+- **Date of Options Data**: The date of the options data retrieval (`options_date`) is displayed at the top of the options section.
+- **Handling of Missing Ticker Input**: As per your requirement, the options data is only displayed if a ticker is provided.
+
+Let me know if you'd like to proceed with more additions or adjustments!
+
+## Result 5 Video 
+
+{{< video https://youtu.be/_7y1pttCnpA width="100%" height="85%" >}}
+
+## Prompt 6:
+
+Finally, for the options data, I want to highlight the "strike" column for each of the dataframes displayed. Can you do that?
+
+
+## Result 6:
+
+To highlight the "strike" column in each of the options dataframes, you can use the `st.dataframe` function along with the `applymap` styling feature in pandas. Here's the updated version of your `main.py` that highlights the "strike" column for each expiration date:
+
+```python
+import streamlit as st
+from helper import DataRetriever  # Import the DataRetriever class
+import pandas as pd  # For handling and displaying dataframes
+
+# Define your custom password
+CORRECT_PASSWORD = "your_secret_password"
+
+# Streamlit app
+st.title("Stock Data Viewer")
+
+# Password input
+password = st.text_input("Enter Password:", type="password")
+
+# Authenticate user
+if password == CORRECT_PASSWORD:
+    st.success("Access granted!")
+
+    # Input for stock ticker
+    ticker = st.text_input("Enter Stock Ticker:", value="", max_chars=10)
+
+    if ticker:
+        try:
+            # Create DataRetriever object
+            data_retriever = DataRetriever(ticker)
+
+            # Fetch and display stock price
+            stock_price = data_retriever.getStockPrice()
+            st.write(f"**Stock Price for {ticker}:** ${stock_price}")
+
+            # Input for number of earnings history entries
+            X = st.number_input("Enter number of earnings to display:", min_value=1, step=1, format="%d")
+
+            if X:
+                # Fetch earnings history
+                earnings_history = data_retriever.getEarningsHistory(int(X))
+
+                # Convert to DataFrame and display as a table
+                if earnings_history:
+                    df = pd.DataFrame(earnings_history, columns=["reportedDate", "reportedTime"])
+                    st.table(df)
+                else:
+                    st.write("No earnings history available.")
+
+            # Fetch options data
+            options_date, options_df = data_retriever.getOptionsData()
+
+            if options_df is not None:
+                st.write(f"**Options Data for {ticker} on {options_date}:**")
+                
+                # Split options data by expiration date and display
+                expiration_dates = options_df['expiration'].unique()
+
+                for expiration in expiration_dates:
+                    st.subheader(f"Expiration Date: {expiration}")
+                    expiration_data = options_df[options_df['expiration'] == expiration]
+                    
+                    # Highlight the "strike" column
+                    styled_df = expiration_data.style.applymap(lambda x: 'background-color: yellow', subset=['strike'])
+                    
+                    # Display the styled dataframe
+                    st.dataframe(styled_df)
+            else:
+                st.write("No options data available.")
+
+        except Exception as e:
+            st.error(f"Error fetching data: {e}")
+
+else:
+    if password:
+        st.error("Incorrect password. Please try again.")
+```
+
+### Updates:
+
+- **Highlighting the "strike" column**: I used `style.applymap` to apply a background color (`yellow`) to the "strike" column in each expiration date's options data.
+- **Displaying the styled dataframe**: `st.dataframe(styled_df)` is used to display the styled dataframe with the highlighted "strike" column.
+
+Now, the "strike" column in each expiration date's options data will be highlighted with a yellow background. Let me know if you'd like further adjustments!
+
+## Result 6 Video 
+
+{{< video https://youtu.be/sE6yxYD8vPI width="100%" height="85%" >}}
+
+## Takeaways
+
+- ChatGPT was able to successfully complete the task without any issues.
+- Instead of including all instructions at once, I gave ChatGPT instructions one after another, such that the solutions built on top of one another.
+  - This is to prevent recency bias as too many instructions at once may lead to ChatGPT prioritizing the recent ones.
+- The process was very iterative, with each step having very specific instruction.
+
+# Failure
+
+## Background
+

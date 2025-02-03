@@ -1,0 +1,92 @@
+# Intro
+
+This documents my attempts to generate a BibTeX bibliography on PDF remediation using an LLM.
+
+## Instructions
+
+You need to generate a BibTeX bibliography in a file called `eB.bib` in the same directory as this document. An example entry in that file is @Paliwal2024, which should resolve to a reference in this document.
+
+Most of the papers are likely to be found in the ACM Digital Library. That online resource has a convention where each entry includes a large gray quote mark that leads to the BibTeX entry for the paper. You can copy and paste a few BibTeX entries if you find you need formatting examples.
+
+You must upload your .qmd file, your .bib file, and your rendered .html file to Canvas. All must have the basename `eB`. Points will be deducted for any other name.
+
+You should remove this instruction section from the final document.
+
+# First attempt
+
+## Initial prompt
+
+Here is where you put the first prompt you tried in writing the code.
+
+## Initial result
+
+Here is where you tell about the result of the first prompt you tried. It may be difficult to include the entire bibliography here, so you may want to just include a sample and describe the issues.
+
+For example, here is a bibliographic entry:
+
+```bibtex
+@article{Paliwal2024,
+author = {Paliwal, Sparsh and Hoeflich, Joshua and Jordan, J Bern and Jain, Rajiv and Morariu, Vlad I and Siu, Alexa and Lazar, Jonathan},
+title = {FormA11y - A tool for remediating PDF forms for accessibility},
+year = {2024},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+issn = {1073-0516},
+url = {https://doi.org/10.1145/3702317},
+doi = {10.1145/3702317},
+abstract = {PDF documents are usually not born-accessible, and so document authors need to put in additional work (remediation) to make them accessible for people with disabilities. Unfortunately, this step is often overlooked and hard to execute, resulting in a large number of inaccessible PDF documents on the internet. Previously, there have been research efforts to investigate potential solutions for remediating PDF documents for accessibility. However, most of the existing research focuses on accessibility of long or scientific PDF documents meant for passive reading. PDF documents come in different types, and this research project focuses on a distinct type of PDF document—forms—where the user is required to interact with the PDF document and enter data. Through our research work we identified that the PDF form remediation process is non-intuitive, repetitive, and overwhelming due to the high-information density of PDF forms, and existing research and tools do not yet address the challenges. Our research work culminated in the creation of a tool – FormA11y – that addresses these challenges by making the repetitive and painstaking process of form remediation easier. To evaluate the effectiveness and efficiency of FormA11y against the industry standard tool – Adobe Acrobat – for PDF form remediation, we performed a within-subject user study with 20 participants. With FormA11y, users remediated forms 2.8 times faster while creating more accurately accessible PDF forms.},
+note = {Just Accepted},
+journal = {ACM Trans. Comput.-Hum. Interact.},
+month = nov,
+keywords = {PDF accessibility, PDF U/A, accessibility, inclusive design, born-accessible, document accessibility, blind users}
+}
+
+```
+
+# Second attempt
+
+## Prompt
+
+Here is a refined prompt.
+
+## Result
+
+Here is the result of the refined prompt.
+
+# $\cdots$
+
+# Fifteenth attempt
+
+## Prompt
+
+Here is the prompt that actually gave you the desired result.
+
+## Result
+
+Here you refer to the `eB.bib` file.
+
+(Just kidding about fifteenth---I don't know how many attempts it will take to get a satisfactory result)
+
+# Conclusion
+
+Here is where you describe what you did and any thoughts about how it came out.
+
+# Addendum: Features of this file
+
+Note: delete this section before you turn in the file!
+
+-   Front matter
+    -   Includes your name
+    -   Includes the keyword "today" which resolves to the date on which you render the document
+    -   Includes fonts---you should install these fonts on your computer or change the font specification to fonts you already have on your computer
+    -   Includes the format (html) to which Quarto will render
+    -   Includes some directives that are specific to that format: toc and embed-resources
+    -   `toc` causes the table of contents to be rendered, on the right side of the frame by default
+    -   `embed-resources` causes any diagrams to be included in the html file itself rather than linked---that way you can just submit the html file and I can view it instead of having to submit linked files
+-   Headings: top level headings are preceded by a \# and a space; second level headings are preceded by \## and a space; you can go down several levels by increasing the number of \# symbols
+-   Bulleted lists, formed by preceding the list with a blank line (or a heading) and beginning each line with a dash and a space (both are important)
+-   LaTeX symbols, in this case $\langle$ and $\rangle$, which resolve to angle brackets when you render the document ... you can include any LaTeX math expressions between dollar signs or double dollar signs ... by the way, any dollar signs meant as real dollar signs should be preceded by a backslash, like \$ this, so Quarto doesn't get confused about whether you are starting an equation
+-   Programmatic keywords, preceded and followed by a backtick, in this case, the name `eB.bib` bibliography file ... this causes the keyword to be rendered in a code font
+-   Emphasis, by surrounding an *important* word with asterisks, causing it to be rendered in italics
+
+Of course, you will delete all the instructions and comments in this file before you turn it in! I don't need to read them when I read your solution. The files you turn in (the qmd and the rendered html) will just include your work. These instructions and comments are just to help you get going.
