@@ -9,15 +9,89 @@ editor: visual
 ---
 
 ## Agenda
-- Success
-  - Background
-  - Prompts and Results
-  - Takeaways
 - Challenge
   - Background
   - Prompts and Results
   - Takeaways
+- Success
+  - Background
+  - Prompts and Results
+  - Takeaways
 - Conclusion
+
+# Challenge
+
+## Prompt 1
+
+I want to learn how a min-heap works internally. Specifically, I want to learn how popping the minimum element from a min-heap works. Can you generate a sequence of images that demonstrate exactly how popping the minimum element from a min-heap works?
+
+## Result 1
+
+I'll generate a sequence of images to visually demonstrate how popping the minimum element from a min-heap works. The process involves the following key steps:
+
+1. **Initial Min-Heap**: Start with a valid min-heap.
+2. **Remove the Minimum Element**: The root (smallest element) is removed.
+3. **Move the Last Element to Root**: The last element in the heap replaces the root.
+4. **Heapify Down (Sift Down)**: The new root is compared with its children and swapped with the smallest child until the min-heap property is restored.
+
+I'll generate the images now.
+
+## Result 1 - Continued
+
+![](img2.webp)
+
+## Result 1 - Continued
+
+Here is a sequence of illustrations demonstrating how popping the minimum element from a min-heap works. The process follows these steps:
+
+1. Start with an initial min-heap.
+2. Remove the minimum element (root) and replace it with the last element in the heap.
+3. Swap the new root down to restore the min-heap property.
+4. Final min-heap after reordering.
+
+Let me know if you need any clarifications!
+
+## Prompt 2
+
+So the heap doesn't look like a traditional heap. It looks more like a tree that you'd find in nature. Remember, the heap should look like a binary tree, where every node has at most 2 children nodes. And the root node has no parents.
+
+## Result 2
+
+![](img2.webp)
+
+Here is an improved step-by-step illustration of how popping the minimum element from a binary min-heap works. This version ensures that the heap is structured properly as a binary tree, where each node has at most two children. Let me know if you need any modifications or further explanations!
+
+## Prompt 3
+
+Same as before, the heaps you generated look more like trees you'd find in nature. Also, there shouldn't be any people in your image. 
+
+Let's start simple, instead of generating a sequence of images, can you start by first showing an image of the initial heap?
+
+## Result 3
+
+![](img3.webp)
+
+Here is a structured binary min-heap illustration, clearly showing the hierarchical structure where each parent node is smaller than its children. Let me know if you need any adjustments before we proceed to the next step!
+
+## Prompt 4
+
+Ok that looks wrong. Let's forget about the heap. Can you start by simply generating a binary tree? Binary tree is a data structure in Computer Science.
+
+## Result 4
+
+![](img4.webp)
+
+Here is a structured binary tree illustration, showing the hierarchical parent-child relationships where each node has at most two children. Let me know if this looks correct before we proceed further!
+
+## Prompt 5
+
+Ok remember, in a binary tree, any given node can have at most 2 children. Additionally, every node should have a parent except the root node. Can you update your image?
+
+## Result 5
+
+![](img5.webp)
+
+Here is an updated and correctly structured binary tree illustration. Each node follows the binary tree rules: at most two children per node, and every node (except the root) has exactly one parent. Let me know if you need further refinements!
 
 # Success
 
