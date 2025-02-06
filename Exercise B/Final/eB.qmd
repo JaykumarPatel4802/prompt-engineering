@@ -760,6 +760,10 @@ Here is where you describe what you did and any thoughts about how it came out.
 - Search feature is useful in retrieving information
 - Limitations for more complex requests like asking for abstracts
 - 6th attempt - returned papers I already had. So had to explicitly say to generate new ones in attempt 7.
+- Example reasoning from 7th prompt
+  - ![](prompt_7_reasoning.png)
+- Reasoning for urls
+  - ![](prompt_8_reasoning.png)
 
 # Addendum: Features of this file
 
