@@ -759,6 +759,11 @@ Here is where you describe what you did and any thoughts about how it came out.
 - Mostly good
 - Search feature is useful in retrieving information
 - Limitations for more complex requests like asking for abstracts
+- After prompt 2, it reasons to get papers that are relevant.
+  - "Focusing on remediation"
+  - "Assessing relevant"
+  - "Refining selection"
+  - ![](prompt_2_reasoning.png)
 - 6th attempt - returned papers I already had. So had to explicitly say to generate new ones in attempt 7.
 - Example reasoning from 7th prompt
   - ![](prompt_7_reasoning.png)
