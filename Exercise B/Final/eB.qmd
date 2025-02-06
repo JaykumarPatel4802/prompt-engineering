@@ -1,0 +1,701 @@
+---
+title: "exercise B"
+subtitle: "BibTeX bibliography generation"
+date: today
+author: Jaykumar Patel
+format:
+  html:
+    toc: true
+    embed-resources: true
+mainfont: TeX Gyre Schola
+monofont: JetBrainsMono Nerd Font
+mathfont: TeX Gyre Schola Math Regular
+jupyter: python3
+bibliography: eB.bib
+---
+
+# Intro
+
+This documents my attempts to generate a BibTeX bibliography on PDF remediation using an LLM.
+
+## Instructions
+
+You need to generate a BibTeX bibliography in a file called `eB.bib` in the same directory as this document. An example entry in that file is @Paliwal2024, which should resolve to a reference in this document.
+
+Most of the papers are likely to be found in the ACM Digital Library. That online resource has a convention where each entry includes a large gray quote mark that leads to the BibTeX entry for the paper. You can copy and paste a few BibTeX entries if you find you need formatting examples.
+
+You must upload your .qmd file, your .bib file, and your rendered .html file to Canvas. All must have the basename `eB`. Points will be deducted for any other name.
+
+You should remove this instruction section from the final document.
+
+# First attempt
+
+## Initial prompt
+
+Generate a bibliography with papers regarding PDF remediation.PDF remediation is the process of making PDFs accessible to screen readers that people with low vision may use.
+
+Note: I am using ChatGPT o3-mini with the "Search" functionality. Using ChatGPT o3-mini enables advanced reasoning skills, which could help it deduce which papers are real and which are not. Additionally, the "Search" functionality gives it the ability to look for papers on the internet, which could be useful in retrieving more recent papers that were not included in the model's training corpus.
+
+## Initial result
+
+```
+Below is a sample bibliography of academic papers and preprints that address various aspects of PDF remediation (in the context of both accessibility and security/data‐sanitization):
+
+1. Wang, L. L., Cachola, I., Bragg, J., Cheng, E. Y.-Y., Haupt, C., Latzke, M., Kuehl, B., van Zuylen, M., Wagner, L., & Weld, D. S. (2021). *Improving the Accessibility of Scientific Documents: Current State, User Needs, and a System Solution to Enhance Scientific PDF Accessibility for Blind and Low Vision Users*. arXiv preprint arXiv:2105.00076. citeturn0search6  
+
+2. Livathinos, N., Berrospi, C., Lysak, M., Kuropiatnyk, V., Nassar, A., Carvalho, A., Dolfi, M., Auer, C., Dinkla, K., & Staar, P. (2021). *Robust PDF Document Conversion Using Recurrent Neural Networks*. arXiv preprint arXiv:2102.09395. citeturn0academia11 
+
+3. Bland, M., Iyer, A., & Levchenko, K. (2022). *Story Beyond the Eye: Glyph Positions Break PDF Text Redaction*. arXiv preprint arXiv:2206.02285. citeturn0academia12  
+
+4. Adhatarao, S., & Lauradoux, C. (2021). *Exploitation and Sanitization of Hidden Data in PDF Files*. arXiv preprint arXiv:2103.02707. citeturn0academia13  
+
+These works explore topics ranging from automated conversion and structural recovery (to aid remediation for accessibility) to the challenges of hidden data and secure redaction in PDF documents. They should provide a solid starting point for research into methods and tools for remediating PDFs.
+```
+
+ChatGPT o3-mini generated the response above. I noticed that the first PDF is directly related to PDF remediation; however, the latter papers are less relevant. To improve this, I specify what PDF remediation is in the prompt.
+
+# Second attempt
+
+## Prompt
+
+The first citation is relevant to PDF remediation, however, the others are not.
+
+Generate a bibliography with papers regarding PDF remediation. PDF remediation is the process of making PDFs accessible to screen readers that people with low vision may use.
+
+## Result
+
+```
+Below is a short bibliography of peer‐reviewed papers and preprints that focus on the remediation of PDFs—that is, modifying PDF documents so that they are accessible (e.g. properly tagged, with a logical reading order and descriptive alt‐text) for blind and low‐vision users using screen readers:
+
+1. **Wang, L. L., Cachola, I., Bragg, J., Cheng, E. Y.-Y., Haupt, C., Latzke, M., Kuehl, B., van Zuylen, M., Wagner, L., & Weld, D. S. (2021).**  
+   *Improving the Accessibility of Scientific Documents: Current State, User Needs, and a System Solution to Enhance Scientific PDF Accessibility for Blind and Low Vision Users.*  
+   *arXiv preprint arXiv:2105.00076.*  
+   citeturn1academia10  
+   This paper provides a broad analysis of the challenges in making scientific PDFs accessible and introduces the SciA11y system—which employs machine learning to automatically convert PDFs into accessible HTML—to address issues such as improper tagging and reading order.
+
+2. **Rajkumar, A. J., Lazar, J., Jordan, J. B., Darvishy, A., & Hutter, H. (2020).**  
+   *PDF Accessibility of Research Papers: What Tools are Needed for Assessment and Remediation?*  
+   In *Proceedings of the Hawaii International Conference on System Sciences (HICSS).*  
+   This work discusses the current tools available for assessing PDF accessibility and outlines the technical challenges inherent in remediating PDFs to meet accessibility standards such as PDF/UA and WCAG, with a focus on practical remediation requirements.
+
+3. **Schmitt‐Koopmann, F., Huang, E., & Darvishy, A. (2022).**  
+   *Accessible PDFs: Applying Artificial Intelligence for Automated Remediation of STEM PDFs.*  
+   In *Proceedings of the 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22).*  
+   [https://doi.org/10.1145/3517428.3550407](https://doi.org/10.1145/3517428.3550407)  
+   This paper describes an AI‐based approach that automatically remediates STEM PDF documents by correcting tagging issues and improving the logical reading order, thereby significantly reducing the manual effort required to produce accessible PDFs.
+
+4. **Brinn, S., Cameron, C., Fielding, D., et al. (2022).**  
+   *A Framework for Improving the Accessibility of Research Papers on arXiv.org.*  
+   [Conference paper].  
+   Although focused on papers hosted on arXiv, this work outlines a framework that includes remediation strategies (e.g. tagging, proper structuring, and reading order correction) to improve the accessibility of scholarly PDFs.  
+   *(Note: Full bibliographic details and DOI should be verified from the conference proceedings.)*
+
+Together, these publications address both the assessment of current accessibility shortcomings in scholarly PDFs and propose automated as well as semi-automated remediation solutions to help transform legacy and newly created PDFs into accessible documents suitable for use with assistive technologies.
+```
+
+The results from ChatGPT were more promising, where it returned 4 papers that were real and relevant to PDF remediation. However, they were not in BibTeX format, so I asked it to give them to be in BibTeX format.
+
+# Third attempt
+
+## Prompt
+
+Can you give me the bibliography in BibTeX format?
+
+## Result
+
+```
+Below are BibTeX entries for a selected bibliography on PDF remediation (the process of making PDFs accessible to screen readers for blind and low‐vision users):
+```
+
+```{bibtex}
+@misc{Wang2021,
+  author       = {Wang, Lucy Lu and Cachola, Isabel and Bragg, Jonathan and Cheng, Evie Yu-Yen and Haupt, Chelsea and Latzke, Matt and Kuehl, Bailey and van Zuylen, Madeleine and Wagner, Linda and Weld, Daniel S.},
+  title        = {Improving the Accessibility of Scientific Documents: Current State, User Needs, and a System Solution to Enhance Scientific PDF Accessibility for Blind and Low Vision Users},
+  year         = {2021},
+  eprint       = {2105.00076},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.CY},
+  url          = {https://arxiv.org/abs/2105.00076}
+}
+
+@inproceedings{Rajkumar2020,
+  author       = {Rajkumar, A. J. and Lazar, J. and Jordan, J. B. and Darvishy, A. and Hutter, H.},
+  title        = {PDF Accessibility of Research Papers: What Tools are Needed for Assessment and Remediation?},
+  booktitle    = {Proceedings of the Hawaii International Conference on System Sciences (HICSS)},
+  year         = {2020},
+  note         = {Discusses current tools and challenges in assessing and remediating PDFs to meet accessibility standards}
+}
+
+@inproceedings{SchmittKoopmann2022,
+  author       = {Schmitt-Koopmann, F. and Huang, E. and Darvishy, A.},
+  title        = {Accessible PDFs: Applying Artificial Intelligence for Automated Remediation of STEM PDFs},
+  booktitle    = {Proceedings of the 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22)},
+  year         = {2022},
+  doi          = {10.1145/3517428.3550407},
+  url          = {https://doi.org/10.1145/3517428.3550407}
+}
+
+@inproceedings{Brinn2022,
+  author       = {Brinn, S. and Cameron, C. and Fielding, D. and others},
+  title        = {A Framework for Improving the Accessibility of Research Papers on arXiv.org},
+  booktitle    = {Proceedings of [Conference Name]},
+  year         = {2022},
+  note         = {Presents a framework—including remediation strategies such as tagging and reordering—to enhance the accessibility of scholarly PDFs on arXiv.org. (Full bibliographic details to be confirmed)}
+}
+```
+
+```
+These entries include a preprint on scientific PDF accessibility, a conference paper addressing tool requirements for PDF remediation, an AI-based automated remediation approach for STEM PDFs, and a framework for improving accessibility on arXiv. You can adjust the fields (such as conference name or publisher details) as needed for your use.
+```
+
+The results above are better, as the generated citations point to actual papers regarding PDF remediation (which I was able to confirm with a quick Google search) in the BibTeX format. Now, I will ask it to generate 10 more. Note, I am not asking it to generate too many at a time because I suspect ChatGPT may get "overwhelmed" if given too much work and start hallucinating.
+
+# Fourth attempt
+
+## Prompt
+
+This is great, can you generate 10 more citations regarding PDF remediation. Remember, PDF remediation is the process of making PDFs accessible to screen readers that people with low vision may use. Make sure you are citing real papers.
+
+## Result
+
+```
+Below are 10 additional BibTeX entries for real, peer‐reviewed papers and technical reports that focus on PDF remediation (i.e. making PDF documents accessible for screen readers and low‐vision users):
+```
+
+```{bibtex}
+@article{Pradhan2022,
+  author       = {Pradhan, Debashish and Rajput, Tripti and Rajkumar, A. J. and Lazar, Jonathan and Jain, Rajiv and Morariu, Vlad I. and Manjunatha, Varun},
+  title        = {Development and Evaluation of a Tool for Assisting Content Creators in Making PDF Files More Accessible},
+  journal      = {ACM Transactions on Accessible Computing},
+  volume       = {15},
+  number       = {1},
+  pages        = {Article 3},
+  year         = {2022},
+  doi          = {10.1145/3507661}
+}
+
+@inproceedings{Zulfiqar2020,
+  author       = {Zulfiqar, Shaban and Arooj, Safa and Hayat, Umar and Shahid, Suleman and Karim, Asim},
+  title        = {Automated Generation of Accessible PDF},
+  booktitle    = {Proceedings of the 22nd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '20)},
+  year         = {2020},
+  doi          = {10.1145/3373625.3418045}
+}
+
+@inproceedings{Mack2021,
+  author       = {Mack, Kelly and Cutrell, Edward and Lee, Bongshin and Morris, Meredith Ringel},
+  title        = {Designing Tools for High-Quality Alt Text Authoring},
+  booktitle    = {Proceedings of the 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21)},
+  year         = {2021},
+  doi          = {10.1145/3441852.3471207}
+}
+
+@article{Nganji2015,
+  author       = {Nganji, Joseph},
+  title        = {The Portable Document Format (PDF) Accessibility Practice of Four Journal Publishers},
+  journal      = {Library \& Information Science Research},
+  volume       = {37},
+  pages        = {254--262},
+  year         = {2015},
+  doi          = {10.1016/j.lisr.2015.06.001}
+}
+
+@article{Nganji2018,
+  author       = {Nganji, Joseph},
+  title        = {An Assessment of the Accessibility of PDF Versions of Selected Journal Articles Published in a WCAG 2.0 Era (2014--2018)},
+  journal      = {Learned Publishing},
+  volume       = {31},
+  number       = {4},
+  pages        = {391--401},
+  year         = {2018},
+  doi          = {10.1002/leap.1197}
+}
+
+@article{Ribera2008,
+  author       = {Ribera, Mireia and others},
+  title        = {Are PDF Documents Accessible?},
+  journal      = {Information Technology and Libraries},
+  volume       = {27},
+  number       = {3},
+  pages        = {25--43},
+  year         = {2008},
+  doi          = {10.6017/ital.v27i3.3246}
+}
+
+@inproceedings{Brady2015,
+  author       = {Brady, E. and Zhong, Y. and Bigham, J. P.},
+  title        = {Creating Accessible PDFs for Conference Proceedings},
+  booktitle    = {Proceedings of the 12th Web for All Conference},
+  year         = {2015}
+}
+
+@inproceedings{Bigham2016,
+  author       = {Bigham, Jeffrey P. and Brady, E. and Gleason, C. and Guo, A. and Shamma, D.},
+  title        = {An Uninteresting Tour Through Why Our Research Papers Aren’t Accessible},
+  booktitle    = {Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in Computing Systems},
+  year         = {2016}
+}
+
+@techreport{Trewin2014,
+  author       = {Trewin, Shari},
+  title        = {Accessible PDF Author Guide},
+  institution  = {SIGACCESS},
+  year         = {2014},
+  url          = {https://www.sigaccess.org/welcome-to-sigaccess/resources/accessible-pdf-author-guide/}
+}
+
+@article{Menzies2022,
+  author       = {Menzies, R. and Tigwell, G. and Crabb, M.},
+  title        = {Author Reflections on Creating Accessible Academic Papers},
+  journal      = {ACM Transactions on Accessible Computing},
+  volume       = {15},
+  number       = {4},
+  pages        = {1--36},
+  year         = {2022},
+  doi          = {10.1145/3546195}
+}
+```
+
+```
+Each entry addresses aspects of PDF remediation—from tool development for automated accessibility enhancements and evaluation of publisher practices to studies assessing the state of PDF accessibility in scholarly publishing. You can adjust the fields (e.g., pages or DOI) as needed for your citation style or specific requirements.
+```
+
+All of the entries in the generated bibliography point to real papers! Additionally, most papers are from reputable sources such as ACM (ex: @Mack2021), ResearchGate (ex: @Nganji2018), and CMU (ex: @Bigham2016).
+
+I did notice that the citations don't have the "abstract" field and not all have the "url" field. However, since ChatGPT is doing a decent job of generating a bibliography with real papers about PDF remediation, I will continue asking it to generate more citations. Later, I will ask if ChatGPT is able to add an "abstract" and "url" field.
+
+# Fifth attempt
+
+## Prompt
+
+Great, can you generate 5 more? I'd prefer for them to be papers from ACM, Arxiv, ResearchGate, or other credible sources.
+
+## Result
+
+```
+Below are five additional BibTeX entries from credible sources (ACM, arXiv, etc.) that focus on PDF remediation for accessibility (i.e. modifying PDFs so that they can be read by screen readers for blind and low‐vision users):
+```
+
+```{bibtex}
+@inproceedings{SchmittKoopmann2022,
+  author       = {Schmitt-Koopmann, F. and Huang, E. and Darvishy, A.},
+  title        = {Accessible PDFs: Applying Artificial Intelligence for Automated Remediation of STEM PDFs},
+  booktitle    = {Proceedings of the 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22)},
+  year         = {2022},
+  doi          = {10.1145/3517428.3550407},
+  url          = {https://doi.org/10.1145/3517428.3550407}
+}
+
+@inproceedings{Lo2023,
+  author       = {Lo, Kyle and Chang, Joseph Chee and Head, Andrew and Bragg, Jonathan and Zhang, Amy X. and Trier, Cassidy and others},
+  title        = {The Semantic Reader Project: Augmenting Scholarly Documents through AI-Powered Interactive Reading Interfaces},
+  booktitle    = {Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '24)},
+  year         = {2023},
+  doi          = {10.1145/3663548.3675634},
+  url          = {https://doi.org/10.1145/3663548.3675634}
+}
+
+@inproceedings{Ingram2023,
+  author       = {Ingram, William A. and Wu, Jian and Fox, Edward A.},
+  title        = {Maximizing Equitable Reach and Accessibility of ETDs},
+  booktitle    = {Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '24)},
+  year         = {2023},
+  note         = {Poster presentation},
+  url          = {https://arxiv.org/abs/2310.18427}
+}
+
+@inproceedings{Kruger2022,
+  author       = {Kruger, Rynhardt and de Wet, Febe and Niesler, Thomas},
+  title        = {Mathematical Content Browsing for Print-Disabled Readers Based on Virtual-World Exploration and Audio-Visual Sensory Substitution},
+  booktitle    = {Proceedings of a relevant accessibility conference},
+  year         = {2022},
+  note         = {ArXiv preprint arXiv:2202.01639},
+  url          = {https://arxiv.org/abs/2202.01639}
+}
+
+@inproceedings{Wang2023,
+  author       = {Wang, Lucy Lu and Bragg, Jonathan and Weld, Daniel S.},
+  title        = {Paper to HTML: A Publicly Available Web Tool for Converting Scientific PDFs into Accessible HTML},
+  booktitle    = {Proceedings of the ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '23)},
+  year         = {2023},
+  doi          = {10.1145/3582298.3582299},
+  url          = {https://doi.org/10.1145/3582298.3582299}
+}
+```
+
+```
+These entries cover work on automated remediation of STEM PDFs using AI, interactive and semantic reading interfaces for scholarly documents, accessibility in electronic theses and dissertations (ETDs), approaches for making mathematical content navigable for print-disabled readers, and a tool for converting PDFs into accessible HTML. Adjust any fields as needed to match your citation style or further publication details.
+```
+
+All of the entries generated by ChatGPT were correct and unique, except 1. ChatGPT generated @SchmittKoopmann2022 which it had already generated from attemps 2 and 3. I hypothesize that the reason why this citation got repeated is recency bias. Since ChatGPT first mentioned @SchmittKoopmann2022 in attempt 2, I suspect that it focused on trying not to repeat the more generations, and failed to not repeat an older generation.
+
+
+Nonetheless, ChatGPT provided a few more credible article in the PDF Remediation domain. I will attempt to generate additional sources one more time.
+
+# Sixth attempt
+
+## Prompt
+
+Can you generate 5 more citations of research papers regarding PDF remediation. Remember, PDF remediation is the process of making PDFs accessible to screen readers that people with low vision may use. Make sure you are citing real papers and they are different from the ones you have already given me.
+
+## Result
+
+```
+Below are five additional BibTeX entries from credible sources (ACM, arXiv, and similar) focusing on PDF remediation—that is, improving the accessibility of PDFs for screen reader users, particularly those with low vision. These citations are different from the ones provided previously:
+```
+
+```{bibtex}
+@inproceedings{Chintalapati2022,
+  author       = {Chintalapati, Sanjana Shivani and Bragg, Jonathan and Wang, Lucy Lu},
+  title        = {A Dataset of Alt Texts from HCI Publications: Analyses and Uses Towards Producing More Descriptive Alt Texts of Data Visualizations in Scientific Papers},
+  booktitle    = {Proceedings of the 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22)},
+  year         = {2022},
+  doi          = {10.1145/3517428.3544796},
+  url          = {https://doi.org/10.1145/3517428.3544796}
+}
+
+@inproceedings{Ribera2019,
+  author       = {Ribera, Mireia and Pozzobon, Riccardo and Sayago, Silvia},
+  title        = {Publishing Accessible Proceedings: The DSAI 2016 Case Study},
+  booktitle    = {Universal Access in the Information Society},
+  year         = {2019},
+  pages        = {1--13},
+  doi          = {10.1007/s10209-019-00700-1},
+  url          = {https://doi.org/10.1007/s10209-019-00700-1}
+}
+
+@article{Shen2022,
+  author       = {Shen, Zejiang and Lo, Kyle and Wang, Lucy Lu and Kuehl, Bailey and Weld, Daniel S.},
+  title        = {VILA: Improving Structured Content Extraction from Scientific PDFs Using Visual Layout Groups},
+  journal      = {Transactions of the Association for Computational Linguistics (TACL)},
+  year         = {2022},
+  volume       = {10},
+  pages        = {--},  % Replace with specific page numbers if available
+  doi          = {10.1162/tacl_a_00514},
+  url          = {https://doi.org/10.1162/tacl_a_00514}
+}
+
+@inproceedings{Singh2024,
+  author       = {Singh, Nikhil and Wang, Lucy Lu and Bragg, Jonathan},
+  title        = {FigurA11y: AI Assistance for Writing Scientific Alt Text},
+  booktitle    = {Proceedings of the 29th International Conference on Intelligent User Interfaces (IUI '24)},
+  year         = {2024},
+  pages        = {886--906},
+  doi          = {10.1145/3640543.3645212},
+  url          = {https://doi.org/10.1145/3640543.3645212}
+}
+
+@inproceedings{Williams2022,
+  author       = {Williams, Candace and de Greef, Lilian and Harris, Ed and Findlater, Leah and Pavel, Amy and Bennett, Cynthia},
+  title        = {Toward Supporting Quality Alt Text in Computing Publications},
+  booktitle    = {Proceedings of the 19th International Web for All Conference (W4A '22)},
+  year         = {2022},
+  pages        = {Article 20},
+  doi          = {10.1145/3493612.3520449},
+  url          = {https://doi.org/10.1145/3493612.3520449}
+}
+```
+
+```
+### Overview
+- **Chintalapati et al. (2022)** present a dataset of alt texts from HCI publications to inform better alt text generation—a key component in PDF remediation.
+- **Ribera et al. (2019)** analyze accessible proceedings through a case study of DSAI 2016, highlighting challenges and strategies in remediating scholarly PDFs.
+- **Shen et al. (2022)** propose VILA, which improves the extraction of structured content from scientific PDFs—a crucial step toward automating remediation.
+- **Singh et al. (2024)** introduce FigurA11y, an AI-driven tool that assists authors in generating high-quality alt text, improving the accessibility of PDF figures.
+- **Williams et al. (2022)** focus on supporting quality alt text in computing publications, which is essential for creating accessible PDF documents.
+
+These five entries expand the literature on PDF remediation by addressing different aspects—from alt text enhancement to structured content extraction and case studies on accessible scholarly proceedings. Adjust any fields (such as page numbers) as necessary to suit your citation style.
+```
+
+These results are great. All of the entries in the bibliography correspond to real papers about PDF remediation, either directly or indirectly. It is interesting to note that @Shen2022 isn't directly about PDF remediation. The paper discusses how to extract structured content from PDFs, and how this can improve PDF accessibility. Thus, this paper indirectly relates to PDF remediation. It is facinating how ChatGPT o3-mini was able to draw the connection of how extracting structured content from PDFs can be used to improve PDF accessbility. I suspect that it is able to do so due to the reasoning abilities that ChatGPT o3-mini has. It reasons "out loud", as it displays what it is "thinking". As a result, this chain of thought process led to relevant results.
+
+Now that I have a decent bibliography, I want to test ChatGPT's ability to fill in missing information. To conduct this test, I will pass 5 entries from the bibliography back to ChatGPT, and ask it to fill in missing information. I will start by asking it to fill in the "url" field.
+
+# Seventh attempt
+
+## Prompt
+
+I will give you a bibliography with 5 entries. These entries do not have a "url" field. Can you determine the url for the respective paper, and add the "url" field? If you are not 100% sure what the url is for the paper, then do not add a "url" field.
+
+Here is the bibliography with 5 entries:
+```{bibtex}
+@inproceedings{Mack2021,
+  author       = {Mack, Kelly and Cutrell, Edward and Lee, Bongshin and Morris, Meredith Ringel},
+  title        = {Designing Tools for High-Quality Alt Text Authoring},
+  booktitle    = {Proceedings of the 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21)},
+  year         = {2021},
+  doi          = {10.1145/3441852.3471207}
+}
+
+@article{Nganji2018,
+  author       = {Nganji, Joseph},
+  title        = {An Assessment of the Accessibility of PDF Versions of Selected Journal Articles Published in a WCAG 2.0 Era (2014--2018)},
+  journal      = {Learned Publishing},
+  volume       = {31},
+  number       = {4},
+  pages        = {391--401},
+  year         = {2018},
+  doi          = {10.1002/leap.1197}
+}
+
+@article{Ribera2008,
+  author       = {Ribera, Mireia and others},
+  title        = {Are PDF Documents Accessible?},
+  journal      = {Information Technology and Libraries},
+  volume       = {27},
+  number       = {3},
+  pages        = {25--43},
+  year         = {2008},
+  doi          = {10.6017/ital.v27i3.3246}
+}
+
+@inproceedings{Brady2015,
+  author       = {Brady, E. and Zhong, Y. and Bigham, J. P.},
+  title        = {Creating Accessible PDFs for Conference Proceedings},
+  booktitle    = {Proceedings of the 12th Web for All Conference},
+  year         = {2015}
+}
+
+@inproceedings{Bigham2016,
+  author       = {Bigham, Jeffrey P. and Brady, E. and Gleason, C. and Guo, A. and Shamma, D.},
+  title        = {An Uninteresting Tour Through Why Our Research Papers Aren’t Accessible},
+  booktitle    = {Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in Computing Systems},
+  year         = {2016}
+}
+```
+
+## Result
+
+```
+Below is the modified bibliography with the URL fields added only for the entries whose DOI‐based URLs we are 100% sure about:
+```
+
+```{bibtex}
+@inproceedings{Mack2021,
+  author       = {Mack, Kelly and Cutrell, Edward and Lee, Bongshin and Morris, Meredith Ringel},
+  title        = {Designing Tools for High-Quality Alt Text Authoring},
+  booktitle    = {Proceedings of the 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21)},
+  year         = {2021},
+  doi          = {10.1145/3441852.3471207},
+  url          = {https://doi.org/10.1145/3441852.3471207}
+}
+
+@article{Nganji2018,
+  author       = {Nganji, Joseph},
+  title        = {An Assessment of the Accessibility of PDF Versions of Selected Journal Articles Published in a WCAG 2.0 Era (2014--2018)},
+  journal      = {Learned Publishing},
+  volume       = {31},
+  number       = {4},
+  pages        = {391--401},
+  year         = {2018},
+  doi          = {10.1002/leap.1197},
+  url          = {https://doi.org/10.1002/leap.1197}
+}
+
+@article{Ribera2008,
+  author       = {Ribera, Mireia and others},
+  title        = {Are PDF Documents Accessible?},
+  journal      = {Information Technology and Libraries},
+  volume       = {27},
+  number       = {3},
+  pages        = {25--43},
+  year         = {2008},
+  doi          = {10.6017/ital.v27i3.3246},
+  url          = {https://doi.org/10.6017/ital.v27i3.3246}
+}
+
+@inproceedings{Brady2015,
+  author       = {Brady, E. and Zhong, Y. and Bigham, J. P.},
+  title        = {Creating Accessible PDFs for Conference Proceedings},
+  booktitle    = {Proceedings of the 12th Web for All Conference},
+  year         = {2015}
+}
+
+@inproceedings{Bigham2016,
+  author       = {Bigham, Jeffrey P. and Brady, E. and Gleason, C. and Guo, A. and Shamma, D.},
+  title        = {An Uninteresting Tour Through Why Our Research Papers Aren’t Accessible},
+  booktitle    = {Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in Computing Systems},
+  year         = {2016}
+}
+```
+
+```
+For the first three entries, the URL fields were derived directly from their DOIs. Since the last two entries do not have a DOI (or we are not 100% sure of their permanent URL), no URL fields were added for them.
+```
+Of 5 entries I provided, ChatGPT was able to add the "url" field for 3 of them. I manually verified that the urls are correct. This test goes to show the capabilities of ChatGPT to explore the internet, retrieve the urls, analyze them for certainty, and add them if the model is certain. For 2 entries, ChatGPT was uncertain that the urls were correct, and thus, did not add them as instructions stated.
+
+In fact, when ChatGPT is reasoning, it displays what it is "thinking". Here is a snippit of the reasoning process: "I'm thinking through avoiding URLs for Brady2015 and Bigham2016 if their details aren't certain. Safe to go with DOIs from Mack2021, Nganji2018, and Ribera2008." This goes to show that it is able to analyze its findings and determine how confident it is in their accuracy.
+
+Finally, I'd like to test if ChatGPT 3o-mini is able to add the "abstract" field. I will ask the model to search for the abstract, and add the field only if it is certain in its accuracy. I will keep the 5 entries I give as reference the same to keep the experiment fair.
+
+# Eighth attempt
+
+## Prompt
+
+I will give you a bibliography with 5 entries. These entries do not have an "abstract" field. Can you determine the abstract for the respective paper, and add the "abstract" field? If you are not 100% sure what the abstract is for the paper, then do not add an "abstract" field.
+
+Here is the bibliography with 5 entries:
+```{bibtex}
+@inproceedings{Mack2021,
+  author       = {Mack, Kelly and Cutrell, Edward and Lee, Bongshin and Morris, Meredith Ringel},
+  title        = {Designing Tools for High-Quality Alt Text Authoring},
+  booktitle    = {Proceedings of the 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21)},
+  year         = {2021},
+  doi          = {10.1145/3441852.3471207}
+}
+
+@article{Nganji2018,
+  author       = {Nganji, Joseph},
+  title        = {An Assessment of the Accessibility of PDF Versions of Selected Journal Articles Published in a WCAG 2.0 Era (2014--2018)},
+  journal      = {Learned Publishing},
+  volume       = {31},
+  number       = {4},
+  pages        = {391--401},
+  year         = {2018},
+  doi          = {10.1002/leap.1197}
+}
+
+@article{Ribera2008,
+  author       = {Ribera, Mireia and others},
+  title        = {Are PDF Documents Accessible?},
+  journal      = {Information Technology and Libraries},
+  volume       = {27},
+  number       = {3},
+  pages        = {25--43},
+  year         = {2008},
+  doi          = {10.6017/ital.v27i3.3246}
+}
+
+@inproceedings{Brady2015,
+  author       = {Brady, E. and Zhong, Y. and Bigham, J. P.},
+  title        = {Creating Accessible PDFs for Conference Proceedings},
+  booktitle    = {Proceedings of the 12th Web for All Conference},
+  year         = {2015}
+}
+
+@inproceedings{Bigham2016,
+  author       = {Bigham, Jeffrey P. and Brady, E. and Gleason, C. and Guo, A. and Shamma, D.},
+  title        = {An Uninteresting Tour Through Why Our Research Papers Aren’t Accessible},
+  booktitle    = {Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in Computing Systems},
+  year         = {2016}
+}
+```
+
+## Result
+
+```
+Below is your modified bibliography with added “abstract” fields for the entries where we could reliably determine the abstract. For the other entries, no abstract field has been added.
+```
+
+```{bibtex}
+@inproceedings{Mack2021,
+  author       = {Mack, Kelly and Cutrell, Edward and Lee, Bongshin and Morris, Meredith Ringel},
+  title        = {Designing Tools for High-Quality Alt Text Authoring},
+  booktitle    = {Proceedings of the 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21)},
+  year         = {2021},
+  doi          = {10.1145/3441852.3471207},
+  abstract     = {Alt text provides critical descriptions of images for screen reader users, yet authors often struggle to produce high-quality alt text. In this paper, we present a suite of design tools and interactive interfaces to support authors in composing better alt text. Through iterative design and evaluation, our user study demonstrates that our approach improves the quality and efficiency of alt text authoring.}
+}
+
+@article{Nganji2018,
+  author       = {Nganji, Joseph},
+  title        = {An Assessment of the Accessibility of PDF Versions of Selected Journal Articles Published in a WCAG 2.0 Era (2014--2018)},
+  journal      = {Learned Publishing},
+  volume       = {31},
+  number       = {4},
+  pages        = {391--401},
+  year         = {2018},
+  doi          = {10.1002/leap.1197},
+  abstract     = {Two hundred PDF articles from four Web of Science-indexed disability-related journals published between 2014 and 2018 were evaluated using both manual inspection and automated tools (including Adobe Acrobat Pro XI, PDF Accessibility Checker 3, and NVDA). The study found that only 15.5% of the documents were tagged, only 10.5% contained alternative text for images, 74.5% included navigational bookmarks, and 87% had meaningful title fields. These findings highlight significant deficiencies in current PDF accessibility practices and suggest the need for improved workflow processes in document production.}
+}
+
+@article{Ribera2008,
+  author       = {Ribera, Mireia and others},
+  title        = {Are PDF Documents Accessible?},
+  journal      = {Information Technology and Libraries},
+  volume       = {27},
+  number       = {3},
+  pages        = {25--43},
+  year         = {2008},
+  doi          = {10.6017/ital.v27i3.3246}
+}
+
+@inproceedings{Brady2015,
+  author       = {Brady, E. and Zhong, Y. and Bigham, J. P.},
+  title        = {Creating Accessible PDFs for Conference Proceedings},
+  booktitle    = {Proceedings of the 12th Web for All Conference},
+  year         = {2015}
+}
+
+@inproceedings{Bigham2016,
+  author       = {Bigham, Jeffrey P. and Brady, E. and Gleason, C. and Guo, A. and Shamma, D.},
+  title        = {An Uninteresting Tour Through Why Our Research Papers Aren’t Accessible},
+  booktitle    = {Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in Computing Systems},
+  year         = {2016}
+}
+```
+
+```
+For the first two entries, the abstracts were obtained from reliable sources (e.g., the ACM Digital Library and publisher websites). Since we could not verify the exact abstract texts for the remaining three entries with complete certainty, no “abstract” field has been added for them.
+```
+
+ChatGPT was able to fill in the abstracts for the first 2 sources. In fact, it explains that it was able to do so because the abstracts were retrieved from credible sources. However, upon closer inspection, it is evident that the abstract that ChatGPT added for @Mack2021 is actually incorrect, and the abstract that ChatGPT added for @Nganji2018 is mostly correct but incomplete. This suggests that the model was either unable t determine what an "abstract" is when it was searching the internet for those respective papers, or that it hallucinated in generating those abstracts. This experiment demonstrates ChatGPT's limitation in its ability to parse online information the way humans can.
+
+
+# Final Attempt
+
+As of now, I have asked ChatGPT to generate a bibliography using its ability to search the internet. However, now I want to test its ability to provide a bibliography given some information about a few papers. This will test ChatGPT's formatting abilities compared to its searching and reasoning abilities.
+
+## Prompt
+
+Here is some information on 3 papers:
+
+
+I want you to generate a bibliography using those papers. Use the following bibliography entry as an example of how to format your bibliography:
+```{bibtex}
+@article{Paliwal2024,
+author = {Paliwal, Sparsh and Hoeflich, Joshua and Jordan, J Bern and Jain, Rajiv and Morariu, Vlad I and Siu, Alexa and Lazar, Jonathan},
+title = {FormA11y - A tool for remediating PDF forms for accessibility},
+year = {2024},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+issn = {1073-0516},
+url = {https://doi.org/10.1145/3702317},
+doi = {10.1145/3702317},
+abstract = {PDF documents are usually not born-accessible, and so document authors need to put in additional work (remediation) to make them accessible for people with disabilities. Unfortunately, this step is often overlooked and hard to execute, resulting in a large number of inaccessible PDF documents on the internet. Previously, there have been research efforts to investigate potential solutions for remediating PDF documents for accessibility. However, most of the existing research focuses on accessibility of long or scientific PDF documents meant for passive reading. PDF documents come in different types, and this research project focuses on a distinct type of PDF document—forms—where the user is required to interact with the PDF document and enter data. Through our research work we identified that the PDF form remediation process is non-intuitive, repetitive, and overwhelming due to the high-information density of PDF forms, and existing research and tools do not yet address the challenges. Our research work culminated in the creation of a tool – FormA11y – that addresses these challenges by making the repetitive and painstaking process of form remediation easier. To evaluate the effectiveness and efficiency of FormA11y against the industry standard tool – Adobe Acrobat – for PDF form remediation, we performed a within-subject user study with 20 participants. With FormA11y, users remediated forms 2.8 times faster while creating more accurately accessible PDF forms.},
+note = {Just Accepted},
+journal = {ACM Trans. Comput.-Hum. Interact.},
+month = nov,
+keywords = {PDF accessibility, PDF U/A, accessibility, inclusive design, born-accessible, document accessibility, blind users}
+}
+```
+
+## Result
+
+Here you refer to the `eB.bib` file.
+
+(Just kidding about fifteenth---I don't know how many attempts it will take to get a satisfactory result)
+
+# Conclusion
+
+Here is where you describe what you did and any thoughts about how it came out.
+
+# Addendum: Features of this file
+
+Note: delete this section before you turn in the file!
+
+-   Front matter
+    -   Includes your name
+    -   Includes the keyword "today" which resolves to the date on which you render the document
+    -   Includes fonts---you should install these fonts on your computer or change the font specification to fonts you already have on your computer
+    -   Includes the format (html) to which Quarto will render
+    -   Includes some directives that are specific to that format: toc and embed-resources
+    -   `toc` causes the table of contents to be rendered, on the right side of the frame by default
+    -   `embed-resources` causes any diagrams to be included in the html file itself rather than linked---that way you can just submit the html file and I can view it instead of having to submit linked files
+-   Headings: top level headings are preceded by a \# and a space; second level headings are preceded by \## and a space; you can go down several levels by increasing the number of \# symbols
+-   Bulleted lists, formed by preceding the list with a blank line (or a heading) and beginning each line with a dash and a space (both are important)
+-   LaTeX symbols, in this case $\langle$ and $\rangle$, which resolve to angle brackets when you render the document ... you can include any LaTeX math expressions between dollar signs or double dollar signs ... by the way, any dollar signs meant as real dollar signs should be preceded by a backslash, like \$ this, so Quarto doesn't get confused about whether you are starting an equation
+-   Programmatic keywords, preceded and followed by a backtick, in this case, the name `eB.bib` bibliography file ... this causes the keyword to be rendered in a code font
+-   Emphasis, by surrounding an *important* word with asterisks, causing it to be rendered in italics
+
+Of course, you will delete all the instructions and comments in this file before you turn it in! I don't need to read them when I read your solution. The files you turn in (the qmd and the rendered html) will just include your work. These instructions and comments are just to help you get going.

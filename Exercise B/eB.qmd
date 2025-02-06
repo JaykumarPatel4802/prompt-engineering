@@ -1,3 +1,19 @@
+---
+title: "exercise B"
+subtitle: "BibTeX bibliography generation"
+date: today
+author: Jaykumar Patel
+format:
+  html:
+    toc: true
+    embed-resources: true
+mainfont: TeX Gyre Schola
+monofont: JetBrainsMono Nerd Font
+mathfont: TeX Gyre Schola Math Regular
+jupyter: python3
+bibliography: eB.bib
+---
+
 # Intro
 
 This documents my attempts to generate a BibTeX bibliography on PDF remediation using an LLM.
@@ -16,9 +32,16 @@ You should remove this instruction section from the final document.
 
 ## Initial prompt
 
-Here is where you put the first prompt you tried in writing the code.
+I would like you to assemble a bibliography in BibTeX format. The subject of the papers in the bibliography should be PDF remediation. PDF remediation is the process of making a PDF accessible to people with disabilities.
+
+I would like to start with 5 entries in the bibliography. Additionally, use papers from the ACM Digital Library. I want to ensure that the papers are legit, credible, and relevant to PDF Remediation.
+
 
 ## Initial result
+
+#. ---
+I initially started with 5 entries to start small and build iteratively. For all of the 5 entries generated, nearly all of the entries in the bibliography point to real papers. However, the most noticaeble error is that all of the entries have incorrect authors and have incomplete abstracts. Additionally, the generated entries point to papers released in various years (2024, 2022, 2011, and 2018), the diversity I liked seeing. Also, all of the generated entries were about PDF remediation, which was a success. The focus for the next prompt is trying to generate entries with correct authors. 
+#. ---
 
 Here is where you tell about the result of the first prompt you tried. It may be difficult to include the entire bibliography here, so you may want to just include a sample and describe the issues.
 
@@ -47,11 +70,88 @@ keywords = {PDF accessibility, PDF U/A, accessibility, inclusive design, born-ac
 
 ## Prompt
 
-Here is a refined prompt.
+I noticed that the entries you provided do point to papers regarding PDF remediation. However, all of the entries you provided have incorrect authors. Can you fix this?
 
 ## Result
 
-Here is the result of the refined prompt.
+This did not fix the problem; the generated entries still have incorrect authors. For most of the entries, ChatGPT just reformatted the "author" field, and for one entry, ChatGPT changed the incorrect author to another incorrect author. In the next prompt, I ask ChatGPT to reformat the generated entries by providing an example, and that I'll revisit fixing the authors for the entries.
+
+# Third attempt
+
+## Prompt
+
+Ok the authors are still incorrect, but that's ok. I will revisit that problem later. Firstly, I want you to reformat the generated entries. Here are a couple example of what the correct format should look like:
+
+```bibtex
+@article{Paliwal2024,
+author = {Paliwal, Sparsh and Hoeflich, Joshua and Jordan, J Bern and Jain, Rajiv and Morariu, Vlad I and Siu, Alexa and Lazar, Jonathan},
+title = {FormA11y - A tool for remediating PDF forms for accessibility},
+year = {2024},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+issn = {1073-0516},
+url = {https://doi.org/10.1145/3702317},
+doi = {10.1145/3702317},
+abstract = {PDF documents are usually not born-accessible, and so document authors need to put in additional work (remediation) to make them accessible for people with disabilities. Unfortunately, this step is often overlooked and hard to execute, resulting in a large number of inaccessible PDF documents on the internet. Previously, there have been research efforts to investigate potential solutions for remediating PDF documents for accessibility. However, most of the existing research focuses on accessibility of long or scientific PDF documents meant for passive reading. PDF documents come in different types, and this research project focuses on a distinct type of PDF document—forms—where the user is required to interact with the PDF document and enter data. Through our research work we identified that the PDF form remediation process is non-intuitive, repetitive, and overwhelming due to the high-information density of PDF forms, and existing research and tools do not yet address the challenges. Our research work culminated in the creation of a tool – FormA11y – that addresses these challenges by making the repetitive and painstaking process of form remediation easier. To evaluate the effectiveness and efficiency of FormA11y against the industry standard tool – Adobe Acrobat – for PDF form remediation, we performed a within-subject user study with 20 participants. With FormA11y, users remediated forms 2.8 times faster while creating more accurately accessible PDF forms.},
+note = {Just Accepted},
+journal = {ACM Trans. Comput.-Hum. Interact.},
+month = nov,
+keywords = {PDF accessibility, PDF U/A, accessibility, inclusive design, born-accessible, document accessibility, blind users}
+}
+```
+
+Here is another example from the ACM Library:
+```bibtex
+@inproceedings{10.1145/3643834.3660747,
+author = {Yin, Alyson and Sogani, Riya and Oewel, Bruna and Phan, Karen and Park, Jaime Shin Young and Yeo, Mia Ashley and Yazzolino, Lindsay Ann and Arcos, Karen and Abdolrahmani, Ali and Blank, Emily and Gilbert, Michael Dean and Branham, Stacy M.},
+title = {“Malicious” Pictorials: How Alt Text Matters to Screen Reader Users' Experience of Image-Dense Media},
+year = {2024},
+isbn = {9798400705830},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3643834.3660747},
+doi = {10.1145/3643834.3660747},
+abstract = {People who are blind face accessibility and usability barriers every time a digital image author omits or creates uninformative alternative or “alt” text. Often, content creators are simply unaware of screen reader users’ experience and accessibility best practices; there is also a lack of research knowledge about how to design accessible image-dense media, like pictorials. We present (1) a content analysis of 149 pictorials, (2) a thematic analysis of three think-aloud sessions with an expert screen reader user, and (3) practical lessons learned from a co-design workshop with three blind scholars. Our research finds that pictorials are increasingly accessible, but they are still far from providing a usable experience. We identify nine “malicious” alt text patterns that riddle pictorials and three novel accessible alt text patterns to guide authors of image-dense media.},
+booktitle = {Proceedings of the 2024 ACM Designing Interactive Systems Conference},
+pages = {1262–1274},
+numpages = {13},
+location = {Copenhagen, Denmark},
+series = {DIS '24}
+}
+```
+
+Note how in both examples, every author is included, and the abstract field contains the entire abstract of the paper.
+
+## Result
+
+The generated entries still have an incomplete abstract. The only entry that has a complete abstract is for FormA11y, but that's simply because I included its bibliography as an example in the prompt. This leads me to believe that it might help the model access the correct author and abstract information if I tell it to use the internet -- which is possible since ChatGPT 4o has internet accesss.
+
+# Fourth attempt
+
+## Prompt
+
+The authors are still incorrect for most of the entries you provided and the abstracts are also incomplete for most of the entries you provided. To fix this, can you utilize the internet to search and retrieve the correct authors and abstracts? The entries you already provided contain the link to the papers in the field "url". The urls of the papers are correct, so can you use those to retrieve the correct author and abstract information for the papers?
+
+## Result
+
+This time, ChatGPT 4o only returned an entry for the FormA11y paper, again probably because I have its entry as an example. It said that for the remaining entried, it will need access to the URLs. Thus, I provide the urls for the remaining 4 papers manually.
+
+# Fifth attempt
+
+## Prompt
+
+Here are the URLs for the remaining 4 entries in their respective order:
+
+- https://doi.org/10.1145/3517428.3550407
+- https://doi.org/10.1145/3663548.3675634
+- https://doi.org/10.1145/2034691.2034748
+- https://doi.org/10.1145/3234695.3236345
+
+Now that you have their URLs, can you update the bibliography entries with their correct authors and the complete abstracts?
+
+## Result
+
+The results still contain incorrect authors and incomplete abstracts. Not only that, ChatGPT replaced the last entry in its original list of 5 entries with a different entry, pointing to a different paper. I'm not sure why it did that, but I hypothesize that when it was searching up the paper using the URL, it hallucinated, and returned a different paper.
 
 # $\cdots$
 
