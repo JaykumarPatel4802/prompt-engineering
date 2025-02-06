@@ -337,6 +337,79 @@ Nonetheless, ChatGPT provided a few more credible article in the PDF Remediation
 
 ## Prompt
 
+Can you generate 5 more citations of research papers regarding PDF remediation. Remember, PDF remediation is the process of making PDFs accessible to screen readers that people with low vision may use. Make sure you are citing real papers.
+
+## Result
+
+```
+Below are five additional BibTeX entries for research papers on PDF remediation—i.e. the process of making PDF documents accessible (through proper tagging, logical reading order, alt text, and other features) for screen readers used by people with low vision. These entries are drawn from credible sources such as ACM and arXiv:
+```
+
+```{bibtex}
+@inproceedings{SchmittKoopmann2022,
+  author       = {Schmitt-Koopmann, F. and Huang, E. and Darvishy, A.},
+  title        = {Accessible PDFs: Applying Artificial Intelligence for Automated Remediation of STEM PDFs},
+  booktitle    = {Proceedings of the 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22)},
+  year         = {2022},
+  doi          = {10.1145/3517428.3550407},
+  url          = {https://doi.org/10.1145/3517428.3550407}
+}
+
+@inproceedings{Lo2023,
+  author       = {Lo, Kyle and Chang, Joseph Chee and Head, Andrew and Bragg, Jonathan and Zhang, Amy X. and others},
+  title        = {The Semantic Reader Project: Augmenting Scholarly Documents through AI-Powered Interactive Reading Interfaces},
+  booktitle    = {Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '24)},
+  year         = {2023},
+  doi          = {10.1145/3663548.3675634},
+  url          = {https://doi.org/10.1145/3663548.3675634}
+}
+
+@inproceedings{Ingram2023,
+  author       = {Ingram, William A. and Wu, Jian and Fox, Edward A.},
+  title        = {Maximizing Equitable Reach and Accessibility of ETDs},
+  booktitle    = {Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '24)},
+  year         = {2023},
+  note         = {Poster presentation; focuses on remediation of electronic theses and dissertations (ETDs) to improve accessibility},
+  url          = {https://arxiv.org/abs/2310.18427}
+}
+
+@inproceedings{Kruger2022,
+  author       = {Kruger, Rynhardt and de Wet, Febe and Niesler, Thomas},
+  title        = {Mathematical Content Browsing for Print-Disabled Readers Based on Virtual-World Exploration and Audio-Visual Sensory Substitution},
+  booktitle    = {Proceedings of a relevant accessibility conference},
+  year         = {2022},
+  note         = {ArXiv preprint arXiv:2202.01639},
+  url          = {https://arxiv.org/abs/2202.01639}
+}
+
+@inproceedings{Wang2023,
+  author       = {Wang, Lucy Lu and Bragg, Jonathan and Weld, Daniel S.},
+  title        = {Paper to HTML: A Publicly Available Web Tool for Converting Scientific PDFs into Accessible HTML},
+  booktitle    = {Proceedings of the ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '23)},
+  year         = {2023},
+  doi          = {10.1145/3582298.3582299},
+  url          = {https://doi.org/10.1145/3582298.3582299}
+}
+```
+
+```
+### Brief Description of Each Entry
+
+1. **Schmitt-Koopmann et al. (2022):** Describes an AI-driven approach to automatically remediate STEM PDFs by improving tagging and reading order, directly benefiting low-vision users.
+2. **Lo et al. (2023):** Presents the Semantic Reader Project that leverages interactive reading interfaces for scholarly documents, including remediation strategies that address accessibility issues in legacy PDFs.
+3. **Ingram et al. (2023):** Focuses on increasing the equitable reach of electronic theses and dissertations (ETDs) by applying AI techniques to remediate PDF documents.
+4. **Kruger et al. (2022):** Although its primary focus is on making mathematical content accessible through virtual-world exploration, this work addresses the remediation of complex PDFs (common in STEM fields) for print-disabled readers.
+5. **Wang et al. (2023):** Describes a tool for converting scientific PDFs into accessible HTML, an approach that effectively remediates PDFs for use with assistive technologies.
+
+These five entries are drawn from credible venues (ACM conferences and arXiv preprints) and represent recent efforts addressing PDF remediation for accessibility. Adjust any fields as needed to fit your specific citation style or additional publication details.
+```
+
+ChatGPT returned the same 5 papers that it had already given me before. In the next prompt, I explicitly tell ChatGPT to cite papers that are different from the ones it has already given me. This will help ensure that the generation results in new bibliography entries.
+
+# Seventh attempt
+
+## Prompt
+
 Can you generate 5 more citations of research papers regarding PDF remediation. Remember, PDF remediation is the process of making PDFs accessible to screen readers that people with low vision may use. Make sure you are citing real papers and they are different from the ones you have already given me.
 
 ## Result
@@ -414,7 +487,7 @@ It is also interesting to note that the urls of @Ribera2019 and @Shen2022 are in
 
 Now that I have a decent bibliography, I want to test ChatGPT's ability to fill in missing information. To conduct this test, I will pass 5 entries from the bibliography back to ChatGPT, and ask it to fill in missing information. I will start by asking it to fill in the "url" field.
 
-# Seventh attempt
+# Eighth attempt
 
 ## Prompt
 
@@ -531,7 +604,7 @@ In fact, when ChatGPT is reasoning, it displays what it is "thinking". Here is a
 
 Finally, I'd like to test if ChatGPT 3o-mini is able to add the "abstract" field. I will ask the model to search for the abstract, and add the field only if it is certain in its accuracy. I will keep the 5 entries I give as reference the same to keep the experiment fair.
 
-# Eighth attempt
+# Ninth attempt
 
 ## Prompt
 
@@ -686,6 +759,7 @@ Here is where you describe what you did and any thoughts about how it came out.
 - Mostly good
 - Search feature is useful in retrieving information
 - Limitations for more complex requests like asking for abstracts
+- 6th attempt - returned papers I already had. So had to explicitly say to generate new ones in attempt 7.
 
 # Addendum: Features of this file
 
