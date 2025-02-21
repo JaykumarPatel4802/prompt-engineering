@@ -314,7 +314,7 @@ a7f72a928a, WOOOOOOOOOO   are you coming to Nottingham at any point?  lovelovelo
 <section id="result---generated-python-script" class="level2">
 <h2 class="anchored" data-anchor-id="result---generated-python-script">Result - Generated Python Script</h2>
 <p>Here’s a Python script that loads the <code>example_tweets.csv</code> file, samples 20 rows while maintaining approximately equal representation of each sentiment class, and saves the sampled dataset to a new CSV file.</p>
-<div id="c5098332" class="cell" data-execution_count="1">
+<div id="ba35f652" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_tweets(file_path, sample_size<span class="op">=</span><span class="dv">20</span>):</span>
@@ -350,7 +350,7 @@ a7f72a928a, WOOOOOOOOOO   are you coming to Nottingham at any point?  lovelovelo
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Save to a new CSV file</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>sampled_tweets.to_csv(<span class="st">"sampled_tweets.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\patel\AppData\Local\Temp\ipykernel_63284\3581416974.py:17: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+<pre><code>C:\Users\patel\AppData\Local\Temp\ipykernel_80584\3581416974.py:17: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
   .apply(lambda x: x.sample(n=min(len(x), num_samples_per_class), random_state=42)))</code></pre>
 </div>
 </div>
@@ -359,15 +359,204 @@ a7f72a928a, WOOOOOOOOOO   are you coming to Nottingham at any point?  lovelovelo
 </section>
 <section id="step-three-benchmark" class="level1">
 <h1>Step three: benchmark</h1>
-<p><span class="math inline">\(\langle\)</span> replace this with your setup including which three models you chose <span class="math inline">\(\rangle\)</span></p>
+<p>The 3 models I chose for the benchmark are <code>gpt-3.5-turbo</code>, <code>openrouter/google/gemini-pro</code>, and <code>openrouter/anthropic/claude-3.5-haiku</code>. The main reason I chose these 3 models is because according to <a href="https://arxiv.org/abs/2312.11444">this</a> paper, Gemini Pro achieves “close but slightly inferior” results compared to GPT-3.5 Turbo. Additionally, according to <a href="https://context.ai/compare/claude-3-haiku/gpt-3-5-turbo">this</a>, GPT-3.5 Turbo and Claude 3 Haiku perform have relatively similar performance for the <code>MMLU</code> and <code>HellaSwag</code> metrics (other benchmarks were not available for comparison). Thus, I chose these 3 models since none have a “clear” advantage, and hopefully will provide interesting results.</p>
+<p>Additionally, the script above sampled these 20 tweets:</p>
+<pre class="{csv}"><code>textID  text    selected_text   sentiment
+4dad557268  says BAD TRIP! (angry)  http://plurk.com/p/wxshi    says BAD TRIP!  negative
+f69a80cc7e  Missing my mother... t-11 days! HAPPY MOTHER`S DAY!!    HAPPY MOTHER`S DAY!!    positive
+f93c297e3a  am chillaxin after a busy BankHoliday, Hope everbody had a gd wkend! Holiday in 12 days!!!  ****    am chillaxin after a busy BankHoliday, Hope everbody had a gd wkend! Holiday in 12 days!!   positive
+24489dcb26   that sounds foreboding...  that sounds foreboding...   negative
+16729cf827   checked and commented  checked and commented   neutral
+bb2ef8a121   pictures of your bliss?  In JPEG format?  Sorry, it`s message board terminology and u don`t play w/us on the boards    pictures of your bliss?  In JPEG format?  Sorry, it`s message board terminology and u don`t play w/us on the board  negative
+073a1cef9b  dared to go back and look at that vid I made - I may take it down   dared to go back and look at that vid I made - I may take it down   neutral
+b34b83c44e  is really, really bored... I guess I will go to bed is really, really bored...  negative
+a7f72a928a   WOOOOOOOOOO   are you coming to Nottingham at any point?  lovelovelove&lt;3   t?  lovelovelove    positive
+1b79929075   Yeah, mine said 'That`s a nice picture' &amp; gave me the red x!  Hope you get it working soon!    'That`s a nice picture' positive
+39854df96d   It`s fun to see that glimpse of your life  s fun   positive
+67beae3c7f   _kat I`ve begged my mum to lt me get them out the attic.. but she wont let me  Waaa... and yes, was spoilt! hehe!  s spoilt    negative
+b18e3e1aa1  Hi Everyone miss me much?  muahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ;)   Hi Everyone miss me much?  muahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ;)   neutral
+ef42dee96c  resting had a whole day of walking  resting had a whole day of walking  neutral
+9191e574bb  I just stuck my finger down my throat and there are a bunch of bumps on my tongue &amp; throat. stuck   negative
+7579b68067  is excited to be visited by her twin and best friend! dinner, star gazing, and a movie!   // cool http://gykd.net   is excited to be visited by her twin and best friend! dinner, star gazing, and a movie!   // cool   positive
+a260fd32ce  Can`t sleep but is happy that the Fugees are keeping him company    Can`t sleep but is happy that the Fugees are keeping him company    neutral
+f4a743a972  Forgot my power cable at home today Forgot my power cable at home today neutral
+e6f129e747  Wow, it`s so early. Just had the best conversation. best    positive
+ac33177eec  Venti Black Ice Tea with 8 pumps of classic Venti Black Ice Tea with 8 pumps of classic neutral</code></pre>
+<p>For all 3 of the aforementioned models, I test their ability to determine the sentiment of the 20 tweets above, for the 2 prompts from the <code>Determining 2 best prompts</code> step. I will utilize <code>Agenta.ai</code> to perform this analysis and benchmarking.</p>
 </section>
 <section id="step-four-results" class="level1">
 <h1>Step four: results</h1>
-<p><span class="math inline">\(\langle\)</span> replace this with the results of the benchmarking <span class="math inline">\(\rangle\)</span></p>
+<section id="text2data-results" class="level2">
+<h2 class="anchored" data-anchor-id="text2data-results">Text2data Results</h2>
+<p>I decided to use Text2data as the baseline and as the established sentiment analysis tool. I manually run the Tweets on the setiment analysis <a href="https://text2data.com/Demo">demo</a>. Here are the results:</p>
+</section>
+<section id="detailed-results" class="level2">
+<h2 class="anchored" data-anchor-id="detailed-results">Detailed Results</h2>
+<p>The following images show detailed results:</p>
+<section id="prompt-1-gpt-3.5-turbo" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-1-gpt-3.5-turbo">Prompt 1: GPT-3.5 Turbo</h3>
+<p><img src="results1-prompt1-gpt-3.5-turbo.png" class="img-fluid"></p>
+</section>
+<section id="prompt-2-gpt-3.5-turbo" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-2-gpt-3.5-turbo">Prompt 2: GPT-3.5 Turbo</h3>
+<p><img src="results1-prompt2-gpt-3.5-turbo.png" class="img-fluid"></p>
+</section>
+<section id="prompt-1-gemini-pro" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-1-gemini-pro">Prompt 1: Gemini Pro</h3>
+<p><img src="results1-prompt1-gemini-pro.png" class="img-fluid"></p>
+</section>
+<section id="prompt-2-gemini-pro" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-2-gemini-pro">Prompt 2: Gemini Pro</h3>
+<p><img src="results1-prompt2-gemini-pro.png" class="img-fluid"></p>
+</section>
+<section id="prompt-1-claude-3-haiku" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-1-claude-3-haiku">Prompt 1: Claude 3 Haiku</h3>
+<p><img src="results1-prompt1-claude-3.5-haiku.png" class="img-fluid"></p>
+</section>
+<section id="prompt-2-claude-3-haiku" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-2-claude-3-haiku">Prompt 2: Claude 3 Haiku</h3>
+<p><img src="results1-prompt2-claude-3.5-haiku.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="summarized-results" class="level2">
+<h2 class="anchored" data-anchor-id="summarized-results">Summarized Results</h2>
+<p>The following image shows the summarized results:</p>
+<p><img src="results1.png" class="img-fluid"> Here are the summarized results in a easy-to-read format:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prompt</th>
+<th>Accuracy</th>
+<th>Average Latency</th>
+<th>Total Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GPT-3.5 Turbo</td>
+<td>1</td>
+<td>60%</td>
+<td>534ms</td>
+<td>$0.000133</td>
+</tr>
+<tr class="even">
+<td>Gemini Pro</td>
+<td>1</td>
+<td>70%</td>
+<td>1.61s</td>
+<td>N/A</td>
+</tr>
+<tr class="odd">
+<td>Claude 3.5 Haiku</td>
+<td>1</td>
+<td>65%</td>
+<td>1.46s</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>GPT-3.5 Turbo</td>
+<td>2</td>
+<td>70%</td>
+<td>654ms</td>
+<td>$0.000214</td>
+</tr>
+<tr class="odd">
+<td>Gemini Pro</td>
+<td>2</td>
+<td>45%</td>
+<td>1.32s</td>
+<td>N/A</td>
+</tr>
+<tr class="even">
+<td>Claude 3.5 Haiku</td>
+<td>2</td>
+<td>55%</td>
+<td>1.46s</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<p>Looking at the results, the best performing model was Gemini Pro with Prompt 1 and GPT-3.5 Turbo with Prompt 2, with both having a 70% accuracy. However, GPT-3.5 Turbo had lower average latency than Gemini Pro. Claude 3.5 Haiku performed decently well with prompt 1 with an accuracy of 65%; but not so well with prompt 2 with an accuracy of 55%.</p>
+<p>Additionally, GPT-3.5 Turbo had the least average latency, with 534ms and 654ms for Prompt 1 and Prompt 2 respectively. On the other hand, Gemini Pro and Claude 3.5 Haiku had average latencies within the range 1.32s and 1.61s. This makes sense since the GPT-3.5 Turbo is designed to be fast.</p>
+<p>Overall best model and prompt combination: From the results, I would chose Prompt 2 with GPT-3.5 Turbo, as it had the best accuracy (70%) and second best latency (654ms).</p>
+<p>However, it is important to note that Prompt 1 had better accuracy on average (60%, 65%, and 70%) across all models than Prompt 2 (45%, 55%, and 70%). Thus, if I had to select the prompt independent of the model, I would select Prompt 1.</p>
+<p>Additionally, GPT-3.5 Turbo had better accuracy on average (60% and 70%) across both prompts compared to Gemini Pro (45% and 70%) and Claude 3.5 Haiku (55% and 65%). Thus, if I had to select the model independent of the prompt, I would select GPT-3.5 Turbo</p>
+<p>Unfortunately, Agenta.ai was unable to collect the “Total Cost” for Gemini Pro and Claude 3.5 Haiku.</p>
+</section>
+</section>
+<section id="step-five-additional-benchmarking" class="level1">
+<h1>Step five: additional benchmarking</h1>
+<p>I was unable to get “Total Cost” information for Gemini Pro and Claude 3.5 Haiku. To get that information, I decided to run the benchmark again using the following models: GPT-3.5 Turbo, GPT-4, and GPT-4o. I use the same prompts and the same sampled tweets from the previous benchmark. I run this benchmark on <code>Agenta.ai</code>, same as before.</p>
+<section id="summarized-results-1" class="level2">
+<h2 class="anchored" data-anchor-id="summarized-results-1">Summarized Results</h2>
+<p>The following image shows the summarized results:</p>
+<p><img src="results2.png" class="img-fluid"> Here are the summarized results in a easy-to-read format:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prompt</th>
+<th>Accuracy</th>
+<th>Average Latency</th>
+<th>Total Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GPT-3.5 Turbo</td>
+<td>1</td>
+<td>65%</td>
+<td>559ms</td>
+<td>$0.000133</td>
+</tr>
+<tr class="even">
+<td>GPT-4</td>
+<td>1</td>
+<td>65%</td>
+<td>816ms</td>
+<td>$0.002695</td>
+</tr>
+<tr class="odd">
+<td>GPT-4o</td>
+<td>1</td>
+<td>65%</td>
+<td>961ms</td>
+<td>$0.000233</td>
+</tr>
+<tr class="even">
+<td>GPT-3.5 Turbo</td>
+<td>2</td>
+<td>65%</td>
+<td>514ms</td>
+<td>$0.000214</td>
+</tr>
+<tr class="odd">
+<td>GPT-4</td>
+<td>2</td>
+<td>65%</td>
+<td>946ms</td>
+<td>$0.004316</td>
+</tr>
+<tr class="even">
+<td>GPT-4o</td>
+<td>2</td>
+<td>70%</td>
+<td>683ms</td>
+<td>$0.000368</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the results, the best-performing model was GPT-4o with Prompt 2, achieving an accuracy of 70%. The other combinations also performed relatively well, each reaching 65% accuracy, and misclassifying just one more tweet compared to the top-performing model and prompt combination.</p>
+<p>However, it is evident that the fastest model was GPT-3.5 Turbo, with average latencies of 559ms and 514ms for Prompt 1 and Prompt 2 respectively. There is no clear evidence as to which is faster between GPT-4 and GPT-4o. For Prompt 1, GPT-4 (average latency - 946ms) is slightly faster than GPT-4o (average latency - 961ms), but for prompt 2, GPT-4o (average latency - 683ms) is faster than GPT-4 (average latency - 946ms).</p>
+<p>On the other hand, it is evident that GPT-4 has the highest total costs, and GPT-3.5 Turbo has the least total costs. However, the total costs of GPT-4o were relatively comparable to that of GPT-3.5 Turbo, especially for Prompt 2 where GPT-4o had a total cost of $0.000233 and GPT-3.5 Turbo had a total cost of $0.000214.</p>
+<p>Even though GPT-4o with Prompt 2 performs the best, I would select GPT-3.5 Turbo (with either Prompt 1 and Prompt 2 – they had same accuracy) because the average latency and total cost is significantly less, while the accuracy only drops 5%.</p>
+</section>
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
-<p><span class="math inline">\(\langle\)</span> replace this with your reflections <span class="math inline">\(\rangle\)</span></p>
+<p>Explain that I narrow down from 5 to 2 using 5 tweets. THen once I have narrowed down to 2 prompts, I can run the full test on 20 tweets. This allows me to be resource efficient, instead of running all 5 prompt pon 20 tweets.</p>
+<p>Also in the results, explain which performance matters the most to me (correctness, runtime, cost).</p>
 </section>
 <section id="addendum-features-of-this-file" class="level1">
 <h1>Addendum: Features of this file</h1>

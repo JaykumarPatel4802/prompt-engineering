@@ -123,13 +123,12 @@ From the results, prompts 3, 4, and 5, returned "positive" for the tweet with te
 
 Prompts 1 and 2 were able to get all sentiments correct; thus, I will utilize those prompts for the final benchmark.
 
-$\langle$ replace this with your process for developing two best prompts $\rangle$
-
 # Step two: select 20 tweets
 
 ## Prompt - Generating Python Script
 
 Prompt for ChatGPT 4o to generate a Python script.
+
 ```
 I have a `example_tweets.csv` file that has the these columns: `textID`, `text`, `selected_test`, and `sentiment`. It has many rows, and I only want to sample 20 rows. I want the 20 rows to be representative, so approximately a third of the rows should have "positive" sentiment, approximately a third of the rows should have "negative" sentiment, and approximately a third of the rows should have "neutral" sentiment. Can you write me a Python script that accomplishes the task of sampling 20 rows from the dataset?
 ```
@@ -183,6 +182,7 @@ This script ensures that the sampled dataset has an approximately equal distribu
 The 3 models I chose for the benchmark are `gpt-3.5-turbo`, `openrouter/google/gemini-pro`, and `openrouter/anthropic/claude-3.5-haiku`. The main reason I chose these 3 models is because according to [this](https://arxiv.org/abs/2312.11444) paper, Gemini Pro achieves "close but slightly inferior" results compared to GPT-3.5 Turbo. Additionally, according to [this](https://context.ai/compare/claude-3-haiku/gpt-3-5-turbo), GPT-3.5 Turbo and Claude 3 Haiku perform have relatively similar performance for the `MMLU` and `HellaSwag` metrics (other benchmarks were not available for comparison). Thus, I chose these 3 models since none have a "clear" advantage, and hopefully will provide interesting results.
 
 Additionally, the script above sampled these 20 tweets:
+
 ```{csv}
 textID	text	selected_text	sentiment
 4dad557268	says BAD TRIP! (angry)  http://plurk.com/p/wxshi	says BAD TRIP!	negative
@@ -212,7 +212,13 @@ For all 3 of the aforementioned models, I test their ability to determine the se
 
 # Step four: results
 
-## Detailed Results
+## Text2data Results
+
+I decided to use Text2data as the baseline and as the established sentiment analysis tool. I manually run the Tweets on the setiment analysis [demo](https://text2data.com/Demo). Here are the results:
+
+
+
+## Detailed Results from Benchmark (with models GPT-3.5 Turbo, Gemini Pro, and Claude 3.5 Haiku)
 
 The following images show detailed results:
 
@@ -245,12 +251,63 @@ The following images show detailed results:
 The following image shows the summarized results:
 
 ![](results1.png)
+Here are the summarized results in a easy-to-read format:
+
+| Model | Prompt | Accuracy | Average Latency | Total Cost |
+|-------|--------|----------|-----------------|------------|
+| GPT-3.5 Turbo | 1 | 60% | 534ms | $0.000133 |
+| Gemini Pro | 1 | 70% | 1.61s | - |
+| Claude 3.5 Haiku | 1 | 65% | 1.46s | - |
+| GPT-3.5 Turbo | 2 | 70% | 654ms | $0.000214 |
+| Gemini Pro | 2 | 45% | 	1.32s |  - |
+| Claude 3.5 Haiku | 2 | 55% | 1.46s | - |
+
+Looking at the results, the best performing model was Gemini Pro with Prompt 1 and GPT-3.5 Turbo with Prompt 2, with both having a 70% accuracy. However, GPT-3.5 Turbo had lower average latency than Gemini Pro. Claude 3.5 Haiku performed decently well with prompt 1 with an accuracy of 65%; but not so well with prompt 2 with an accuracy of 55%.
+
+Additionally, GPT-3.5 Turbo had the least average latency, with 534ms and 654ms for Prompt 1 and Prompt 2 respectively. On the other hand, Gemini Pro and Claude 3.5 Haiku had average latencies within the range 1.32s and 1.61s. This makes sense since the GPT-3.5 Turbo is designed to be fast.
+
+Overall best model and prompt combination: From the results, I would chose Prompt 2 with GPT-3.5 Turbo, as it had the best accuracy (70%) and second best latency (654ms). 
+
+However, it is important to note that Prompt 1 had better accuracy on average (60%, 65%, and 70%) across all models than Prompt 2 (45%, 55%, and 70%). Thus, if I had to select the prompt independent of the model, I would select Prompt 1.
+
+Additionally, GPT-3.5 Turbo had better accuracy on average (60% and 70%) across both prompts compared to Gemini Pro (45% and 70%) and Claude 3.5 Haiku (55% and 65%). Thus, if I had to select the model independent of the prompt, I would select GPT-3.5 Turbo
+
+Unfortunately, Agenta.ai was unable to collect the "Total Cost" for Gemini Pro and Claude 3.5 Haiku.
+
+# Step five: additional benchmarking (with models GPT-3.5 Turbo, GPT-4, and GPT-4o)
+
+I was unable to get "Total Cost" information for Gemini Pro and Claude 3.5 Haiku. To get that information, I decided to run the benchmark again using the following models: GPT-3.5 Turbo, GPT-4, and GPT-4o. I use the same prompts and the same sampled tweets from the previous benchmark. I run this benchmark on `Agenta.ai`, same as before.
+
+## Summarized Results
+
+The following image shows the summarized results:
+
+![](results2.png)
+Here are the summarized results in a easy-to-read format:
+
+| Model | Prompt | Accuracy | Average Latency | Total Cost |
+|-------|--------|----------|-----------------|------------|
+| GPT-3.5 Turbo | 1 | 65% | 559ms | $0.000133 |
+| GPT-4 | 1 | 65% | 816ms | $0.002695 |
+| GPT-4o | 1 | 65% | 961ms | $0.000233 |
+| GPT-3.5 Turbo | 2 | 65% | 514ms | $0.000214 |
+| GPT-4 | 2 | 65% | 946ms | $0.004316 |
+| GPT-4o | 2 | 70% | 683ms | $0.000368 |
+
+Based on the results, the best-performing model was GPT-4o with Prompt 2, achieving an accuracy of 70%. The other combinations also performed relatively well, each reaching 65% accuracy, and misclassifying just one more tweet compared to the top-performing model and prompt combination.
+
+However, it is evident that the fastest model was GPT-3.5 Turbo, with average latencies of 559ms and 514ms for Prompt 1 and Prompt 2 respectively. There is no clear evidence as to which is faster between GPT-4 and GPT-4o. For Prompt 1, GPT-4 (average latency - 946ms) is slightly faster than GPT-4o (average latency - 961ms), but for prompt 2, GPT-4o (average latency - 683ms) is faster than GPT-4 (average latency - 946ms).
+
+On the other hand, it is evident that GPT-4 has the highest total costs, and GPT-3.5 Turbo has the least total costs. However, the total costs of GPT-4o were relatively comparable to that of GPT-3.5 Turbo, especially for Prompt 2 where GPT-4o had a total cost of \$0.000233 and GPT-3.5 Turbo had a total cost of \$0.000214.
+
+Even though GPT-4o with Prompt 2 performs the best, I would select GPT-3.5 Turbo (with either Prompt 1 and Prompt 2 -- they had same accuracy) because the average latency and total cost is significantly less, while the accuracy only drops 5%.
+
 
 # Conclusion
 
-$\langle$ replace this with your reflections $\rangle$
 
-Explain that I narrow down from 5 to 2 using 5 tweets. THen once I have narrowed down to 2 prompts, I can run the full test on 20 tweets. This allows me to be resource efficient, instead of running all 5 prompt pon 20 tweets.
+
+Explain that I narrow down from 5 to 2 using 5 tweets. Then once I have narrowed down to 2 prompts, I can run the full test on 20 tweets. This allows me to be resource efficient, instead of running all 5 prompt pon 20 tweets.
 
 Also in the results, explain which performance matters the most to me (correctness, runtime, cost).
 
