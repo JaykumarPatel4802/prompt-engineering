@@ -1,0 +1,72 @@
+---
+title: "Milestone 1: Project Focus"
+author: "Jaykumar Patel, Laith Altarabishi, Harold Zhong"
+format: html
+editor: visual
+---
+
+# Milestone 1: Project Focus
+
+## Domain
+
+-   We will create a ChatBot to perform sentiment analysis on tweets.
+-   We will finetune an existing model using labeled twitter sentiment data.
+
+## Twitter Datasets
+
+### Here are some of the datasets we are considering:
+
+-   https://huggingface.co/datasets/carblacac/twitter-sentiment-analysis
+    -   Each entry in this dataset has a `text` (corresponding to a sentence of a tweet) and a `feeling` (corresponding to the sentiment -- `0` for negative and `1` for positive)
+    -   There a total of 119,988 entries for training, 29,997 entries for validation, and 61,998 entries for test.
+    -   Roughly half of the entries correspond to the `1` feeling, and roughly half correspond to the `0` feeling.
+-   https://huggingface.co/datasets/jppgks/twitter-financial-news-sentiment
+    -   This dataset focuses on financial news on Twitter.
+    -   Each entry in this dataset has a `input` (corresponding to a tweet) and a `output` (corresponding to the sentiment -- `neutral`, `positive`, or `negative`)
+-   https://huggingface.co/datasets/gxb912/large-twitter-tweets-sentiment
+    -   Each entry in this dataset has a `text` (corresponding to a tweet) and a `sentiment` (corresponding to the sentiment -- `0` for negative and `1` for positive)
+    -   The training set has `179,995` entries, and test set has `44,999` entries.
+
+## General Datasets (non-Twitter)
+
+-   https://huggingface.co/datasets/Sp1786/multiclass-sentiment-analysis-dataset
+    -   General text
+    -   Each entry in this dataset has a `text` and a `sentiment` (`neutral`, `positive`, or `negative`)
+-   https://huggingface.co/datasets/NickyNicky/finance-financialmodelingprep-stock-news-sentiments-rss-feed?row=5
+    -   Financial news
+    -   Data contains `text` `sentiment`, and `sentimentScore`
+    -   88.5% is `Positive` sentiment, rest is `Negative`
+-   https://huggingface.co/datasets/NickyNicky/Finance_sentiment_and_topic_classification_En?row=3
+    -   More finance News
+
+## Medical Reasonoing
+
+-   https://huggingface.co/datasets/FreedomIntelligence/medical-o1-reasoning-SFT
+-   https://huggingface.co/datasets/TsinghuaC3I/MedXpertQA
+
+## Therapy Data
+
+-   https://huggingface.co/datasets/Aarya4536/therapy-bot-data-10k?row=1
+
+## Movie Review Sentiment Analysis
+
+-   https://huggingface.co/datasets/cornell-movie-review-data/rotten_tomatoes
+
+## Plain Language Summary Generator
+
+-   https://www.dropbox.com/scl/fi/oldc36jnjfan3qijeo4ih/plos_readability_ctrl_sum_corpus.rar?dl=0&e=1&rlkey=q682arskm4x0nl6pa6f44odq8
+    -   Summary of research papers
+    -   Contains an abstract and its plain language summary
+    -   Contains 28,124 papers
+-   https://paperswithcode.com/dataset/cnn-daily-mail-1
+    -   Summary of news stories
+-   https://huggingface.co/datasets/abisee/cnn_dailymail?row=7
+    -   Highlights from CNN Articles
+
+## Translator
+
+-   Some HuggingFace data
+
+## Specifications
+
+-   We plan to run out model locally

@@ -12,21 +12,13 @@ monofont: JetBrainsMono Nerd Font
 mathfont: TeX Gyre Schola Math Regular
 jupyter: python3
 bibliography: eB.bib
+nocite: |
+  @*
 ---
 
 # Intro
 
 This documents my attempts to generate a BibTeX bibliography on PDF remediation using an LLM.
-
-## Instructions
-
-You need to generate a BibTeX bibliography in a file called `eB.bib` in the same directory as this document. An example entry in that file is @Paliwal2024, which should resolve to a reference in this document.
-
-Most of the papers are likely to be found in the ACM Digital Library. That online resource has a convention where each entry includes a large gray quote mark that leads to the BibTeX entry for the paper. You can copy and paste a few BibTeX entries if you find you need formatting examples.
-
-You must upload your .qmd file, your .bib file, and your rendered .html file to Canvas. All must have the basename `eB`. Points will be deducted for any other name.
-
-You should remove this instruction section from the final document.
 
 # First attempt
 
@@ -38,7 +30,7 @@ Note: I am using ChatGPT o3-mini with the "Search" functionality. Using ChatGPT 
 
 ## Initial result
 
-```
+
 Below is a sample bibliography of academic papers and preprints that address various aspects of PDF remediation (in the context of both accessibility and security/data‐sanitization):
 
 1. Wang, L. L., Cachola, I., Bragg, J., Cheng, E. Y.-Y., Haupt, C., Latzke, M., Kuehl, B., van Zuylen, M., Wagner, L., & Weld, D. S. (2021). *Improving the Accessibility of Scientific Documents: Current State, User Needs, and a System Solution to Enhance Scientific PDF Accessibility for Blind and Low Vision Users*. arXiv preprint arXiv:2105.00076. citeturn0search6  
@@ -50,9 +42,11 @@ Below is a sample bibliography of academic papers and preprints that address var
 4. Adhatarao, S., & Lauradoux, C. (2021). *Exploitation and Sanitization of Hidden Data in PDF Files*. arXiv preprint arXiv:2103.02707. citeturn0academia13  
 
 These works explore topics ranging from automated conversion and structural recovery (to aid remediation for accessibility) to the challenges of hidden data and secure redaction in PDF documents. They should provide a solid starting point for research into methods and tools for remediating PDFs.
-```
 
-ChatGPT o3-mini generated the response above. I noticed that the first PDF is directly related to PDF remediation; however, the latter papers are less relevant. To improve this, I specify what PDF remediation is in the prompt.
+
+## Comments
+
+ChatGPT o3-mini generated the response above. I noticed that the first PDF is directly related to PDF remediation; however, the latter papers are less directly relevant to PDF remediation and more about PDF data. To improve this, I specify what PDF remediation is in the prompt.
 
 # Second attempt
 
@@ -64,7 +58,6 @@ Generate a bibliography with papers regarding PDF remediation. PDF remediation i
 
 ## Result
 
-```
 Below is a short bibliography of peer‐reviewed papers and preprints that focus on the remediation of PDFs—that is, modifying PDF documents so that they are accessible (e.g. properly tagged, with a logical reading order and descriptive alt‐text) for blind and low‐vision users using screen readers:
 
 1. **Wang, L. L., Cachola, I., Bragg, J., Cheng, E. Y.-Y., Haupt, C., Latzke, M., Kuehl, B., van Zuylen, M., Wagner, L., & Weld, D. S. (2021).**  
@@ -91,7 +84,8 @@ Below is a short bibliography of peer‐reviewed papers and preprints that focus
    *(Note: Full bibliographic details and DOI should be verified from the conference proceedings.)*
 
 Together, these publications address both the assessment of current accessibility shortcomings in scholarly PDFs and propose automated as well as semi-automated remediation solutions to help transform legacy and newly created PDFs into accessible documents suitable for use with assistive technologies.
-```
+
+## Comments
 
 The results from ChatGPT were more promising, where it returned 4 papers that were real and relevant to PDF remediation. However, they were not in BibTeX format, so I asked it to give them to be in BibTeX format.
 
@@ -103,9 +97,7 @@ Can you give me the bibliography in BibTeX format?
 
 ## Result
 
-```
 Below are BibTeX entries for a selected bibliography on PDF remediation (the process of making PDFs accessible to screen readers for blind and low‐vision users):
-```
 
 ```{bibtex}
 @misc{Wang2021,
@@ -144,9 +136,10 @@ Below are BibTeX entries for a selected bibliography on PDF remediation (the pro
 }
 ```
 
-```
 These entries include a preprint on scientific PDF accessibility, a conference paper addressing tool requirements for PDF remediation, an AI-based automated remediation approach for STEM PDFs, and a framework for improving accessibility on arXiv. You can adjust the fields (such as conference name or publisher details) as needed for your use.
-```
+
+
+## Comments
 
 The results above are better, as the generated citations point to actual papers regarding PDF remediation (which I was able to confirm with a quick Google search) in the BibTeX format. Now, I will ask it to generate 10 more. Note, I am not asking it to generate too many at a time because I suspect ChatGPT may get "overwhelmed" if given too much work and start hallucinating.
 
@@ -158,9 +151,7 @@ This is great, can you generate 10 more citations regarding PDF remediation. Rem
 
 ## Result
 
-```
 Below are 10 additional BibTeX entries for real, peer‐reviewed papers and technical reports that focus on PDF remediation (i.e. making PDF documents accessible for screen readers and low‐vision users):
-```
 
 ```{bibtex}
 @article{Pradhan2022,
@@ -256,9 +247,9 @@ Below are 10 additional BibTeX entries for real, peer‐reviewed papers and tech
 }
 ```
 
-```
 Each entry addresses aspects of PDF remediation—from tool development for automated accessibility enhancements and evaluation of publisher practices to studies assessing the state of PDF accessibility in scholarly publishing. You can adjust the fields (e.g., pages or DOI) as needed for your citation style or specific requirements.
-```
+
+## Comments
 
 All of the entries in the generated bibliography point to real papers! Additionally, most papers are from reputable sources such as ACM (ex: @Mack2021), ResearchGate (ex: @Nganji2018), and CMU (ex: @Bigham2016).
 
@@ -268,13 +259,11 @@ I did notice that the citations don't have the "abstract" field and not all have
 
 ## Prompt
 
-Great, can you generate 5 more? I'd prefer for them to be papers from ACM, Arxiv, ResearchGate, or other credible sources.
+Great, can you generate 5 more? I'd prefer for them to be papers from ACM, arXiv, ResearchGate, or other credible sources.
 
 ## Result
 
-```
 Below are five additional BibTeX entries from credible sources (ACM, arXiv, etc.) that focus on PDF remediation for accessibility (i.e. modifying PDFs so that they can be read by screen readers for blind and low‐vision users):
-```
 
 ```{bibtex}
 @inproceedings{SchmittKoopmann2022,
@@ -323,9 +312,9 @@ Below are five additional BibTeX entries from credible sources (ACM, arXiv, etc.
 }
 ```
 
-```
 These entries cover work on automated remediation of STEM PDFs using AI, interactive and semantic reading interfaces for scholarly documents, accessibility in electronic theses and dissertations (ETDs), approaches for making mathematical content navigable for print-disabled readers, and a tool for converting PDFs into accessible HTML. Adjust any fields as needed to match your citation style or further publication details.
-```
+
+## Comments
 
 All of the entries generated by ChatGPT were correct and unique, except 1. ChatGPT generated @SchmittKoopmann2022 which it had already generated from attemps 2 and 3. I hypothesize that the reason why this citation got repeated is recency bias. Since ChatGPT first mentioned @SchmittKoopmann2022 in attempt 2, I suspect that it focused on trying not to repeat the more generations, and failed to not repeat an older generation.
 
@@ -341,9 +330,7 @@ Can you generate 5 more citations of research papers regarding PDF remediation. 
 
 ## Result
 
-```
 Below are five additional BibTeX entries for research papers on PDF remediation—i.e. the process of making PDF documents accessible (through proper tagging, logical reading order, alt text, and other features) for screen readers used by people with low vision. These entries are drawn from credible sources such as ACM and arXiv:
-```
 
 ```{bibtex}
 @inproceedings{SchmittKoopmann2022,
@@ -392,7 +379,6 @@ Below are five additional BibTeX entries for research papers on PDF remediation�
 }
 ```
 
-```
 ### Brief Description of Each Entry
 
 1. **Schmitt-Koopmann et al. (2022):** Describes an AI-driven approach to automatically remediate STEM PDFs by improving tagging and reading order, directly benefiting low-vision users.
@@ -402,7 +388,8 @@ Below are five additional BibTeX entries for research papers on PDF remediation�
 5. **Wang et al. (2023):** Describes a tool for converting scientific PDFs into accessible HTML, an approach that effectively remediates PDFs for use with assistive technologies.
 
 These five entries are drawn from credible venues (ACM conferences and arXiv preprints) and represent recent efforts addressing PDF remediation for accessibility. Adjust any fields as needed to fit your specific citation style or additional publication details.
-```
+
+## Comments
 
 ChatGPT returned the same 5 papers that it had already given me before. In the next prompt, I explicitly tell ChatGPT to cite papers that are different from the ones it has already given me. This will help ensure that the generation results in new bibliography entries.
 
@@ -481,7 +468,9 @@ Below are five additional BibTeX entries from credible sources (ACM, arXiv, and 
 These five entries expand the literature on PDF remediation by addressing different aspects—from alt text enhancement to structured content extraction and case studies on accessible scholarly proceedings. Adjust any fields (such as page numbers) as necessary to suit your citation style.
 ```
 
-These results are great. All of the entries in the bibliography correspond to real papers about PDF remediation, either directly or indirectly. It is interesting to note that @Shen2022 isn't directly about PDF remediation. The paper discusses how to extract structured content from PDFs, and how this can improve PDF accessibility. Thus, this paper indirectly relates to PDF remediation. It is facinating how ChatGPT o3-mini was able to draw the connection of how extracting structured content from PDFs can be used to improve PDF accessbility. I suspect that it is able to do so due to the reasoning abilities that ChatGPT o3-mini has. It reasons "out loud", as it displays what it is "thinking". As a result, this chain of thought process led to relevant results.
+## Comments
+
+These results are great. All of the entries in the bibliography correspond to real papers about PDF remediation, either directly or indirectly. It is interesting to note that @Shen2022 isn't directly about PDF remediation. The paper discusses how to extract structured content from PDFs, and how this can improve PDF accessibility. Thus, this paper indirectly relates to PDF remediation. It is facinating how ChatGPT o3-mini was able to draw the connection of how extracting structured content from PDFs can be used to improve PDF accessibility. I suspect that it is able to do so due to the reasoning abilities that ChatGPT o3-mini has. It reasons "out loud", as it displays what it is "thinking". As a result, this chain of thought process led to relevant results.
 
 It is also interesting to note that the urls of @Ribera2019 and @Shen2022 are incorrect. This is probably because either ChatGPT was unable to find the correct urls during its search or it hallucinated. However, for most of the papers, the urls are correct!
 
@@ -542,9 +531,7 @@ Here is the bibliography with 5 entries:
 
 ## Result
 
-```
 Below is the modified bibliography with the URL fields added only for the entries whose DOI‐based URLs we are 100% sure about:
-```
 
 ```{bibtex}
 @inproceedings{Mack2021,
@@ -595,9 +582,10 @@ Below is the modified bibliography with the URL fields added only for the entrie
 }
 ```
 
-```
 For the first three entries, the URL fields were derived directly from their DOIs. Since the last two entries do not have a DOI (or we are not 100% sure of their permanent URL), no URL fields were added for them.
-```
+
+## Comments
+
 Of 5 entries I provided, ChatGPT was able to add the "url" field for 3 of them. I manually verified that the urls are correct. This test goes to show the capabilities of ChatGPT to explore the internet, retrieve the urls, analyze them for certainty, and add them if the model is certain. For 2 entries, ChatGPT was uncertain that the urls were correct, and thus, did not add them as instructions stated.
 
 In fact, when ChatGPT is reasoning, it displays what it is "thinking". Here is a snippit of the reasoning process: "I'm thinking through avoiding URLs for Brady2015 and Bigham2016 if their details aren't certain. Safe to go with DOIs from Mack2021, Nganji2018, and Ribera2008." This goes to show that it is able to analyze its findings and determine how confident it is in their accuracy.
@@ -659,9 +647,7 @@ Here is the bibliography with 5 entries:
 
 ## Result
 
-```
 Below is your modified bibliography with added “abstract” fields for the entries where we could reliably determine the abstract. For the other entries, no abstract field has been added.
-```
 
 ```{bibtex}
 @inproceedings{Mack2021,
@@ -711,9 +697,9 @@ Below is your modified bibliography with added “abstract” fields for the ent
 }
 ```
 
-```
 For the first two entries, the abstracts were obtained from reliable sources (e.g., the ACM Digital Library and publisher websites). Since we could not verify the exact abstract texts for the remaining three entries with complete certainty, no “abstract” field has been added for them.
-```
+
+## Comments
 
 ChatGPT was able to fill in the abstracts for the first 2 sources. In fact, it explains that it was able to do so because the abstracts were retrieved from credible sources. However, upon closer inspection, it is evident that the abstract that ChatGPT added for @Mack2021 is actually incorrect, and the abstract that ChatGPT added for @Nganji2018 is mostly correct but incomplete. This suggests that the model was either unable t determine what an "abstract" is when it was searching the internet for those respective papers, or that it hallucinated in generating those abstracts. This experiment demonstrates ChatGPT's limitation in its ability to parse and identify online information (specifically abstracts in this case) the way humans can.
 
@@ -726,6 +712,29 @@ As of now, I have asked ChatGPT to generate a bibliography using its ability to 
 
 Here is some information on 3 papers:
 
+Paper 1:
+Title: Beyond The Page-Break: Towards Better Tools for Remediation of Born-Digital Documents
+Author: Mark W. R. Anderson
+Published: 10 September 2024
+Pages: 70 - 77
+Booktitle: Proceedings of the 35th ACM Conference on Hypertext and Social Media
+Publisher: Association for Computing Machinery
+
+Paper 2:
+Title: Uncovering the New Accessibility Crisis in Scholarly PDFs: Publishing Model and Platform Changes Contribute to Declining Scholarly Document Accessibility in the Last Decade
+Authors: Anukriti Kumar, Lucy Lu Wang
+Published: 27 October 2024
+Pages: 1 - 16
+Booktitle = Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility
+Publisher: Association for Computing Machinery
+
+Paper 3:
+Title: “Malicious” Pictorials: How Alt Text Matters to Screen Reader Users' Experience of Image-Dense Media
+Authors: Alyson Yin, Riya Sogani, Bruna Oewel, Karen Phan, Jaime Shin Young Park, Mia Ashley Yeo, Lindsay Ann Yazzolino, Karen Arcos, Ali Abdolrahmani, Emily Blank, Michael Dean Gilbert, Stacy M. Branham
+Published: 01 July 2024
+Pages: 1262 - 1274
+Booktitle = Proceedings of the 2024 ACM Designing Interactive Systems Conference
+Publisher: Association for Computing Machinery
 
 I want you to generate a bibliography using those papers. Use the following bibliography entry as an example of how to format your bibliography:
 ```{bibtex}
@@ -748,44 +757,80 @@ keywords = {PDF accessibility, PDF U/A, accessibility, inclusive design, born-ac
 
 ## Result
 
-Here you refer to the `eB.bib` file.
+Below are the BibTeX entries for the three papers. (No “abstract” fields were added since we do not have confirmed abstracts for these papers.)
 
-(Just kidding about fifteenth---I don't know how many attempts it will take to get a satisfactory result)
+```{bibtex}
+@inproceedings{Anderson2024,
+  author    = {Anderson, Mark W. R.},
+  title     = {Beyond The Page-Break: Towards Better Tools for Remediation of Born-Digital Documents},
+  booktitle = {Proceedings of the 35th ACM Conference on Hypertext and Social Media},
+  year      = {2024},
+  month     = {sep},
+  pages     = {70--77},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA}
+}
+
+@inproceedings{KumarWang2024,
+  author    = {Kumar, Anukriti and Wang, Lucy Lu},
+  title     = {Uncovering the New Accessibility Crisis in Scholarly PDFs: Publishing Model and Platform Changes Contribute to Declining Scholarly Document Accessibility in the Last Decade},
+  booktitle = {Proceedings of the 26th International ACM SIGACCESS Conference on Computers and Accessibility},
+  year      = {2024},
+  month     = {oct},
+  pages     = {1--16},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA}
+}
+
+@inproceedings{Yin2024,
+  author    = {Yin, Alyson and Sogani, Riya and Oewel, Bruna and Phan, Karen and Park, Jaime Shin Young and Yeo, Mia Ashley and Yazzolino, Lindsay Ann and Arcos, Karen and Abdolrahmani, Ali and Blank, Emily and Gilbert, Michael Dean and Branham, Stacy M.},
+  title     = {“Malicious” Pictorials: How Alt Text Matters to Screen Reader Users' Experience of Image-Dense Media},
+  booktitle = {Proceedings of the 2024 ACM Designing Interactive Systems Conference},
+  year      = {2024},
+  month     = {jul},
+  pages     = {1262--1274},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA}
+}
+```
+
+If you obtain verified abstracts in the future, you can add an `abstract` field to each entry accordingly.
+
+## Comments
+
+From the results above, it is evident that ChatGPT is really good at formatting a bibliography given an example and the right data. Specifically, it was able to parse the input for the "Published" date and determine the year and month, which it included in the final bibliographies it generated. Additionally, it was able to determine the "address" field of ACM based on the example I had given it, and it added that "address" field to the entries it generated!
+
+Interestingly, ChatGPT also remembered that I was interested in adding the "abstract" field from my prior request (in Ninth Attempt), and it suggested that I can add the abstracts if I were to obtain them.
+
+It is important to note that I turned off the "Search" functionality for this request, as I had provided all the data it needed and removing its need to search the internet. This demonstrates ChatGPT's ability to format the entries given input data. ChatGPT is able to follow structured requests very closely, and proves useful in automating repetitive / monotonous tasks when given exact instructions and the right data.
+
+The final bibliography is in `eB.bib` as well as in the `References` section of this page.
 
 # Conclusion
 
-Here is where you describe what you did and any thoughts about how it came out.
-
-- Mostly good
-- Search feature is useful in retrieving information
-- Limitations for more complex requests like asking for abstracts
-- After prompt 2, it reasons to get papers that are relevant.
-  - "Focusing on remediation"
-  - "Assessing relevant"
-  - "Refining selection"
-  - ![](prompt_2_reasoning.png)
-- 6th attempt - returned papers I already had. So had to explicitly say to generate new ones in attempt 7.
-- Example reasoning from 7th prompt
+- I utilized ChatGPT o3-mini with the "Search" functionality enabled. There are 2 main reasons for this:
+  1. ChatGPT o3-mini has reasoning capabilities, which is extremely useful for determining credible and real sources. From my experience, this reasoning ability allowed the model to hallucinate less, as it was ability to think through the validity of the generated bibliography.
+  2. The "Search" functionality enabled ChatGPT to search the internet for articles instead of relying solely on its training corpus.
+- Although I initially described "PDF Remediation" in the `First Attempt`, most of the papers ChatGPT generated were focused on PDF data, which is only indirectly related to PDF remediation.
+- To improve the response, I clarified in the `Second Attempt` that the papers generated were not relevant to PDF remediation and asked it to regenerate them. This time, it produced more relevant papers. I believe this improvement was due to ChatGPT’s ability to use its reasoning capabilities to assess the relevance of the papers and adjust its response accordingly.
+  - As shown in the image, it is evident that ChatGPT is reasoning by "Focusing on remediation", "Assessing relevant" papers, and "Refining selection"
+  ![](prompt_2_reasoning.png)
+- Interestingly on the `Sixth Attempt`, ChatGPT returned papers it had already previously generated. Technically, the model did not hallucinate, as the papers were still real and about PDF remediation. After explicitly telling it to generate entries that are "different" than the ones it had already given (`Seventh Attempt`), it was able to generate new papers.
+  - This is a good example of how it is important to be as specific as possible when prompting the model. By being specific in `Seventh Attempt`, the model was able to better understand what I wanted, and provided the desired response.
+  - As shown in the image, the model used its reasoning capabilities for "Locating research papers" and "Evaluating options" to ensure that the results "expand beyond previous citations".
   - ![](prompt_7_reasoning.png)
-- Reasoning for urls
+- ChatGPT o3-mini's "Search" feature proves useful for when I asked it to fill in urls in `Eighth Attempt`. Although it wasn't able to determine the url for every entry, it was successful for 3 out of 5. For the 3 urls it generated, I was able to verify their validity manually.
+  - I believe that it was able to generate correct urls due to its reasoning and search capabilities.
+  - As shown in the image, ChatGPT "searched manually" for papers to get their urls.
+  - Then it determined if the urls were valid. It did not include urls for papers if it determined that the "details are uncertain".
   - ![](prompt_8_reasoning.png)
+- `Ninth Attempt` demonstrates ChatGPT's limitations in completing more complex tasks such as adding the "abstract" field. Of the 5 papers, it generated were either incorrect or incomplete abstracts for 2 of them. It didn't generate any abstracts for 3 of them due to it not being able to "verify the exact abstract texts ... with complete certainty".
+- Finally, the `Final Attempt` demonstrates that the model is really good with structured tasks when it is given precise instructions and right data. The "one-shot" approach enabled the model to understand how to structure the bibliography it provided.
+- Final Notes:
+  - Overall, I thought the results were incredible! Most, if not all, of the generated bibliography contained real papers about PDF remediation! Additionally, many of them were from credible sources such as ACM, ResearchGate, and CMU. 
+  - ChatGPT o3-mini's reasoning capabilities combined with its ability to "Search" the internet proved useful for this exercise, since ChatGPT was able to return papers not directly in its training corpus.
+  - Additionally, its reasoning enabled it to determine which papers were real and relevant to PDF remediation.
+  
+Note: The `Result` sections contain the results of ChatGPT, copied and pasted. The `Comments` sections contain my comments and analysis of ChatGPT's results.
 
-# Addendum: Features of this file
-
-Note: delete this section before you turn in the file!
-
--   Front matter
-    -   Includes your name
-    -   Includes the keyword "today" which resolves to the date on which you render the document
-    -   Includes fonts---you should install these fonts on your computer or change the font specification to fonts you already have on your computer
-    -   Includes the format (html) to which Quarto will render
-    -   Includes some directives that are specific to that format: toc and embed-resources
-    -   `toc` causes the table of contents to be rendered, on the right side of the frame by default
-    -   `embed-resources` causes any diagrams to be included in the html file itself rather than linked---that way you can just submit the html file and I can view it instead of having to submit linked files
--   Headings: top level headings are preceded by a \# and a space; second level headings are preceded by \## and a space; you can go down several levels by increasing the number of \# symbols
--   Bulleted lists, formed by preceding the list with a blank line (or a heading) and beginning each line with a dash and a space (both are important)
--   LaTeX symbols, in this case $\langle$ and $\rangle$, which resolve to angle brackets when you render the document ... you can include any LaTeX math expressions between dollar signs or double dollar signs ... by the way, any dollar signs meant as real dollar signs should be preceded by a backslash, like \$ this, so Quarto doesn't get confused about whether you are starting an equation
--   Programmatic keywords, preceded and followed by a backtick, in this case, the name `eB.bib` bibliography file ... this causes the keyword to be rendered in a code font
--   Emphasis, by surrounding an *important* word with asterisks, causing it to be rendered in italics
-
-Of course, you will delete all the instructions and comments in this file before you turn it in! I don't need to read them when I read your solution. The files you turn in (the qmd and the rendered html) will just include your work. These instructions and comments are just to help you get going.
+Here is the final references:

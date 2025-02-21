@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>ec_original</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="eC_original_files/libs/clipboard/clipboard.min.js"></script>
+<script src="eC_original_files/libs/quarto-html/quarto.js"></script>
+<script src="eC_original_files/libs/quarto-html/popper.min.js"></script>
+<script src="eC_original_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="eC_original_files/libs/quarto-html/anchor.min.js"></script>
+<link href="eC_original_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="eC_original_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="eC_original_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="eC_original_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="eC_original_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Intro</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This documents my attempts to benchmark a pair of prompts on several models.</p>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<section id="step-one" class="level3">
+<h3 class="anchored" data-anchor-id="step-one">Step one</h3>
+<p>Using your best model, identify the two best prompts you can find for detecting sentiment (positive, negative, or neutral) in a tweet.</p>
+</section>
+<section id="step-two" class="level3">
+<h3 class="anchored" data-anchor-id="step-two">Step two</h3>
+<p>Using the dataset <code>example_tweets.csv</code>, found on Canvas, randomly select 20 tweets for testing. You will need to create a Python script to select the tweets and you will include the Python script in your .qmd file under Step two, along with the selected tweets.</p>
+</section>
+<section id="step-three" class="level3">
+<h3 class="anchored" data-anchor-id="step-three">Step three</h3>
+<p>Using Agenta.AI, benchmark your two prompts on the 20 tweets, using any three models. Then try the same tweets on an established sentiment analysis tool.</p>
+</section>
+<section id="step-four" class="level3">
+<h3 class="anchored" data-anchor-id="step-four">Step four</h3>
+<p>Document your results in your .qmd file, clearly identifying the best prompt and the best model.</p>
+</section>
+<section id="step-five" class="level3">
+<h3 class="anchored" data-anchor-id="step-five">Step five</h3>
+<p>You must upload your .qmd file and your rendered .html file to Canvas. All must have the basename <code>eC</code>. Points will be deducted for any other name. (If you upload it more than once, Canvas will change the name but don’t be concerned about that.)</p>
+<p>You should remove this instruction section from the final document.</p>
+</section>
+</section>
+<section id="step-one-two-best-prompts" class="level1">
+<h1>Step one: two best prompts</h1>
+<p>Before determining my 2 best prompts, I generated 5 prompts using ChatGPT 4o.</p>
+<section id="generating-5-prompts" class="level2">
+<h2 class="anchored" data-anchor-id="generating-5-prompts">Generating 5 Prompts</h2>
+<p>I generated my 5 initial prompts by asking ChatGPT 4o to generate 5 prompts. I specified what the prompts will be used for (as system prompt) and what the end goal is (to determine sentiment).</p>
+<section id="prompt-to-generate-5-prompts" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-to-generate-5-prompts">Prompt to generate 5 prompts</h3>
+<p>I want to use various models to determine the sentiment of a tweet. The ground truth values can be either “positive”, “negative”, or “neutral”.</p>
+<p>Can you generate 5 prompts, that I can use as system prompts for various LLMs, such that the LLM can determine the sentiment of the tweet?</p>
+<p>After using the prompts you generate as a system prompt, I will pass a tweet to the model, and the model should return “positive”, “negative”, or “neutral”.</p>
+</section>
+<section id="generated-5-prompts" class="level3">
+<h3 class="anchored" data-anchor-id="generated-5-prompts">Generated 5 prompts</h3>
+<p>Here are five different system prompts for sentiment classification of tweets using LLMs:</p>
+<hr>
+</section>
+<section id="prompt-1-concise-and-direct" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-1-concise-and-direct"><strong>Prompt 1: Concise and Direct</strong></h3>
+<blockquote class="blockquote">
+<p>You are a sentiment analysis model. Given a tweet, classify its sentiment as one of the following:<br>
+- <strong>positive</strong><br>
+- <strong>negative</strong><br>
+- <strong>neutral</strong><br>
+Return only one of these three words as your response, without any explanations.</p>
+</blockquote>
+<hr>
+</section>
+<section id="prompt-2-emotion-focused-approach" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-2-emotion-focused-approach"><strong>Prompt 2: Emotion-Focused Approach</strong></h3>
+<blockquote class="blockquote">
+<p>Your task is to analyze the sentiment of a given tweet. Determine if the overall emotion conveyed is <strong>positive, negative, or neutral</strong>.<br>
+- If the tweet expresses happiness, excitement, or approval, return <strong>positive</strong>.<br>
+- If the tweet expresses anger, frustration, or disapproval, return <strong>negative</strong>.<br>
+- If the tweet is factual, ambiguous, or lacks strong emotion, return <strong>neutral</strong>.<br>
+Your response should be only one of these words: <strong>positive, negative, or neutral</strong>.</p>
+</blockquote>
+<hr>
+</section>
+<section id="prompt-3-context-aware-classification" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-3-context-aware-classification"><strong>Prompt 3: Context-Aware Classification</strong></h3>
+<blockquote class="blockquote">
+<p>Act as a sentiment classification model for tweets. Your goal is to analyze a given tweet and classify its sentiment. Follow these guidelines:<br>
+- Consider the tone, wording, and context of the tweet.<br>
+- If the tweet expresses enthusiasm, support, or positivity, return <strong>positive</strong>.<br>
+- If it expresses complaints, dissatisfaction, or negativity, return <strong>negative</strong>.<br>
+- If it is neutral, informative, or lacks sentiment, return <strong>neutral</strong>.<br>
+Your response must be one of the three words: <strong>positive, negative, or neutral</strong>. Do not provide explanations.</p>
+</blockquote>
+<hr>
+</section>
+<section id="prompt-4-nlp-based-explanation-for-more-advanced-models" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-4-nlp-based-explanation-for-more-advanced-models"><strong>Prompt 4: NLP-Based Explanation (For More Advanced Models)</strong></h3>
+<blockquote class="blockquote">
+<p>You are an advanced sentiment analysis model trained on textual data. Given a tweet, analyze its sentiment and classify it as one of three categories:<br>
+- <strong>positive</strong>: The tweet expresses a favorable or happy sentiment.<br>
+- <strong>negative</strong>: The tweet conveys criticism, frustration, or negative emotions.<br>
+- <strong>neutral</strong>: The tweet does not strongly express a positive or negative sentiment.<br>
+Your response should be exactly one of these words: <strong>positive, negative, or neutral</strong>. Do not include additional text.</p>
+</blockquote>
+<hr>
+</section>
+<section id="prompt-5-social-media-specific-interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-5-social-media-specific-interpretation"><strong>Prompt 5: Social Media-Specific Interpretation</strong></h3>
+<blockquote class="blockquote">
+<p>You are a sentiment analysis assistant trained to classify tweets based on sentiment. Consider the informal, abbreviated, and expressive nature of tweets while making your classification. Assign the tweet to one of the following sentiment categories:<br>
+- <strong>positive</strong>: If the tweet conveys enthusiasm, appreciation, or positive sentiment.<br>
+- <strong>negative</strong>: If the tweet expresses frustration, criticism, or negativity.<br>
+- <strong>neutral</strong>: If the tweet is objective, factual, or lacks strong sentiment.<br>
+Return only the sentiment classification as a single word: <strong>positive, negative, or neutral</strong>. Do not provide explanations or additional text.</p>
+</blockquote>
+<hr>
+<p>Each of these prompts has a slightly different approach, ranging from concise classification to emotion-based interpretation. Let me know if you need modifications! 🚀</p>
+</section>
+</section>
+<section id="determining-2-best-prompts" class="level2">
+<h2 class="anchored" data-anchor-id="determining-2-best-prompts">Determining 2 best prompts</h2>
+<p>To determine the 2 best prompts, I test the 5 prompts above on 5 random entries from the <code>example_tweets.csv</code> and then I determine which prompts performed the best.</p>
+<p>To determine the 5 random entries, I use the python code from <code>Step two</code> to select 5 tweets.</p>
+<p>Here are the 5 tweets:</p>
+<pre><code>textID,text,selected_text,sentiment
+ac33177eec,Venti Black Ice Tea with 8 pumps of classic,Venti Black Ice Tea with 8 pumps of classic,neutral
+ef42dee96c,resting had a whole day of walking,resting had a whole day of walking,neutral
+7579b68067,"is excited to be visited by her twin and best friend! dinner, star gazing, and a movie!   // cool http://gykd.net","is excited to be visited by her twin and best friend! dinner, star gazing, and a movie!   // cool",positive
+4dad557268,says BAD TRIP! (angry)  http://plurk.com/p/wxshi,says BAD TRIP!,negative
+a7f72a928a, WOOOOOOOOOO   are you coming to Nottingham at any point?  lovelovelove&lt;3,t?  lovelovelove,positive</code></pre>
+<p>To determine which prompt was the best, I asked <code>gpt-3.5-turbo</code> to determine the sentiment for each of the tweets above for each of the system prompts by using <code>Agenta.ai</code>. Here are the results I got:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Prompt</th>
+<th>ac33177eec</th>
+<th>ef42dee96c</th>
+<th>7579b68067</th>
+<th>4dad557268</th>
+<th>a7f72a928a</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>neutral</td>
+<td>neutral</td>
+<td>positive</td>
+<td>negative</td>
+<td>positive</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>neutral</td>
+<td>neutral</td>
+<td>positive</td>
+<td>negative</td>
+<td>positive</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>neutral</td>
+<td>positive</td>
+<td>positive</td>
+<td>negative</td>
+<td>positive</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>neutral</td>
+<td>positive</td>
+<td>positive</td>
+<td>negative</td>
+<td>positive</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>neutral</td>
+<td>positive</td>
+<td>positive</td>
+<td>negative</td>
+<td>positive</td>
+</tr>
+</tbody>
+</table>
+<p>From the results, prompts 3, 4, and 5, returned “positive” for the tweet with textID = ef42dee96c, but the correct sentiment was “neutral”. I hypothesize that this is because prompts 4 and 5 specific positive as “favorable” and “appreciation” respectively, and the model could have determined “resting” as “favorable” or “appreciation”.</p>
+<p>Prompts 1 and 2 were able to get all sentiments correct; thus, I will utilize those prompts for the final benchmark.</p>
+<p><span class="math inline">\(\langle\)</span> replace this with your process for developing two best prompts <span class="math inline">\(\rangle\)</span></p>
+</section>
+</section>
+<section id="step-two-select-20-tweets" class="level1">
+<h1>Step two: select 20 tweets</h1>
+<section id="prompt---generating-python-script" class="level2">
+<h2 class="anchored" data-anchor-id="prompt---generating-python-script">Prompt - Generating Python Script</h2>
+<p>Prompt for ChatGPT 4o to generate a Python script.</p>
+<pre><code>I have a `example_tweets.csv` file that has the these columns: `textID`, `text`, `selected_test`, and `sentiment`. It has many rows, and I only want to sample 20 rows. I want the 20 rows to be representative, so approximately a third of the rows should have "positive" sentiment, approximately a third of the rows should have "negative" sentiment, and approximately a third of the rows should have "neutral" sentiment. Can you write me a Python script that accomplishes the task of sampling 20 rows from the dataset?</code></pre>
+</section>
+<section id="result---generated-python-script" class="level2">
+<h2 class="anchored" data-anchor-id="result---generated-python-script">Result - Generated Python Script</h2>
+<p>Here’s a Python script that loads the <code>example_tweets.csv</code> file, samples 20 rows while maintaining approximately equal representation of each sentiment class, and saves the sampled dataset to a new CSV file.</p>
+<div id="c5098332" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_tweets(file_path, sample_size<span class="op">=</span><span class="dv">20</span>):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load the dataset</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(file_path)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure sentiment column exists</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'sentiment'</span> <span class="kw">not</span> <span class="kw">in</span> df.columns:</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"The dataset must contain a 'sentiment' column."</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the number of samples per sentiment class</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    num_samples_per_class <span class="op">=</span> sample_size <span class="op">//</span> <span class="dv">3</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    remainder <span class="op">=</span> sample_size <span class="op">%</span> <span class="dv">3</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sample approximately equal number of rows from each sentiment category</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    sampled_df <span class="op">=</span> (df.groupby(<span class="st">'sentiment'</span>, group_keys<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                    .<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.sample(n<span class="op">=</span><span class="bu">min</span>(<span class="bu">len</span>(x), num_samples_per_class), random_state<span class="op">=</span><span class="dv">42</span>)))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If there is a remainder, sample additional rows from random sentiment groups</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> remainder <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        additional_samples <span class="op">=</span> df.sample(n<span class="op">=</span>remainder, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        sampled_df <span class="op">=</span> pd.concat([sampled_df, additional_samples])</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Shuffle the final sampled dataset</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    sampled_df <span class="op">=</span> sampled_df.sample(frac<span class="op">=</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">42</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sampled_df</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage example</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"example_tweets.csv"</span>  <span class="co"># Adjust path if needed</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>sampled_tweets <span class="op">=</span> sample_tweets(file_path)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Save to a new CSV file</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>sampled_tweets.to_csv(<span class="st">"sampled_tweets.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\patel\AppData\Local\Temp\ipykernel_63284\3581416974.py:17: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  .apply(lambda x: x.sample(n=min(len(x), num_samples_per_class), random_state=42)))</code></pre>
+</div>
+</div>
+<p>This script ensures that the sampled dataset has an approximately equal distribution of sentiment categories while handling cases where there might not be enough rows in a particular category. Let me know if you need any modifications!</p>
+</section>
+</section>
+<section id="step-three-benchmark" class="level1">
+<h1>Step three: benchmark</h1>
+<p><span class="math inline">\(\langle\)</span> replace this with your setup including which three models you chose <span class="math inline">\(\rangle\)</span></p>
+</section>
+<section id="step-four-results" class="level1">
+<h1>Step four: results</h1>
+<p><span class="math inline">\(\langle\)</span> replace this with the results of the benchmarking <span class="math inline">\(\rangle\)</span></p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p><span class="math inline">\(\langle\)</span> replace this with your reflections <span class="math inline">\(\rangle\)</span></p>
+</section>
+<section id="addendum-features-of-this-file" class="level1">
+<h1>Addendum: Features of this file</h1>
+<p>Note: delete this section before you turn in the file!</p>
+<ul>
+<li>Front matter
+<ul>
+<li>Includes your name</li>
+<li>Includes the keyword “today” which resolves to the date on which you render the document</li>
+<li>Includes fonts—you should install these fonts on your computer or change the font specification to fonts you already have on your computer</li>
+<li>Includes the format (html) to which Quarto will render</li>
+<li>Includes some directives that are specific to that format: toc and embed-resources</li>
+<li><code>toc</code> causes the table of contents to be rendered, on the right side of the frame by default</li>
+<li><code>embed-resources</code> causes any diagrams to be included in the html file itself rather than linked—that way you can just submit the html file and I can view it instead of having to submit linked files</li>
+</ul></li>
+<li>Headings: top level headings are preceded by a # and a space; second level headings are preceded by ## and a space; you can go down several levels by increasing the number of # symbols</li>
+<li>Bulleted lists, formed by preceding the list with a blank line (or a heading) and beginning each line with a dash and a space (both are important)</li>
+<li>LaTeX symbols, in this case <span class="math inline">\(\langle\)</span> and <span class="math inline">\(\rangle\)</span>, which resolve to angle brackets when you render the document … you can include any LaTeX math expressions between dollar signs or double dollar signs … by the way, any dollar signs meant as real dollar signs should be preceded by a backslash, like $ this, so Quarto doesn’t get confused about whether you are starting an equation</li>
+<li>Programmatic keywords, preceded and followed by a backtick, in this case, the name <code>eB.bib</code> bibliography file … this causes the keyword to be rendered in a code font</li>
+<li>Emphasis, by surrounding an <em>important</em> word with asterisks, causing it to be rendered in italics</li>
+</ul>
+<p>Of course, you will delete all the instructions and comments in this file before you turn it in! I don’t need to read them when I read your solution. The files you turn in (the qmd and the rendered html) will just include your work. These instructions and comments are just to help you get going.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,40 @@
+---
+title: "E1 Tips"
+format: html
+editor: visual
+---
+
+# Intro
+
+I hope this email finds you well. I am reaching out to seek clarification on a few key aspects of the Chatbot Project for M1 to ensure our approach aligns with your expectations.
+
+*Recall that for m1 you are giving me a general idea of your topic and dataset. Some of the following questions are more appropriate for the later parts of the project, but I'll answer them anyway. The requirements I gave last week are as follows:*
+
+## Deliverable
+- *A short qmd / html document describing the domain
+- The doc should include specification of whether you plan to run locally or using a cloud service
+- The doc should include a discussion of the possible datasets you might use (the actual dataset will be due in m2)
+- You are not required to stick with the directions you give here, but this should be your current best guess of what you plan to do
+- Examples: chatbot to emulate a foreign leader; chatbot to triage banking problems; chatbot to analyze tweets*
+
+# Your questions
+
+# Grading Criteria & Dataset Requirements
+- Should we focus more on the dataset or the chatbot implementation in terms of grading?
+- *Both are important, but keep in mind that you are not turning in a dataset or a chatbot implementation. The dataset should just be a candidate dataset that you might use for the chatbot. For the chatbot, you are turning in a domain that you describe in which the chatbot will operate.*
+- For the dataset, are we expected to scrape data using Python, or can we use an existing dataset from Kaggle?
+- *Either is fine. A dataset from HuggingFace is probably even better.*
+- Is there a specific requirement for the dataset size?
+- *Most of the datasets on HuggingFace are large enough to be useful. The real criteria is that the dataset should be large enough to be useful for the chatbot. It's not possible to give a specific number because different domains have different requirements.*
+
+# Chatbot Implementation
+- Are we required to use the software tools discussed in class, or can we develop the chatbot by calling an LLM API through our own coding?
+- *We will discuss Haystack in class but you are free to use LangChain or GriptTape or any of the many other frameworks available. In addition, you are free to use Agenta or any other tool to fine-tune prompts or evaluate models and you are free to use Potato or any other annotation tool to prepare your dataset.*
+- Do we have the flexibility to choose our own topic of interest for deeper exploration?
+- *You must choose your own topic of interest. Last week I mentioned some examples but they were only examples.*
+
+# Prompt Design & Adaptability
+- Are we expected to predefine the chatbot’s application scenario using prompts?
+- *You are expected to prepare the chatbot for a specific domain using a dataset.*
+- If a user selects a topic outside of our predefined prompts, should we adjust the LLM to ensure the chatbot generates more effective responses?
+- *It would not be a chatbot if it could only respond to a predefined set of prompts. Maybe I don't understand your question.*

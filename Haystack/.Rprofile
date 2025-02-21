@@ -1,0 +1,1 @@
+Sys.setenv(RETICULATE_PYTHON = "C:/Users/patel/miniconda3/envs/haystack/python.exe")

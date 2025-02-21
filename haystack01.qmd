@@ -1,0 +1,182 @@
+Note: This is a condensed copy of a tutorial at [haystack](https://haystack.deepset.ai/tutorials/27_first_rag_pipeline)
+
+# Before you install
+
+I habitually run `pip-upgrade` before I install any Python package. In my `~/.bash_profile` I have the following alias:
+
+```bash
+#| eval: false
+alias pip-upgrade="pip list -o | cut -f1 -d' ' | tr ' ' '\n' | awk '{if(NR>=3)print}' | cut -d' ' -f1 | xargs -n1 pip install -U"
+```
+
+You are free to do this differently or not at all, depending on your Python installation.
+
+# Install Haystack
+
+The following should NOT be run in this document. Run it in a terminal. You may render this document multiple times but you should only install Haystack once.
+
+```bash
+#| eval: false
+pip install haystack-ai
+pip install "datasets>=2.6.1"
+pip install "sentence-transformers>=3.0.0"
+```
+
+The following reports back to deepset.ai that you are running this tutorial. Comment it out if you don't want to report this.
+
+## Enable Telemetry
+
+```{python}
+from haystack.telemetry import tutorial_running
+tutorial_running(27)
+```
+
+# Fetching and Indexing Documents
+
+## Initialize the Document Store
+
+```{python}
+from haystack.document_stores.in_memory import InMemoryDocumentStore
+document_store = InMemoryDocumentStore()
+```
+
+## Fetch the Data
+
+```{python}
+from datasets import load_dataset
+from haystack import Document
+
+dataset = load_dataset("bilgeyucel/seven-wonders", split="train")
+docs = [Document(content=doc["content"], meta=doc["meta"]) for doc in dataset]
+```
+
+## Initialize a Document Embedder
+
+```{python}
+from haystack.components.embedders import SentenceTransformersDocumentEmbedder
+doc_embedder = SentenceTransformersDocumentEmbedder(model="sentence-transformers/all-MiniLM-L6-v2")
+doc_embedder.warm_up()
+```
+
+## Write Documents to the DocumentStore
+
+```{python}
+docs_with_embeddings = doc_embedder.run(docs)
+document_store.write_documents(docs_with_embeddings["documents"])
+```
+
+# Building the RAG Pipeline
+
+## Initialize the Text Embedder
+
+```{python}
+from haystack.components.embedders import SentenceTransformersTextEmbedder
+text_embedder = SentenceTransformersTextEmbedder(model="sentence-transformers/all-MiniLM-L6-v2")
+```
+
+## Initialize the Retriever
+
+```{python}
+from haystack.components.retrievers.in_memory import InMemoryEmbeddingRetriever
+retriever = InMemoryEmbeddingRetriever(document_store)
+```
+
+## Define a Template Prompt
+
+```{python}
+from haystack.components.builders import ChatPromptBuilder
+from haystack.dataclasses import ChatMessage
+
+template = [
+    ChatMessage.from_user(
+        """
+Given the following information, answer the question.
+
+Context:
+
+
+Question: 
+Answer:
+"""
+    )
+]
+
+prompt_builder = ChatPromptBuilder(template=template)
+```
+
+## Initialize a ChatGenerator
+
+Note that the following code will only work if you have an OPENAI_API_KEY. Mine is defined in the file `~/.Renviron` in the following manner.
+
+```bash
+#| eval: false
+OPENAI_API_KEY="sk1093847bunchofnumbersandletters"
+```
+
+You must have an OPENAI_API_KEY defined somehow for the following to work.
+
+```{python}
+import os
+from getpass import getpass
+from haystack.components.generators.chat import OpenAIChatGenerator
+
+chat_generator = OpenAIChatGenerator(model="gpt-4o-mini")
+```
+
+## Build the pipeline
+
+```{python}
+from haystack import Pipeline
+
+basic_rag_pipeline = Pipeline()
+#. Add components to your pipeline
+basic_rag_pipeline.add_component("text_embedder", text_embedder)
+basic_rag_pipeline.add_component("retriever", retriever)
+basic_rag_pipeline.add_component("prompt_builder", prompt_builder)
+basic_rag_pipeline.add_component("llm", chat_generator)
+```
+
+```{python}
+#. Now, connect the components to each other
+basic_rag_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
+basic_rag_pipeline.connect("retriever", "prompt_builder")
+basic_rag_pipeline.connect("prompt_builder.prompt", "llm.messages")
+```
+
+# Ask a question
+
+```{python}
+question = "What does Rhodes Statue look like?"
+
+response = basic_rag_pipeline.run({"text_embedder": {"text": question}, "prompt_builder": {"question": question}})
+
+print(response["llm"]["replies"][0].text)
+```
+
+## Additional questions to ask
+
+```{python}
+examples = [
+    "Where is Gardens of Babylon?",
+    "Why did people build Great Pyramid of Giza?",
+    "What does Rhodes Statue look like?",
+    "Why did people visit the Temple of Artemis?",
+    "What is the importance of Colossus of Rhodes?",
+    "What happened to the Tomb of Mausolus?",
+    "How did Colossus of Rhodes collapse?",
+]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
