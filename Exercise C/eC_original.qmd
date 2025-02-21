@@ -217,6 +217,31 @@ For all 3 of the aforementioned models, I test their ability to determine the se
 I decided to use Text2data as the baseline and as the established sentiment analysis tool. I manually run the Tweets on the setiment analysis [demo](https://text2data.com/Demo). Here are the results:
 
 
+| textID | Ground Truth Sentiment | Predicted Sentiment | Score (-1 to 1) |
+|--------|------------------------|---------------------|-----------------|
+| 4dad557268 | negative | negative | -0.86 |
+| f69a80cc7e | positive | negative | -0.79 |
+| f93c297e3a | positive | positive | +0.99 |
+| 24489dcb26 | negative | negative | -0.69 |
+| 16729cf827 | neutral | neutral | +0.13 |
+| bb2ef8a121 | negative | negative | -0.85 |
+| 073a1cef9b | neutral | negative | -0.76 |
+| b34b83c44e | negative | negative | -0.91 |
+| a7f72a928a | positive | positive | +0.98 |
+| 1b79929075 | positive | positive | +0.94 |
+| 39854df96d | positive | positive | +0.75 |
+| 67beae3c7f | negative | negative | -0.93 |
+| b18e3e1aa1 | neutral | positive | +0.91 |
+| ef42dee96c | neutral | neutral | +0.19 | 
+| 9191e574bb | negative | negative | -1.00 |
+| 7579b68067 | positive | positive | +1.00 |
+| a260fd32ce | neutral | positive | +0.97 |
+| f4a743a972 | neutral | negative | -0.91 |
+| e6f129e747 | positive | positive | +0.78 |
+| ac33177eec | neutral | positive | +0.71 |
+
+The results above show an accuracy of 70%.
+
 
 ## Detailed Results from Benchmark (with models GPT-3.5 Turbo, Gemini Pro, and Claude 3.5 Haiku)
 
@@ -274,6 +299,8 @@ Additionally, GPT-3.5 Turbo had better accuracy on average (60% and 70%) across 
 
 Unfortunately, Agenta.ai was unable to collect the "Total Cost" for Gemini Pro and Claude 3.5 Haiku.
 
+\textbf{Comparison with baseline:} Baseline (text2data) had a performance of 70%. The best model/prompt combinations in this benchmark (Gemini Pro with Prompt 1 and GPT-3.5 Turbo with Prompt 2) also had a 70% accuracy. This is a good sign, as it shows that with prompt engineering, General Purpose LLMs can achieve similar accuracy as established baselines designed for sentiment analysis.
+
 # Step five: additional benchmarking (with models GPT-3.5 Turbo, GPT-4, and GPT-4o)
 
 I was unable to get "Total Cost" information for Gemini Pro and Claude 3.5 Haiku. To get that information, I decided to run the benchmark again using the following models: GPT-3.5 Turbo, GPT-4, and GPT-4o. I use the same prompts and the same sampled tweets from the previous benchmark. I run this benchmark on `Agenta.ai`, same as before.
@@ -302,6 +329,7 @@ On the other hand, it is evident that GPT-4 has the highest total costs, and GPT
 
 Even though GPT-4o with Prompt 2 performs the best, I would select GPT-3.5 Turbo (with either Prompt 1 and Prompt 2 -- they had same accuracy) because the average latency and total cost is significantly less, while the accuracy only drops 5%.
 
+\textbf{Comparison with baseline:} Baseline (text2data) had a performance of 70%. The best model/prompt combination in this benchmark (GPT-4o with Prompt 2) also had a 70% accuracy. Additionally, other model/prompt combinations were not too far behind, with an accuracy of 65%. This is a good sign, as it shows that with prompt engineering, General Purpose LLMs can achieve similar accuracy as established baselines designed for sentiment analysis.
 
 # Conclusion
 
