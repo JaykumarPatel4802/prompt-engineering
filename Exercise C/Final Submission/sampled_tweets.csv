@@ -1,4 +1,4 @@
-textID,text,selected_text,ground_truth_sentiment
+textID,text,selected_text,sentiment
 4dad557268,says BAD TRIP! (angry)  http://plurk.com/p/wxshi,says BAD TRIP!,negative
 f69a80cc7e,Missing my mother... t-11 days! HAPPY MOTHER`S DAY!!,HAPPY MOTHER`S DAY!!,positive
 f93c297e3a,"am chillaxin after a busy BankHoliday, Hope everbody had a gd wkend! Holiday in 12 days!!!  ****","am chillaxin after a busy BankHoliday, Hope everbody had a gd wkend! Holiday in 12 days!!",positive

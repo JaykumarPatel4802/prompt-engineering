@@ -121,6 +121,10 @@ $\langle$ replace this with the results of the benchmarking $\rangle$
 
 $\langle$ replace this with your reflections $\rangle$
 
+Explain that I narrow down from 5 to 2 using 5 tweets. Then once I have narrowed down to 2 prompts, I can run the full test on 20 tweets. This allows me to be resource efficient, instead of running all 5 prompt pon 20 tweets.
+
+Also in the results, explain which performance matters the most to me (correctness, runtime, cost).
+
 # Addendum: Features of this file
 
 Note: delete this section before you turn in the file!

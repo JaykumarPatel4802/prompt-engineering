@@ -1,26 +1,21 @@
+---
+title: "exercise C"
+subtitle: "Benchmarking"
+date: today
+author: Jaykumar Patel
+format:
+  html:
+    toc: true
+    embed-resources: true
+mainfont: TeX Gyre Schola
+monofont: JetBrainsMono Nerd Font
+mathfont: TeX Gyre Schola Math Regular
+jupyter: python3
+---
+
 # Intro
 
 This documents my attempts to benchmark a pair of prompts on several models.
-
-## Instructions
-
-### Step one
-Using your best model, identify the two best prompts you can find for detecting sentiment (positive, negative, or neutral) in a tweet.
-
-### Step two
-Using the dataset `example_tweets.csv`, found on Canvas, randomly select 20 tweets for testing. You will need to create a Python script to select the tweets and you will include the Python script in your .qmd file under Step two, along with the selected tweets.
-
-### Step three
-Using Agenta.AI, benchmark your two prompts on the 20 tweets, using any three models.
-Then try the same tweets on an established sentiment analysis tool.
-
-### Step four
-Document your results in your .qmd file, clearly identifying the best prompt and the best model.
-
-### Step five
-You must upload your .qmd file and your rendered .html file to Canvas. All must have the basename `eC`. Points will be deducted for any other name. (If you upload it more than once, Canvas will change the name but don't be concerned about that.)
-
-You should remove this instruction section from the final document.
 
 # Step one: two best prompts
 
@@ -28,7 +23,7 @@ Before determining my 2 best prompts, I generated 5 prompts using ChatGPT 4o.
 
 ## Generating 5 Prompts
 
-I generated my 5 initial prompts by asking ChatGPT 4o to generate 5 prompts. I specified what the prompts will be used for (as system prompt) and what the end goal is (to determine sentiment).
+I determine my 5 initial prompts by asking ChatGPT 4o to generate 5 prompts. I specified what the prompts will be used for (as system prompt) and what the end goal is (to determine sentiment).
 
 ### Prompt to generate 5 prompts
 
@@ -96,7 +91,7 @@ Each of these prompts has a slightly different approach, ranging from concise cl
 
 To determine the 2 best prompts, I test the 5 prompts above on 5 random entries from the `example_tweets.csv` and then I determine which prompts performed the best.
 
-To determine the 5 random entries, I use the python code from `Step two` to select 5 tweets.
+To determine the 5 random entries, I use the python code from [Step two](#step-two-select-20-tweets) to select 5 tweets.
 
 Here are the 5 tweets:
 
@@ -109,7 +104,7 @@ ef42dee96c,resting had a whole day of walking,resting had a whole day of walking
 a7f72a928a, WOOOOOOOOOO   are you coming to Nottingham at any point?  lovelovelove<3,t?  lovelovelove,positive
 ```
 
-To determine which prompt was the best, I asked `gpt-3.5-turbo` to determine the sentiment for each of the tweets above for each of the system prompts by using `Agenta.ai`. Here are the results I got:
+To determine which prompt was the best, I asked `gpt-3.5-turbo` to determine the sentiment for each of the tweets above for each of the system prompts by using [Agenta.ai](Agenta.ai). Here are the results I got:
 
 | Prompt | ac33177eec | ef42dee96c | 7579b68067 | 4dad557268 | a7f72a928a |
 |--------|------------|------------|------------|------------|------------|
@@ -121,17 +116,14 @@ To determine which prompt was the best, I asked `gpt-3.5-turbo` to determine the
 
 From the results, prompts 3, 4, and 5, returned "positive" for the tweet with textID = ef42dee96c, but the correct sentiment was "neutral". I hypothesize that this is because prompts 4 and 5 specific positive as "favorable" and "appreciation" respectively, and the model could have determined "resting" as "favorable" or "appreciation".
 
-Prompts 1 and 2 were able to get all sentiments correct; thus, I will utilize those prompts for the final benchmark.
+[Prompt 1](#prompt-1-concise-and-direct) and [Prompt 2](#prompt-2-emotion-focused-approach) were able to get all sentiments correct; thus, I will utilize those prompts for the final benchmark.
 
 # Step two: select 20 tweets
 
-## Prompt - Generating Python Script
+## Prompt - Generating Python Script using ChatGPT 4o
 
-Prompt for ChatGPT 4o to generate a Python script.
 
-```
 I have a `example_tweets.csv` file that has the these columns: `textID`, `text`, `selected_test`, and `sentiment`. It has many rows, and I only want to sample 20 rows. I want the 20 rows to be representative, so approximately a third of the rows should have "positive" sentiment, approximately a third of the rows should have "negative" sentiment, and approximately a third of the rows should have "neutral" sentiment. Can you write me a Python script that accomplishes the task of sampling 20 rows from the dataset?
-```
 
 ## Result - Generated Python Script
 
@@ -176,12 +168,9 @@ sampled_tweets.to_csv("sampled_tweets.csv", index=False)
 
 This script ensures that the sampled dataset has an approximately equal distribution of sentiment categories while handling cases where there might not be enough rows in a particular category. Let me know if you need any modifications!
 
+## 20 Sampled Tweets
 
-# Step three: benchmark
-
-The 3 models I chose for the benchmark are `gpt-3.5-turbo`, `openrouter/google/gemini-pro`, and `openrouter/anthropic/claude-3.5-haiku`. The main reason I chose these 3 models is because according to [this](https://arxiv.org/abs/2312.11444) paper, Gemini Pro achieves "close but slightly inferior" results compared to GPT-3.5 Turbo. Additionally, according to [this](https://context.ai/compare/claude-3-haiku/gpt-3-5-turbo), GPT-3.5 Turbo and Claude 3 Haiku perform have relatively similar performance for the `MMLU` and `HellaSwag` metrics (other benchmarks were not available for comparison). Thus, I chose these 3 models since none have a "clear" advantage, and hopefully will provide interesting results.
-
-Additionally, the script above sampled these 20 tweets:
+The script above sampled these 20 tweets:
 
 ```{csv}
 textID	text	selected_text	sentiment
@@ -207,14 +196,25 @@ e6f129e747	Wow, it`s so early. Just had the best conversation.	best	positive
 ac33177eec	Venti Black Ice Tea with 8 pumps of classic	Venti Black Ice Tea with 8 pumps of classic	neutral
 ```
 
-For all 3 of the aforementioned models, I test their ability to determine the sentiment of the 20 tweets above, for the 2 prompts from the `Determining 2 best prompts` step. I will utilize `Agenta.ai` to perform this analysis and benchmarking.
+
+# Step three: benchmark
+
+The 3 models I chose for the benchmark are `gpt-3.5-turbo`, `openrouter/google/gemini-pro`, and `openrouter/anthropic/claude-3.5-haiku`. The main reason I chose these 3 models is because according to [this](https://arxiv.org/abs/2312.11444) paper, Gemini Pro achieves "close but slightly inferior" results compared to GPT-3.5 Turbo. Additionally, according to [this](https://context.ai/compare/claude-3-haiku/gpt-3-5-turbo), GPT-3.5 Turbo and Claude 3 Haiku perform have relatively similar performance for the `MMLU` and `HellaSwag` metrics (other metrics were not available for comparison). Claude 3.5 Haiku is a slightly better version than Claude 3 Haiku, so I chose Claude 3.5 Haiku. Thus, I chose these 3 models since none have a "clear" advantage, and hopefully will provide interesting results.
+
+For all 3 of the aforementioned models, I test their ability to determine the sentiment of the [20 sampled tweets](#sampled-tweets), for each of the [2 selected prompts](#determining-2-best-prompts). I will utilize `Agenta.ai` to perform this analysis and benchmarking.
 
 
 # Step four: results
 
-## Text2data Results
+## Baseline
 
-I decided to use Text2data as the baseline and as the established sentiment analysis tool. I manually run the Tweets on the setiment analysis [demo](https://text2data.com/Demo). Here are the results:
+### Baseline Choice
+
+I chose [Text2data](https://text2data.com/Demo) as my baseline and the as the established sentiment analysis tool. This website has a dedicated sentiment analysis tool for "Twitter-like content". It returns a score from -1.00 to +1.00 where "negative" is -1.00 to -0.25, "neutral" is -0.25 to +0.25, and "positive" is +0.25 to +1.00. I manually run the [20 sampled tweets](#sampled-tweets) on the sentiment analysis tool in Text2data.
+
+### Baseline Results
+
+Here are the Text2data results:
 
 
 | textID | Ground Truth Sentiment | Predicted Sentiment | Score (-1 to 1) |
@@ -240,12 +240,14 @@ I decided to use Text2data as the baseline and as the established sentiment anal
 | e6f129e747 | positive | positive | +0.78 |
 | ac33177eec | neutral | positive | +0.71 |
 
+Text2data provides a score from -1.00 to 1.00. Negative is -1.00 to -0.25. Neutral is -0.25 to +0.25. Positive is +0.25 to +1.00.
+
 The results above show an accuracy of 70%.
 
 
-## Detailed Results from Benchmark (with models GPT-3.5 Turbo, Gemini Pro, and Claude 3.5 Haiku)
+## Detailed Results from Benchmark
 
-The following images show detailed results:
+The following images show detailed results from performing the benchmark on `Agenta.ai`.
 
 ### Prompt 1: GPT-3.5 Turbo
 
@@ -263,11 +265,11 @@ The following images show detailed results:
 
 ![](results1-prompt2-gemini-pro.png)
 
-### Prompt 1: Claude 3 Haiku
+### Prompt 1: Claude 3.5 Haiku
 
 ![](results1-prompt1-claude-3.5-haiku.png)
 
-### Prompt 2: Claude 3 Haiku
+### Prompt 2: Claude 3.5 Haiku
 
 ![](results1-prompt2-claude-3.5-haiku.png)
 
@@ -297,11 +299,13 @@ However, it is important to note that Prompt 1 had better accuracy on average (6
 
 Additionally, GPT-3.5 Turbo had better accuracy on average (60% and 70%) across both prompts compared to Gemini Pro (45% and 70%) and Claude 3.5 Haiku (55% and 65%). Thus, if I had to select the model independent of the prompt, I would select GPT-3.5 Turbo
 
-Unfortunately, Agenta.ai was unable to collect the "Total Cost" for Gemini Pro and Claude 3.5 Haiku.
+Unfortunately, `Agenta.ai` was unable to collect the "Total Cost" for Gemini Pro and Claude 3.5 Haiku.
 
-\textbf{Comparison with baseline:} Baseline (text2data) had a performance of 70%. The best model/prompt combinations in this benchmark (Gemini Pro with Prompt 1 and GPT-3.5 Turbo with Prompt 2) also had a 70% accuracy. This is a good sign, as it shows that with prompt engineering, General Purpose LLMs can achieve similar accuracy as established baselines designed for sentiment analysis.
+\textbf{Comparison with baseline:} Baseline (Text2data) had a performance of 70%. The best model/prompt combinations in this benchmark (Gemini Pro with Prompt 1 and GPT-3.5 Turbo with Prompt 2) also had a 70% accuracy. This is a good sign, as it shows that with prompt engineering, General Purpose LLMs can achieve similar accuracy as established baselines designed for sentiment analysis.
 
-# Step five: additional benchmarking (with models GPT-3.5 Turbo, GPT-4, and GPT-4o)
+# Step five: additional benchmark
+
+I perform an additional benchmark with the following models: GPT-3.5 Turbo, GPT-4, and GPT-4o.
 
 I was unable to get "Total Cost" information for Gemini Pro and Claude 3.5 Haiku. To get that information, I decided to run the benchmark again using the following models: GPT-3.5 Turbo, GPT-4, and GPT-4o. I use the same prompts and the same sampled tweets from the previous benchmark. I run this benchmark on `Agenta.ai`, same as before.
 
@@ -329,33 +333,23 @@ On the other hand, it is evident that GPT-4 has the highest total costs, and GPT
 
 Even though GPT-4o with Prompt 2 performs the best, I would select GPT-3.5 Turbo (with either Prompt 1 and Prompt 2 -- they had same accuracy) because the average latency and total cost is significantly less, while the accuracy only drops 5%.
 
-\textbf{Comparison with baseline:} Baseline (text2data) had a performance of 70%. The best model/prompt combination in this benchmark (GPT-4o with Prompt 2) also had a 70% accuracy. Additionally, other model/prompt combinations were not too far behind, with an accuracy of 65%. This is a good sign, as it shows that with prompt engineering, General Purpose LLMs can achieve similar accuracy as established baselines designed for sentiment analysis.
+\textbf{Comparison with baseline:} Baseline (Text2data) had a performance of 70%. The best model/prompt combination in this benchmark (GPT-4o with Prompt 2) also had a 70% accuracy. Additionally, other model/prompt combinations were not too far behind, with an accuracy of 65%. This is a good sign, as it shows that with prompt engineering, General Purpose LLMs can achieve similar accuracy as established baselines designed for sentiment analysis.
 
 # Conclusion
 
+Firstly, I select my 2 best prompts. I do this by first asking ChatGPT 4o to generate me 5 prompts that I can start with. Then I narrow down my 2 best prompts by testing all 5 prompts on 5 randomly sampled Tweets using ChatGPT-3.5 Turbo. Using this method, I was able to determine that [Prompt 1](#prompt-1-concise-and-direct) and [Prompt 2](#prompt-2-emotion-focused-approach) were the best prompts out of the 5 as they resulted in a higher accuracy in sentiment classification for the 5 Tweets.
 
+Once I selected my 2 best prompts, I run the full benchmark using those 2 prompts on 20 tweets across 3 different LLMs. This approach allows me to complete an initial layer of filtering (narrowing from 5 to 2 prompts) with minimal resource usage -- after which I run detailed benchmarking on the 2 resulting prompts. By avoiding the need to test all 5 initial prompts in the final benchmark, this method ensures efficient use of resources.
 
-Explain that I narrow down from 5 to 2 using 5 tweets. Then once I have narrowed down to 2 prompts, I can run the full test on 20 tweets. This allows me to be resource efficient, instead of running all 5 prompt pon 20 tweets.
+To run the benchmark against 20 tweets, I need to first [sample 20 tweets](#step-two-select-20-tweets). I do so my asking ChatGPT 4o to write me a python script that samples 20 random tweets from `example_tweets.csv`. I also tell it to ensure that approximately a third of the tweets have a positive sentiment, approximately a third have neutral sentiment, and approximately a third have negative sentiment. This even distribution of sentiment allows me to fairly compare various prompts and models.
 
-Also in the results, explain which performance matters the most to me (correctness, runtime, cost).
+For the [baseline](#baseline), I use [Text2data](https://text2data.com/Demo), which provides a sentiment analysis tool for "Twitter-like content". The baseline was able to get an average accuracy of 70% on the 20 tweets.
 
-# Addendum: Features of this file
+For the [(initial) benchmark](#step-three-benchmark), I select my models of choice to be `gpt-3.5-turbo`, `openrouter/google/gemini-pro`, and `openrouter/anthropic/claude-3.5-haiku`. According to [this](https://arxiv.org/abs/2312.11444) paper, Gemini Pro achieves similar results compared to GPT-3.5 Turbo, and according to [this](https://context.ai/compare/claude-3-haiku/gpt-3-5-turbo), GPT-3.5 Turbo and Claude 3 Haiku have similar performance. Claude 3.5 Haiku is a slightly better version than Claude 3 Haiku, so I chose Claude 3.5 Haiku.
 
-Note: delete this section before you turn in the file!
+Once I had my models selected, I ran the 20 tweets for each of the model/prompt pairs. I have explained the results in detail in the [Step four](#step-four-results) section. The key finding was that the best model/prompt combinations were Gemini Pro with Prompt 1 and GPT-3.5 Turbo with Prompt 2, with both having a 70% accuracy. This accuracy also matched the accuracy of the baseline (Text2data). Across both prompts, ChatGPT-3.5 Turbo had the best accuracy. Across all 3 models, Prompt 1 resulted in the best accuracy. Finally, GPT-3.5 Turbo had the least latency, which makes sense as it is designed to run faster. Cost data was not available for Gemini Pro and Claude 3.5 Haiku.
 
--   Front matter
-    -   Includes your name
-    -   Includes the keyword "today" which resolves to the date on which you render the document
-    -   Includes fonts---you should install these fonts on your computer or change the font specification to fonts you already have on your computer
-    -   Includes the format (html) to which Quarto will render
-    -   Includes some directives that are specific to that format: toc and embed-resources
-    -   `toc` causes the table of contents to be rendered, on the right side of the frame by default
-    -   `embed-resources` causes any diagrams to be included in the html file itself rather than linked---that way you can just submit the html file and I can view it instead of having to submit linked files
--   Headings: top level headings are preceded by a \# and a space; second level headings are preceded by \## and a space; you can go down several levels by increasing the number of \# symbols
--   Bulleted lists, formed by preceding the list with a blank line (or a heading) and beginning each line with a dash and a space (both are important)
--   LaTeX symbols, in this case $\langle$ and $\rangle$, which resolve to angle brackets when you render the document ... you can include any LaTeX math expressions between dollar signs or double dollar signs ... by the way, any dollar signs meant as real dollar signs should be preceded by a backslash, like \$ this, so Quarto doesn't get confused about whether you are starting an equation
--   Programmatic keywords, preceded and followed by a backtick, in this case, the name `eB.bib` bibliography file ... this causes the keyword to be rendered in a code font
--   Emphasis, by surrounding an *important* word with asterisks, causing it to be rendered in italics
+I wanted to analyze costs across various LLMs, so I ran another benchmark using models from the OpenAI family. Specifically, I chose ChatGPT-3.5 Turbo, ChatGPT 4, and ChatGPT 4o. The detailed results are in the [Step five](#step-five-additional-benchmark) section. The key finding was that the best model/prompt combination was ChatGPT-4o with Prompt 2, achieving an accuracy of 70%. This accuracy also matched the accuracy of the baseline (Text2data). For every other combination, the accuracy was 65%, so not far behind. Additionally, ChatGPT-3.5 Turbo had the least cost. ChatGPT-3.5 Turbo also had the least latency. Even though GPT-4o with Prompt 2 performs the best, I would select GPT-3.5 Turbo (with either Prompt 1 and Prompt 2 – they had same accuracy) because the average latency and total cost is significantly less, while the accuracy only drops 5%.
 
-Of course, you will delete all the instructions and comments in this file before you turn it in! I don't need to read them when I read your solution. The files you turn in (the qmd and the rendered html) will just include your work. These instructions and comments are just to help you get going.
+Finally, it is really interesting to note that in both benchmarks, there was at least 1 model/prompt combination that had the same accuracy (70%) as Text2data, which is an established sentiment analysis tool. These results are encouraging, as they highlight the power of prompt engineering to enable general-purpose LLMs to achieve the same results as specilized tools.
 
