@@ -1245,6 +1245,12 @@ Looking at the Histogram of Residuals for all models, the residuals are centered
 
 Finally, looking at the Residuals vs Order plots, most of the residuals are randomly scattered around 0. However, residuals earlier in the observation order seem to have a higher variance in residual (wider spread around 0), whereas the residuals later in the observation order are more tightly spread around 0. This means that the models are making bigger mistakes earlier in the dataset compared to the end. An analysis into the dataset itself may provide explanations why this is the case. Maybe the data is noisier at the start, or the dataset has a non-random order, where certain types of houses (that the model struggles with) are grouped near the beginning. A deeper look into the structure and ordering of the dataset might help explain this behavior.
 
+Considering that `model` and `reduced_model` had very similar (almost same) adjusted r-squared value, and that `reduced_model_5` had a noticable lower adjusted r-squared value, I would select the featured (columns) used for the `reduced_model` as the final list of variables that best determine the sale price. These features are `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `YearBuilt`, `Fireplaces`, `MSSubClass`, `Neighborhood`, `HouseStyle`, and `KitchenQual`. This constitutes a total of 14 columns. These columns were selected because they had a p-value of less than 0.5 from the original set of columns. This is still a lot of columns; however, reducing it further to 5 columns results in a significant performance drop.
+
+It is interesting to note that even the `reduced_model_5`, which had the columns `GrLivArea`, `KitchenQual`, `TotalBsmtSF`, `OverallQual`, and `OverallCond`, had an adjusted r-squared value of `0.8317`, which is still better than the adjusted r-squared value of `0.703` from this [paper](https://jse.amstat.org/v19n3/decock.pdf) by Dean De Cock.
+
+My final set of columns that best determine the sale price are `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `YearBuilt`, `Fireplaces`, `MSSubClass`, `Neighborhood`, `HouseStyle`, and `KitchenQual`. If I had to reduce that set to 5 columns, then I would choose `GrLivArea`, `KitchenQual`, `TotalBsmtSF`, `OverallQual`, and `OverallCond`.
+
 # Conclusion
 
 $\langle$ replace this with your reflections $\rangle$
