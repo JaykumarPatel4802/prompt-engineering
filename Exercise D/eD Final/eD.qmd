@@ -1131,15 +1131,119 @@ However, if I limit the column count to 5 (keeping only the columns with the lea
 
 # Step three: Regression diagnostics
 
-I will now analyze the regression model that I created. To do so, I will create 4 diagnostic plots.
+I will now analyze the regression models that I created. To do so, I will create 4 diagnostic plots using the `plot` method.
+
+## Diagnostic plots using `plot()` method
+
+### Linear Regression Model: `model`
 
 ```{r}
 plot(model)
 ```
 
+### Linear Regression Model: `reduced_model`
+
+```{r}
+plot(reduced_model)
+```
+
+### Linear Regression Model: `reduced_model_5`
+
+```{r}
+plot(reduced_model_5)
+```
+## Custom Residual Plots - Similar to those in this [paper](https://jse.amstat.org/v19n3/decock.pdf)
+
+The `plot` function above creates the Q-Q plot and the Residuals vs Fitted plots. However, it does not create a Histogram to show the distribution of residuals and it does not create the Residuals vs Order plot.
+
+### Prompt
+
+```
+Can you write a function in R that takes in a Linear Regression Model as an input, and a Histogram that shows the distribution of residuals and a Residuals vs Order Plot?
+
+### Response
+
+Absolutely! Here's an R function that takes a **Linear Regression model object** (`lm`) and generates two important diagnostic plots:
+
+1. **Histogram of residuals** – to check if residuals are approximately normally distributed
+2. **Residuals vs Order plot** – to detect any time-based or order-based patterns (non-randomness)
+
+---
+
+### 📜 **R Function: Plot Residual Diagnostics**
+```
+```{r}
+# Load required libraries
+library(ggplot2)
+library(gridExtra)
+
+# Define the function
+plot_residual_diagnostics <- function(model) {
+  # Extract residuals
+  residuals <- resid(model)
+  obs_order <- seq_along(residuals)
+
+  # Histogram of residuals
+  hist_plot <- ggplot(data.frame(residuals), aes(x = residuals)) +
+    geom_histogram(bins = 30, fill = "skyblue", color = "black", alpha = 0.7) +
+    geom_vline(xintercept = 0, color = "red", linetype = "dashed") +
+    labs(title = "Histogram of Residuals", x = "Residual", y = "Frequency") +
+    theme_minimal()
+
+  # Residuals vs Order
+  order_plot <- ggplot(data.frame(Order = obs_order, Residual = residuals), aes(x = Order, y = Residual)) +
+    geom_point(color = "darkblue", alpha = 0.6) +
+    geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+    labs(title = "Residuals vs Order", x = "Observation Order", y = "Residual") +
+    theme_minimal()
+
+  # Display the plots side-by-side
+  grid.arrange(hist_plot, order_plot, ncol = 2)
+}
+
+# Example usage:
+# model <- lm(SalePrice ~ OverallQual + GrLivArea, data = df)
+# plot_residual_diagnostics(model)
+```
+```
+---
+
+### 🔍 Interpretation:
+- **Histogram**: Should be roughly bell-shaped if residuals are normally distributed.
+- **Residuals vs Order**: Should show no clear patterns if the residuals are randomly distributed (a key regression assumption).
+
+---
+
+Let me know if you also want a **Residuals vs Fitted Values plot** or **Q-Q plot** to assess normality more formally!
+```
+
+### Custom Residual Plots for Linear Regression Model - `model`
+
+```{r}
+plot_residual_diagnostics(model)
+```
+
+### Custom Residual Plots for Linear Regression Model - `reduced_model`
+
+```{r}
+plot_residual_diagnostics(reduced_model)
+```
+
+### Custom Residual Plots for Linear Regression Model - `reduced_model_5`
+
+```{r}
+plot_residual_diagnostics(reduced_model_5)
+```
+
 # Step four: results
 
-$\langle$ replace this with your determination of the list of variables that determine sales price $\rangle$
+Looking at the Residuals vs Fitted plots for the three models, `model` and `reduced_model` produce similar results, with residuals showing a fairly random spread around the horizontal line at 0—though there is a slight convex curvature. However, the plot for `reduced_model_5` shows a more pronounced convex pattern. This stronger curvature suggests a nonlinear relationship between the predictors (feature columns) and the response variable (`SalePrice`). Since linear regression assumes a linear relationship, such nonlinearity can lead to poorer model performance. This is supported by the notably lower adjusted R-squared value for `reduced_model_5` compared to both `model` and `reduced_model`.
+
+Looking at the Q-Q Residuals plot for all models, most of the the residuals fall fairly close to the line. This suggess that the bulk of the residuals are approximately normally distributed. However, both the left and right tails deviate significantly from the line. This suggests the presence of outliers, which can impact inference accuracy. This problem can be mitigated by preprocessing the data by identifying and removing outliers.
+
+Looking at the Histogram of Residuals for all models, the residuals are centered around 0, which is expected. The distribution is also symmetric and resembles the "bell-shape". Some of the tail bins have somewhat high frequency, which aligns with what we saw in the Q-Q Residuals.
+
+Finally, looking at the Residuals vs Order plots, most of the residuals are randomly scattered around 0. However, residuals earlier in the observation order seem to have a higher variance in residual (wider spread around 0), whereas the residuals later in the observation order are more tightly spread around 0. This means that the models are making bigger mistakes earlier in the dataset compared to the end. An analysis into the dataset itself may provide explanations why this is the case. Maybe the data is noisier at the start, or the dataset has a non-random order, where certain types of houses (that the model struggles with) are grouped near the beginning. A deeper look into the structure and ordering of the dataset might help explain this behavior.
 
 # Conclusion
 
