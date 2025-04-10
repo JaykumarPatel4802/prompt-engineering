@@ -1253,4 +1253,25 @@ My final set of columns that best determine the sale price are `OverallQual`, `O
 
 # Conclusion
 
-$\langle$ replace this with your reflections $\rangle$
+In this analysis, I explored the Ames Housing Dataset with the goal of identifying the most important features (columns) that influence house `SalePrice`. I followed a structured approach that began with **exploratory data analysis (EDA)** and ended with a **refined regression model** for price prediction.
+
+I first determined which columns to explore, as not all columns are beneficial to this task. I determined the viable columns by manually inspecting the `amesHousing2011doc.txt` and `amesHousing2011.csv` file. GPT-4o was also beneficial for this task. I uploaded the aforementioned files and asked the LLM to give me a list of columns that it deemed were important. I determined the final list by taking a union of my list and the list the GPT-4o provided.
+
+Then, I used **univariate and bivariate analysis** to understand the distribution and relationships (such as correlation) between the features (columns) as well and the target variable, `SalePrice`. I examined both **numerical columns** (using histograms, boxplots, and correlation coefficients) and **categorical columns** (using distribution charts, cross-tabulations, and modes). This allowed me to build an intuitive understanding of the data and observe potential feature interactions.
+
+From there, I moved on to **regression modeling** to formally assess how each variable impacts sale price. I began with a comprehensive model that included 18 variables (13 numerical and 5 categorical), then systematically reduced the number of features using **p-values** to evaluate statistical significance. The final refined model, which used 14 features, achieved nearly the same adjusted r-squared value as the full model, demonstrating that many predictors were redundant or non-contributive. A smaller 5-variable model, while more interpretable, did show a performance drop, highlighting the need to balance simplicity and accuracy.
+
+The final diagnostics included **residual analysis** using Q-Q plots, histograms, and residuals vs. fitted/order plots. These diagnostics confirmed that while the models generally adhered to regression assumptions, there were signs of nonlinearity and outliers, particularly in the tails of the residual distributions. This pointed to potential improvements through data preprocessing or nonlinear modeling techniques.
+
+## Reflection on the Utility of GPT-4o
+
+A critical part of this project was leveraging **GPT-4o** to assist throughout the entire analytical pipeline. GPT-4o provided:
+
+- **Analytical guidance**: It helped brainstorm appropriate statistical and visual techniques tailored to the data structure.
+- **Code generation**: It wrote modular, well-structured R code for tasks such as visualizing distributions, calculating statistical summaries, generating regression models, and interpreting diagnostics.
+- **Model refinement**: It suggested approaches to reduce model complexity without compromising performance, such as filtering features by p-value and comparing adjusted r-squared values.
+- **Plot explanation**: It offered intuitive explanations for how plots should behave in an ideal situation, such as bell-shaped curve of the histogram and random scattering for the Residuals vs Order plot.
+
+The LLM was not just a passive tool, it acted like a **real-time statistical consultant**, significantly accelerating my workflow and reducing time spent on boilerplate code. It also encouraged deeper reflection by suggesting alternative perspectives (such as cross-tabulations for categorial data and standardized variance to account for differences in units between columns), many of which I may not have initially considered.
+
+Overall, this project demonstrated the power of combining **human intuition and domain knowledge** with **LLM-assisted analysis**. I was able to build and refine a meaningful model, interpret results with statistical rigor, and gain deeper insights into how different housing features influence price—all while maintaining a strong degree of control and understanding throughout the process.
