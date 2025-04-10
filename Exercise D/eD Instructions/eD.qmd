@@ -1,0 +1,69 @@
+# Intro
+
+This documents my attempts to use an LLM to assist in analyzing a well-known dataset.
+
+## Instructions
+
+### Step one
+Describe the Ames Housing dataset. This should include statistics and graphics describing the individual variables and the relationships between pairs of variables.
+
+*You should use R to do this. You should ask the LLM to provide R scripts to do this, then include the R scripts in your .qmd file. Keep in mind that you should enclose the R code in triple backticks, like this: ` ```{r} ... ``` `*
+
+### Step two
+Make inferences about the determinants of the sale price of a house. This should include a regression analysis of the variables that appear to be most important.
+
+*You should use the `lm()` function in R to form a regression model.*
+
+### Step three
+You should create four diagnostic plots of the final regression model you select. You should include the plots and a brief analysis of the plots.
+
+*You should use the `plot()` function in R to form the plots. If you have created a model using a function call like `m <- lm(...)` then you can use `plot(m)` to create the four plots.*
+
+### Step four
+You should include your final judgment as to which is the best model, which constitutes a list of variables that determine the sale price.
+
+### Conclusion
+You should reflect on your work and the utility of the LLM in this task.
+
+*Be sure to remove the above instructions before you turn in the file!*
+
+# Step one: Description of data
+
+$\langle$ replace this with your description of the variables $\rangle$
+
+# Step two: Inferences about the determinants of the sale price
+
+$\langle$ replace this with your regression analysis  $\rangle$
+
+# Step three: Regression diagnostics
+
+$\langle$ replace this with your regression diagnostics $\rangle$
+
+# Step four: results
+
+$\langle$ replace this with your determination of the list of variables that determine sales price $\rangle$
+
+# Conclusion
+
+$\langle$ replace this with your reflections $\rangle$
+
+# Addendum: Features of this file
+
+*Note: delete this section before you turn in the file!*
+
+-   Front matter
+    -   Includes your name
+    -   Includes the keyword "today" which resolves to the date on which you render the document
+    -   Includes fonts---you should install these fonts on your computer or change the font specification to fonts you already have on your computer
+    -   Includes the format (html) to which Quarto will render
+    -   Includes some directives that are specific to that format: toc and embed-resources
+    -   `toc` causes the table of contents to be rendered, on the right side of the frame by default
+    -   `embed-resources` causes any diagrams to be included in the html file itself rather than linked---that way you can just submit the html file and I can view it instead of having to submit linked files
+-   Headings: top level headings are preceded by a \# and a space; second level headings are preceded by \## and a space; you can go down several levels by increasing the number of \# symbols
+-   Bulleted lists, formed by preceding the list with a blank line (or a heading) and beginning each line with a dash and a space (both are important)
+-   LaTeX symbols, in this case $\langle$ and $\rangle$, which resolve to angle brackets when you render the document ... you can include any LaTeX math expressions between dollar signs or double dollar signs ... by the way, any dollar signs meant as real dollar signs should be preceded by a backslash, like \$ this, so Quarto doesn't get confused about whether you are starting an equation
+-   Programmatic keywords, preceded and followed by a backtick, in this case, the name `eB.bib` bibliography file ... this causes the keyword to be rendered in a code font
+-   Emphasis, by surrounding an *important* word with asterisks, causing it to be rendered in italics
+
+Of course, you will delete all the instructions and comments in this file before you turn it in! I don't need to read them when I read your solution. The files you turn in (the qmd and the rendered html) will just include your work. These instructions and comments are just to help you get going.
+

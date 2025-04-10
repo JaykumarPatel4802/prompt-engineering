@@ -1,0 +1,89 @@
+---
+title: https://huggingface.co/docs/dataset-viewer/quick_start
+jupyter: python3
+---
+
+
+
+```{python}
+dataset = "abisee/cnn_dailymail"
+```
+
+# Check if dataset is valid
+
+```{python}
+import requests
+API_URL = f"https://datasets-server.huggingface.co/is-valid?dataset={dataset}"
+def query():
+    response = requests.get(API_URL)
+    return response.json()
+data = query()
+print(data)
+```
+
+# Check if dataset has configurations and splits
+
+Rotten tomatoes has a train and test split
+
+```{python}
+import requests
+API_URL = f"https://datasets-server.huggingface.co/splits?dataset={dataset}"
+def query():
+    response = requests.get(API_URL)
+    return response.json()
+data = query()
+print(data)
+```
+
+# Preview the dataset
+
+Gives first rows
+
+```{python}
+import requests
+API_URL = f"https://datasets-server.huggingface.co/first-rows?dataset={dataset}&config=3.0.0&split=train"
+def query():
+    response = requests.get(API_URL)
+    return response.json()
+data = query()
+print(data)
+```
+
+# Download slices of dataset
+
+```{python}
+import requests
+API_URL = f"https://datasets-server.huggingface.co/rows?dataset={dataset}&config=3.0.0&split=train&offset=150&length=10"
+def query():
+    response = requests.get(API_URL)
+    return response.json()
+data = query()
+print(data)
+```
+
+# Access Parquet files
+Haystack does this automatically
+Parquet is a way of storing the data. Data starts off in different formats (json, csv, database format, etc.). For storage efficience and uniform interface, Huggingface converts it into Parquet format. And gives it back to me in whatever format I want.
+
+```{python}
+import requests
+API_URL = f"https://datasets-server.huggingface.co/parquet?dataset={dataset}"
+def query():
+    response = requests.get(API_URL)
+    return response.json()
+data = query()
+print(data)
+```
+
+# Get the size of the dataset
+
+```{python}
+import requests
+API_URL = f"https://datasets-server.huggingface.co/size?dataset={dataset}"
+def query():
+    response = requests.get(API_URL)
+    return response.json()
+data = query()
+print(data)
+```
+

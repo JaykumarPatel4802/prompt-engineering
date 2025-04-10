@@ -1,0 +1,1146 @@
+---
+title: "exercise D"
+subtitle: "Statistical Analysis"
+date: today
+author: Jaykumar Patel
+format:
+  html:
+    toc: true
+    embed-resources: true
+mainfont: TeX Gyre Schola
+monofont: JetBrainsMono Nerd Font
+mathfont: TeX Gyre Schola Math Regular
+---
+
+# Intro
+
+# Step one: Description of data
+
+To get started, I prompt GPT-4o with what I am trying to do (statistical analysis), and ideas on how I can achieve that. Additionally, I attach the `amesHousing2011doc.txt` file so that GPT-4o has context regarding the dataset.
+
+## Ask GPT-4o for Initial Ideas
+
+### Prompt:
+
+I have the Ames Housing Dataset. I want to perform some analysis where I gather statistics and and graphics describing the individual variables (the columns) and the relationships between pairs of variables (the columns).
+
+Firstly, can I get ideas on what kind of analysis I can do? I have also attached a `amesHousing2011doc.txt` file, which provides descriptions of the columns and their values in the dataset.
+
+### Response:
+
+```
+Great! The Ames Housing dataset is very rich and well-suited for exploratory data analysis (EDA), regression modeling, and feature engineering. Given the wide mix of variable types (nominal, ordinal, discrete, continuous), you can explore it from multiple perspectives. Here are ideas for the kinds of analysis you can perform, split into **univariate**, **bivariate**, and **multivariate** analysis categories:
+
+---
+
+## 🟦 **Univariate Analysis** (Individual Columns)
+
+### ✳️ Categorical Variables (Nominal/Ordinal)
+- **Frequency counts** for values (e.g. `MS Zoning`, `Neighborhood`, `House Style`)
+- **Bar plots** of category distributions
+- **Mode** (most common category)
+- **Missing values** analysis (e.g. `Pool QC`, `Fence`, `Alley`)
+
+### ✳️ Numerical Variables (Continuous/Discrete)
+- **Summary statistics** (mean, median, std, min, max, percentiles)
+- **Histograms** and **KDE plots**
+- **Boxplots** for outlier detection
+- **Missing data patterns**
+- **Distribution skews** (e.g., is `SalePrice` right-skewed?)
+
+---
+
+## 🟨 **Bivariate Analysis** (Column vs. Column)
+
+### ✳️ Numerical vs Numerical
+- **Scatter plots** (e.g., `Gr Liv Area` vs. `SalePrice`)
+- **Correlation matrix / heatmap**
+- **Linearity checks** (especially for regression)
+- **SalePrice vs. total basement square footage, garage area, etc.**
+
+### ✳️ Categorical vs Numerical
+- **Box plots** or **violin plots** (e.g., `Neighborhood` vs `SalePrice`)
+- **Groupby mean/median plots** (e.g., average `SalePrice` by `House Style`)
+- **ANOVA** tests for statistical significance
+
+### ✳️ Categorical vs Categorical
+- **Cross-tabulations** (e.g., `Bldg Type` vs `House Style`)
+- **Stacked bar charts** or **mosaic plots**
+
+---
+
+## 🟥 **Multivariate Analysis**
+
+### ✳️ Dimensionality Reduction
+- **PCA** or **t-SNE** on numerical features for visualization
+- **Clustering** houses based on numerical features (e.g., KMeans)
+
+### ✳️ Feature Interactions
+- Interaction terms like `Overall Qual * Gr Liv Area`
+- Multi-variable groupby (e.g., average sale price by `Neighborhood` and `Year Built` bin)
+
+### ✳️ Outlier Analysis
+- Scatterplot `Gr Liv Area` vs `SalePrice` (suggested by dataset doc)
+- Remove houses with more than 4000 sq ft to clean outliers
+
+---
+
+## 🧪 Modeling Preparation (Feature Engineering)
+
+- **Transform ordinal features** to numeric scales (e.g., `Overall Qual`)
+- **Log-transform skewed features** (e.g., `SalePrice`, `Lot Area`)
+- **One-hot encode** nominal variables
+- **Handle missing values** (mean/median imputation or special category)
+
+---
+
+## 🔎 Specific Questions You Could Explore
+
+- Which neighborhoods have the highest median house prices?
+- Do houses with basements or garages tend to sell for more?
+- Does the quality rating of kitchens or exterior correlate with price?
+- How does remodel year affect house price?
+- Is there evidence of seasonality in the sales (`Mo Sold` vs `SalePrice`)?
+
+---
+
+If you'd like, I can help generate specific visualizations or code for some of these. Would you like to start by exploring individual variables, or jump into some bivariate analysis (like how `SalePrice` relates to others)?
+```
+
+## Determine Cloumns to Analyze
+
+First, I will determine which columns I should analyze, because not all columns are important in predicting the house price. I will do this using 2 approaches.
+
+### Approach 1:
+
+I will look at the `amesHousing2011doc.txt` and `amesHousing2011.csv` data manually to determine the important columns. I will also use my personal knowledge to determine which columns are useful.
+
+The columns I determined to be useful are:
+
+- MSSubClass - The type of dwelling can be important in determining the price of a house. Particularly, the age and number of floors are important.
+- Neighborhood - House prices can vary by neighborhood depending on the available amenities, location, access to major roads, etc.
+- BldgType - The price can vary by type of building. For example, a Duplex may be cheaper than a Single Family Detached home.
+- HouseStyle - Whether the house is finished or unfinished and the number of stories it can can impact its price.
+- OverallQual and OverallCond - This can point to the quality and condition of the building. Quality and conditional of the building is directly correlated with the price.
+- GrLivArea - This captures the square footage of the house above ground. The square feet of the house is directly correlated with the price.
+- BedroomAbvGr, FullBath, and HalfBath - The count of bedrooms and bathrooms is directly correlated with the price.
+- GarageArea - This number not only indirectly captures the number of cars that can fit in the garage, but also indicates potential storage space. I suspect that people like a large garage for that additional storage space. This could help indicate the price.
+- PoolArea - Houses that have pools are more expensive than those that don't. Thus, this could be useful in determining house price.
+
+### Approach 2:
+
+I will ask GPT-4o to determine which columns are important by passing it the `amesHousing2011doc.txt` and `amesHousing2011.csv` as context. I hope that this context helps GPT-4o determine which columns are important in determining house prices.
+
+#### Prompt:
+
+I have uploaded 2 files. One is `amesHousing2011.csv` which contains data about houses - along with their feature (columns) and price data. The other file is `amesHousing2011doc.txt` which provides descriptions for each of the columns.
+
+I want to create a regression model to predict house prices given a set of features. However, I don't want to include all features, as all may not be important and may add unnecessary noise. Given the descriptions of the columns, can you give me a list (subset) of 10 columns that I should keep, along with short, 1 sentence descriptions as to why that column is important in helping predict the house prices?
+
+Give your response in a bulleted list and keep your descriptions concise.
+
+#### Response:
+
+```
+Here are **10 important features** selected from the Ames Housing dataset, along with **brief explanations** for why they are useful in predicting house prices:
+
+- **Gr Liv Area** *(Above ground living area in square feet)*  
+  Larger homes generally cost more; this is one of the most directly proportional indicators of value.
+
+- **Overall Qual** *(Overall material and finish of the house)*  
+  Higher-quality construction and finishes typically result in higher sale prices.
+
+- **Year Built** *(Original construction year)*  
+  Newer homes often require fewer repairs and may be more energy-efficient, increasing value.
+
+- **Garage Cars** *(Garage capacity in terms of car spaces)*  
+  More garage space is a highly desirable feature for homeowners, impacting price positively.
+
+- **KitchenQual** *(Kitchen quality)*  
+  The kitchen is a focal point in a home; better kitchen quality often significantly boosts appeal and value.
+
+- **Total Bsmt SF** *(Total basement area)*  
+  A larger basement adds usable square footage, even if unfinished, which can increase value.
+
+- **Neighborhood** *(Location within Ames city limits)*  
+  Location is a key driver in real estate; some neighborhoods command higher prices due to amenities, schools, etc.
+
+- **Fireplaces** *(Number of fireplaces)*  
+  Fireplaces can enhance comfort and aesthetics, making a home more attractive to buyers.
+
+- **Full Bath** *(Number of full bathrooms above grade)*  
+  More bathrooms support convenience and are highly valued in larger households.
+
+- **Lot Area** *(Lot size in square feet)*  
+  Bigger lots provide more privacy and expansion potential, which can raise a property's market value.
+
+Let me know if you'd like help preprocessing these features or building the model!
+```
+
+### Combining Approach 1 and Approach 2:
+
+When I combine the set of columns from Approach 1 and Approach 2 (by taking the union), I get these columns: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, `OverallQual`, `OverallCond`, `KitchenQual`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, `Fireplaces`
+
+### Determine Numerical and Categorical Columns
+
+Firstly, I will determine which columns are Numerical and which are Categorical. I will do this by asking GPT-4o to write me a R script to do so.
+
+#### Prompt: 
+
+The `amesHousing2011.csv` file contains a database of house information, containing its features (columns) and prices. Some columns contain numerical data and some contain categorical data. Can you write me an R script that takes a list of column names, and prints which columns contain numerical data and which contain categorical data?
+
+#### Response:
+
+```
+Absolutely! Here's an R script that takes a list of column names and prints whether each column is **numerical** or **categorical**, based on the actual data types in the `amesHousing2011.csv` file.
+```
+
+```{r}
+# Load required package
+library(readr)
+
+# Read the CSV file
+df <- read_csv("amesHousing2011.csv")
+
+# Define the list of column names you're interested in
+selected_columns <- c(
+  "MSSubClass",
+  "Neighborhood",
+  "BldgType",
+  "HouseStyle",
+  "OverallQual",
+  "OverallCond",
+  "KitchenQual",
+  "BedroomAbvGr",
+  "HalfBath",
+  "FullBath",
+  "GarageArea",
+  "GarageCars",
+  "GrLivArea",
+  "TotalBsmtSF",
+  "LotArea",
+  "PoolArea",
+  "YearBuilt",
+  "Fireplaces"
+)
+
+# Check and print whether each selected column is numerical or categorical
+for (col in selected_columns) {
+  if (!col %in% colnames(df)) {
+    cat(col, "is NOT found in the dataset.\n")
+  } else {
+    col_data <- df[[col]]
+    if (is.numeric(col_data)) {
+      cat(col, "- Numerical\n")
+    } else if (is.character(col_data) || is.factor(col_data)) {
+      cat(col, "- Categorical\n")
+    } else {
+      cat(col, "- Other type\n")
+    }
+  }
+}
+```
+
+```
+### How to use:
+1. Save this script in a `.R` file.
+2. Make sure the `amesHousing2011.csv` is in your working directory.
+3. Run the script in R or RStudio.
+
+Let me know if you want to convert categorical columns to factors or preprocess them for modeling too!
+```
+
+The numerical columns are: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`.
+
+The categorical columns are: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
+
+## Univariate Analysis
+
+### Numerical Columns
+
+The numerical columns are: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`.
+
+#### Visualizing Distribution of Values
+
+I will start by visualizing the distribution of values for the numerical columns.
+
+##### Prompt
+
+Can you write an R script that generates distribution plots that help visualize the distribution of values? This R script should take a list of column names as input. The dataset is in `amesHousing2011.csv` file.
+
+##### Response
+
+```
+Absolutely! Here's an R script that:
+
+- Loads the data from `amesHousing2011.csv`
+- Takes a list of column names
+- Generates distribution plots (histograms with density curves) for each column
+- Helps visualize variance by showing how spread out the values are
+```
+
+```{r}
+# Load necessary libraries
+library(readr)
+library(ggplot2)
+library(dplyr)
+
+# Load the dataset
+data <- read_csv("amesHousing2011.csv")
+
+# Function to generate distribution plots for a list of numeric columns
+plot_distributions <- function(data, columns) {
+  for (col in columns) {
+    if (is.numeric(data[[col]])) {
+      print(
+        ggplot(data, aes_string(x = col)) +
+          geom_histogram(aes(y = ..density..), binwidth = 30, fill = "skyblue", color = "black", alpha = 0.7) +
+          geom_density(color = "red", size = 1) +
+          labs(
+            title = paste("Distribution of", col),
+            x = col,
+            y = "Density"
+          ) +
+          theme_minimal()
+      )
+    } else {
+      warning(paste("Skipping non-numeric column:", col))
+    }
+  }
+}
+
+# Example usage
+columns_to_plot <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces")
+plot_distributions(data, columns_to_plot)
+```
+
+```
+### What this does:
+- For each numeric column, it plots a histogram overlaid with a smooth density curve.
+- This gives a visual sense of how spread out (high or low variance) the data is.
+
+Let me know if you want to arrange the plots in a grid layout or save them to files!
+```
+
+#### Getting numerical metrics
+
+I'll now getting some statistical information of numerical columns, such as mean, median, and variance.
+
+##### Prompt
+
+The charts are a little hard to interpret. I would like some concrete numerical data. Can you write me R code that determines the mean, median, and variance of a column. I want to pass a list of columns, and get the results for all the columns. The dataset is in `amesHousing2011.csv` file.
+
+##### Response 
+
+```
+Absolutely! Here's an R script that allows you to pass a **list of column names** and computes the **mean**, **median**, and **variance** for **each of them**, then outputs the results in a tidy table:
+```
+
+```{r}
+# Load required libraries
+library(readr)   # for reading CSV files
+library(dplyr)   # for data manipulation
+library(tibble)  # for tidy output
+
+# Load the dataset
+ames_data <- read_csv("amesHousing2011.csv")
+
+# Define the columns you want to analyze
+columns_to_analyze <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces")  # Change as needed
+
+# Function to compute summary stats for one column
+compute_stats <- function(df, col) {
+  data <- df[[col]]
+  tibble(
+    Column = col,
+    Mean = mean(data, na.rm = TRUE),
+    Median = median(data, na.rm = TRUE),
+    Variance = var(data, na.rm = TRUE)
+  )
+}
+
+# Apply function to each column in the list and combine results
+summary_table <- bind_rows(lapply(columns_to_analyze, function(col) {
+  compute_stats(ames_data, col)
+}))
+
+# Print the results
+print(summary_table)
+```
+
+```
+### ✅ How to use:
+- Modify the `columns_to_analyze` list to include the numeric columns you want.
+- This will give you a nice table with rows for each column and columns for Mean, Median, and Variance.
+
+Let me know if you want to export the result to CSV or visualize it too!
+```
+
+#### Addressing Differences in Column Units using Variance of Z-scores
+
+The true variance value isn't very useful since the columns are in different units. For example, a column that has values in square-ft versus a column that has values for the number of bedrooms are clearly going to have drastically different variance values. To address this, I ask GPT-4o for some suggestions.
+
+##### Prompt
+
+I notice that different columns are in different units, so the variance of columns depends on those units. I want to filter columns based the ones that capture the most information. How can I do this while taking into account the fact that columns are in different units?
+
+##### Response
+
+```
+Great observation! You're absolutely right—**variance is sensitive to units**, so comparing variance across columns with different units (e.g., square feet vs dollars vs years) can be misleading.
+
+To compare the *informativeness* of different columns in a unit-independent way, here are **three common strategies**:
+
+---
+
+### ✅ 1. **Use Standardized Variance (a.k.a. Variance of Z-scores)**
+
+This approach **standardizes each column** (subtract mean, divide by standard deviation), making them **unitless**. You can then look at the variance (which will always be 1 for each feature) or go one step further:
+
+Use the **coefficient of variation** (CV):  
+\[
+\text{CV} = \frac{\text{Standard Deviation}}{\text{Mean}}
+\]  
+This measures relative variability **regardless of scale**.
+
+---
+
+### ✅ 2. **Use PCA (Principal Component Analysis)**
+
+PCA projects your data onto a new axis where the **first few components capture the most variance**. This is an excellent way to:
+- Reduce dimensionality
+- Identify informative columns (based on loadings)
+- Avoid scale issues (just standardize before PCA)
+
+---
+
+### ✅ 3. **Use Feature Importance from a Model**
+
+You can train a simple model (e.g., linear regression or random forest) to predict an outcome like `SalePrice` and rank features by importance. You’ll want to **standardize features first**.
+
+---
+
+### 📦 Here’s some R code that does #1 and shows coefficient of variation:
+```
+
+```{r}
+library(readr)
+library(dplyr)
+
+# Load the dataset
+df <- read_csv("amesHousing2011.csv")
+
+# Function to compute coefficient of variation
+compute_cv <- function(df, columns) {
+  results <- data.frame(Column = character(), CV = numeric(), stringsAsFactors = FALSE)
+
+  for (col_name in columns) {
+    if (col_name %in% names(df) && is.numeric(df[[col_name]])) {
+      mean_val <- mean(df[[col_name]], na.rm = TRUE)
+      sd_val <- sd(df[[col_name]], na.rm = TRUE)
+      if (mean_val != 0) {
+        cv <- sd_val / abs(mean_val)
+        results <- rbind(results, data.frame(Column = col_name, CV = cv))
+      }
+    }
+  }
+
+  results <- results %>% arrange(desc(CV))
+  return(results)
+}
+
+# Columns to analyze
+columns_to_analyze <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces")
+
+# Compute and print CV for each column
+cv_table <- compute_cv(df, columns_to_analyze)
+print(cv_table)
+```
+
+
+### Categorical Columns
+
+At this point, I have a pretty good idea of the distribution and types of values in the numerical columns. I will proceed to analyze categorical columns next.
+
+The categorical columns are: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
+
+#### Distribution
+
+I want to start by understanding the distribution of values (categories) for the 4 columns above.
+
+##### Prompt
+
+I will provide a list of categorical columns. Can you write me an R script to visualize the distribution of values for those columns? The script should take a list of columns as input.
+
+##### Response
+
+```
+Absolutely! Here’s an R script that takes a **list of categorical columns** and generates **bar plots** showing the distribution of values (frequencies) for each column.
+
+It handles:
+- Only categorical columns (e.g., `character` or `factor`)
+- Displays one bar chart per column
+
+---
+
+### 📜 **R Script: Visualize Categorical Column Distributions**
+```
+
+```{r}
+# Load required libraries
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(gridExtra)
+
+# Function to plot categorical distributions
+plot_categorical_distributions <- function(df, columns) {
+  plots <- list()
+
+  for (col in columns) {
+    if (col %in% names(df)) {
+      if (is.character(df[[col]]) || is.factor(df[[col]])) {
+        p <- ggplot(df, aes_string(x = col)) +
+          geom_bar(fill = "steelblue", color = "black") +
+          ggtitle(paste("Distribution of", col)) +
+          theme_minimal() +
+          theme(axis.text.x = element_text(angle = 45, hjust = 1))
+        plots[[col]] <- p
+      } else {
+        warning(paste("Skipping", col, "- not a categorical column."))
+      }
+    } else {
+      warning(paste("Column", col, "not found in the data frame."))
+    }
+  }
+
+  if (length(plots) == 0) {
+    message("No categorical columns to plot.")
+  } else {
+    # Show all plots, 2 per row
+    grid.arrange(grobs = plots, ncol = 2)
+  }
+}
+
+# Example usage:
+df <- read_csv("amesHousing2011.csv")
+cat_columns <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
+plot_categorical_distributions(df, cat_columns)
+```
+```
+---
+
+### 📝 Notes:
+- Rotates x-axis labels for readability.
+- Skips and warns if a column isn’t found or isn’t categorical.
+- Uses `gridExtra` to neatly arrange multiple plots.
+
+Let me know if you want:
+- **Percentages instead of raw counts**
+- **Top N values only** (to deal with too many categories)
+- To **save the plots as files** instead of displaying them
+```
+
+#### Determine Mode for Each Column
+
+Statistics like mean, median, and variance cannot be calculated for categorical columns. However, we can calculate the mode, which will show which category appears the most for each column.
+
+##### Prompt
+
+Can you write an R script that determines the mode (or the category that shows up the most) for each categorical column?
+
+##### Response
+```
+Absolutely! Here's an R script that takes a **list of categorical column names** and computes the **mode** (most frequent category) for each one.
+
+---
+
+### 📜 **R Script: Compute Mode for Categorical Columns**
+```
+
+```{r}
+# Load required libraries
+library(readr)
+library(dplyr)
+
+# Function to compute mode for a vector
+get_mode <- function(x) {
+  ux <- na.omit(unique(x))
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+# Function to compute mode for each categorical column
+compute_modes <- function(df, columns) {
+  results <- data.frame(Column = character(), Mode = character(), stringsAsFactors = FALSE)
+
+  for (col in columns) {
+    if (col %in% names(df)) {
+      if (is.character(df[[col]]) || is.factor(df[[col]])) {
+        mode_value <- get_mode(df[[col]])
+        results <- rbind(results, data.frame(Column = col, Mode = mode_value))
+      } else {
+        warning(paste("Skipping", col, "- not a categorical column."))
+      }
+    } else {
+      warning(paste("Column", col, "not found in the data frame."))
+    }
+  }
+
+  return(results)
+}
+
+# Example usage:
+df <- read_csv("amesHousing2011.csv")
+cat_columns <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
+mode_results <- compute_modes(df, cat_columns)
+print(mode_results)
+```
+
+```
+---
+
+Let me know if you'd like it to also return **frequency counts**, **handle ties**, or **export the results**!
+```
+
+## Bivariate Analysis
+
+Now that I have analyzed the columns, I will analyze the columns in relation to each other. Specifically, I will perform bivariate analysis, where I will look at 2 columns at a time.
+
+### Numerical Columns
+
+The numerical columns are: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`.
+
+#### Determining Correlation Coefficient and Covariance
+
+I will start by determining the correlation coefficient between pairs of columns. This can help me analyze how 2 columns may relate to each other. I will also include the `SalePrice` column to see if any feature columns have any interesting relationships with the `SalePrice` column.
+
+##### Prompt
+
+Can you write an R script that takes an input list of columns, and outputs the correlation coefficient between all column pairs?
+
+##### Response
+
+```
+Definitely! Here's an R script that:
+
+- Takes a list of **numeric column names**
+- Computes the **correlation coefficient** (Pearson, by default) for **all pairs** of those columns
+- Outputs the results in a **correlation matrix**
+
+---
+
+### 📜 **R Script: Correlation Matrix for Selected Columns**
+```
+
+```{r}
+# Load required libraries
+library(readr)
+library(dplyr)
+
+# Function to compute correlation matrix
+compute_correlation_matrix <- function(df, columns, method = "pearson") {
+  # Filter numeric columns only
+  numeric_cols <- columns[sapply(df[columns], is.numeric)]
+  
+  if (length(numeric_cols) < 2) {
+    stop("Need at least two numeric columns for correlation analysis.")
+  }
+
+  # Subset the data and drop rows with NAs
+  data_subset <- df %>%
+    select(all_of(numeric_cols)) %>%
+    na.omit()
+
+  # Compute correlation matrix
+  cor_matrix <- cor(data_subset, method = method)
+  return(cor_matrix)
+}
+
+# Example usage:
+df <- read_csv("amesHousing2011.csv")
+selected_columns <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces", "SalePrice")
+cor_matrix <- compute_correlation_matrix(df, selected_columns)
+print(cor_matrix)
+```
+
+```
+---
+
+### 🔍 Bonus (Visual Option):
+To visualize the matrix:
+```
+
+```{r}
+# Optional: Visualize correlation matrix
+library(corrplot)
+corrplot(cor_matrix, method = "color", addCoef.col = "black", tl.cex = 0.8)
+```
+
+The result above shows me that certain columns, such as `GarageCars` and `GarageArea` are very correlated. This may suggest that in the final regression model, only one columns, perhaps `GarageArea` needs to be included.
+
+The results also show that `OverallQual` is highly correlated with `SalePrice`, which makes sense. This indicates that `OverallQual` may be a good variable in helping determining `SalePrice` in the regression model.
+
+#### Function to get variance and correlation information
+
+The following function can be used to get the distribution of values for 2 columns. Additionally, it will also show the correlation coefficient and the scatter plot visualization of the correlation between 2 columns.
+
+##### Prompt
+
+Can you write me an R script that takes 2 column names, and uses the `ggpairs` function to show distribution and correlation information between those 2 columns?
+
+##### Response
+
+```
+Absolutely! The `ggpairs` function from the `GGally` package is perfect for visualizing **distributions, scatterplots, and correlations** between variables — even for just two columns.
+
+Here’s an R script that:
+- Takes **two column names** as input
+- Uses `ggpairs()` to generate the plot showing their **distributions**, **scatterplot**, and **correlation**
+
+---
+
+### 📜 **R Script: Visualize 2 Columns with `ggpairs`**
+```
+
+```{r}
+# Load required libraries
+library(readr)
+library(GGally)
+library(dplyr)
+
+# Function to plot ggpairs for two columns
+plot_ggpairs_two_columns <- function(df, col1, col2) {
+  # Check if both columns exist and are numeric
+  if (!(col1 %in% names(df)) || !(col2 %in% names(df))) {
+    stop("One or both column names are not in the dataframe.")
+  }
+
+  if (!(is.numeric(df[[col1]]) && is.numeric(df[[col2]]))) {
+    stop("Both columns must be numeric.")
+  }
+
+  # Subset and remove rows with NA
+  data_subset <- df %>% select(all_of(c(col1, col2))) %>% na.omit()
+
+  # Plot with ggpairs
+  ggpairs(data_subset)
+}
+
+# Example usage:
+df <- read_csv("amesHousing2011.csv")
+plot_ggpairs_two_columns(df, "SalePrice", "GrLivArea")
+```
+
+```
+---
+
+### 📝 Output:
+- A 2x2 matrix of plots:
+  - Diagonals: histograms or density plots
+  - Lower triangle: scatterplot
+  - Upper triangle: correlation coefficient
+
+Let me know if you'd like to support **non-numeric (categorical)** columns or want a version that handles **more than 2 columns**!
+```
+
+The `ggpairs` function is useful. For example, when comparing `SalePrice` and `GrLivArea`, we see that the correlation coefficient is `0.719` and the scatter plot shows that the 2 columns are positively correlated with each other. This can be used to determine the importance of `GrLivArea` in helping predict the `SalePrice`.
+
+### Categorial Columns
+
+The categorical columns are: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
+
+#### Distribution
+
+I will analyze the categorical columns by generating cross tabulations between categorical columns. This can show how often combinations of values occur.
+
+##### Prompt
+
+Can you write a R script that takes a list of categorical columns, and generates a cross tabulation between every pair?
+
+##### Response
+
+```
+Absolutely! Here's an R script that:
+
+- Takes a **list of categorical column names**
+- Computes **cross tabulations** (contingency tables) between **every pair of columns**
+- Outputs them as a list of tables, or prints each one clearly with labels
+
+---
+
+### 📜 **R Script: Cross Tabulation for Categorical Column Pairs**
+```
+```{r}
+# Load required libraries
+library(readr)
+
+# Function to generate cross tabulations for each unique pair of categorical columns
+generate_cross_tabs <- function(df, columns) {
+  # Filter to only columns that exist and are categorical
+  valid_cols <- columns[columns %in% names(df) & sapply(df[columns], function(x) is.factor(x) || is.character(x))]
+  
+  if (length(valid_cols) < 2) {
+    stop("Need at least two valid categorical columns.")
+  }
+  
+  tab_list <- list()
+
+  for (i in 1:(length(valid_cols) - 1)) {
+    for (j in (i + 1):length(valid_cols)) {
+      col1 <- valid_cols[i]
+      col2 <- valid_cols[j]
+
+      tab <- table(df[[col1]], df[[col2]])
+      tab_name <- paste(col1, "vs", col2)
+      cat("\n============================\n")
+      cat("Cross-tabulation:", tab_name, "\n")
+      print(tab)
+      
+      tab_list[[tab_name]] <- tab
+    }
+  }
+
+  return(tab_list)
+}
+
+# Example usage:
+df <- read_csv("amesHousing2011.csv")
+cat_columns <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
+cross_tabs <- generate_cross_tabs(df, cat_columns)
+```
+```
+---
+
+### 📝 Output:
+- Prints each table with clear labels like `Neighborhood vs HouseStyle`
+- Also stores all tables in a named list (`cross_tabs`) for later use
+```
+
+The results indicate that some combinations occur more frequently than others. For instance, when examining `HouseStyle` in relation to `KitchenQual`, houses with a `1Story` style are more likely to have kitchens in `TA` condition (typical or average). In contrast, `2Story` houses more commonly have kitchens rated as `Gd` (good) rather than `TA`.
+
+# Step two: Inferences about the determinants of the sale price
+
+Now that I have analyzed the numerical columns and categorical columns using univariate and bivariate analysis, I will move on to using regression analysis to draw inferences about the determinants of the sale price.
+
+## Initial Model
+
+### Prompt
+
+Here are the numerical columns of interest: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`. Here are the categorical columns of interest: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
+
+I know that not all of the columns are important in helping determine the target `SalePrice`. I want you to write a R script that helps me make inferences about the determinants of the sale price of a house. This should include a regression analysis of the variables that appear to be most important.
+
+You should use the `lm()` function in R to form a regression model.
+
+Remember to account for the fact that some columns are numerical and some are categorical. For the categorical columns, you should use indicator variables.
+
+$\langle$ replace this with your regression analysis  $\rangle$.
+
+The output of the R script should show the regression summary.
+
+### Response
+
+```
+Absolutely — let’s build a clean R script that helps you **analyze which features most influence `SalePrice`** using linear regression.
+
+We will:
+- Use **`lm()`** to build a multiple linear regression model
+- Treat categorical variables as **factors** so R automatically creates dummy (indicator) variables
+- Print the **regression summary** to see which variables are significant predictors
+
+---
+
+### 📜 **R Script: Regression Analysis for `SalePrice`**
+```
+```{r}
+# Load necessary libraries
+library(readr)
+library(dplyr)
+
+# Load the dataset
+df <- read_csv("amesHousing2011.csv")
+
+# Define numerical and categorical columns of interest
+numerical_columns <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath",
+                       "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea",
+                       "PoolArea", "YearBuilt", "Fireplaces")
+
+categorical_columns <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
+
+# Convert categorical columns to factors
+df <- df %>%
+  mutate(across(all_of(categorical_columns), as.factor))
+
+# Select only relevant columns + SalePrice
+model_data <- df %>%
+  select(SalePrice, all_of(numerical_columns), all_of(categorical_columns)) %>%
+  na.omit()  # Remove rows with NA
+
+# Build the formula: SalePrice ~ all predictors
+formula_string <- paste("SalePrice ~", paste(c(numerical_columns, categorical_columns), collapse = " + "))
+regression_formula <- as.formula(formula_string)
+
+# Fit the regression model
+model <- lm(regression_formula, data = model_data)
+
+# Output the regression summary
+summary(model)
+```
+```
+---
+
+### 🔍 What You’ll Get:
+- **Coefficients**, **p-values**, and **R-squared**
+- Insight into:
+  - Which variables are significantly associated with `SalePrice`
+  - The **magnitude and direction** of their effect
+- Indicator variables are automatically handled for factors
+
+---
+
+### 📌 Notes:
+- If any predictors have a **high p-value**, they might not be contributing much and could be removed in model refinement.
+- To avoid multicollinearity or explore nonlinear relationships, you could later extend this with regularization (like `glmnet`) or decision trees (`randomForest`).
+
+Let me know if you’d like help refining the model or creating diagnostic plots!
+```
+
+## Refining Model
+
+GPT-4o suggested that predictors that have a high p-value may not be as useful. Thus, I will ask GPT-4o to write me a script that creates a linear regression model, filters out columns that have a high p-value, and returns the remaining columns
+
+### Prompt
+
+You mentioned that some predictors may have a high p-value and may not be contributing much to the model. Can you write an R script that create the LR model, determines the p-value of all columns, and returns the set of columns that have a p-value of less than 0.05? Right now, the model has many columns (including indicator columns). I want to end with a set of columns that is significantly smaller, but can achieve a similar performance. That way, this model is more easily interpretable. 
+
+For indicator variables, even if one of the categories has a p-value of less than 0.05, then include the original categorical variable. Ensure that when you are rebuilding the model, you don't directly input the indicator variables, but instead, use the original column names.
+
+### Response
+```
+You're spot-on — simplifying your model while preserving performance improves both interpretability and generalization. Let’s build an R script that does exactly what you described.
+
+---
+
+### ✅ What This Script Does:
+1. Builds a full linear regression model with both numerical and categorical predictors.
+2. Extracts the **p-values** of all predictor terms.
+3. For categorical variables (with dummy variables), keeps the **original column** if **any of its levels** is significant (p < 0.05).
+4. Returns a **reduced set of predictors**.
+5. Builds a new regression model using only the reduced set.
+
+---
+
+### 📜 **R Script: Feature Selection Based on p-values**
+```
+```{r}
+# Load necessary libraries
+library(readr)
+library(dplyr)
+library(stringr)
+
+# Load the dataset
+df <- read_csv("amesHousing2011.csv")
+
+# Define columns
+numeric_cols <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", 
+                  "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", 
+                  "PoolArea", "YearBuilt", "Fireplaces")
+
+categorical_cols <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
+
+# Select and clean data
+selected_cols <- c(numeric_cols, categorical_cols, "SalePrice")
+model_data <- df %>%
+  select(all_of(selected_cols)) %>%
+  na.omit()
+
+# Convert categorical variables to factors
+model_data[categorical_cols] <- lapply(model_data[categorical_cols], factor)
+
+# Create full model formula
+full_formula <- as.formula(paste("SalePrice ~", paste(c(numeric_cols, categorical_cols), collapse = " + ")))
+
+# Fit full model
+full_model <- lm(full_formula, data = model_data)
+
+# Extract summary
+model_summary <- summary(full_model)
+
+# Extract term names and p-values
+coefs <- coef(model_summary)
+p_values <- coefs[, "Pr(>|t|)"]
+term_names <- names(p_values)
+
+# Determine which terms have p-value < 0.05
+significant_terms <- term_names[p_values < 0.05]
+
+# Map indicator variables back to original categorical columns
+sig_numeric <- intersect(numeric_cols, significant_terms)
+
+sig_categorical <- categorical_cols[sapply(categorical_cols, function(cat_col) {
+  any(str_detect(significant_terms, fixed(cat_col)))
+})]
+
+# Combine reduced set of predictors
+reduced_predictors <- c(sig_numeric, sig_categorical)
+
+# Print the reduced set
+cat("✅ Reduced set of predictors (p < 0.05):\n")
+print(reduced_predictors)
+
+# Rebuild reduced model
+reduced_formula <- as.formula(paste("SalePrice ~", paste(reduced_predictors, collapse = " + ")))
+reduced_model <- lm(reduced_formula, data = model_data)
+
+# Show summary of the reduced model
+cat("\n📉 Summary of reduced model:\n")
+summary(reduced_model)
+```
+```
+---
+
+### 🧠 Why This Is Good:
+- Keeps your model **interpretable**.
+- Avoids manually inspecting dozens of dummy variables.
+- Uses **statistical significance (p < 0.05)** as a filter.
+- Easily extendable for interaction terms or stepwise modeling later.
+
+---
+
+Let me know if you'd like to also compare the performance (like R² or RMSE) of the reduced vs full model, or visualize residuals!
+```
+
+## Prompt
+
+I would like to further simplify the model. Can you modify the previous script such that it sorts the columns by p-value and then returns the 5 columns with the least p-values?
+
+## Response
+
+```
+Absolutely! Here's an updated version of the previous script that:
+
+1. **Builds the full regression model**
+2. Extracts **p-values** for each predictor term
+3. Maps significant **indicator variables back to original columns**
+4. Sorts variables by **lowest p-value**
+5. Returns a set of the **top 5 predictors** based on lowest p-value
+6. Builds a reduced model using just those 5 predictors (categorical handled correctly)
+
+---
+
+### 📜 **R Script: Select Top 5 Predictors with Lowest p-values**
+```
+```{r}
+# Load required libraries
+library(readr)
+library(dplyr)
+library(stringr)
+
+# Load the dataset
+df <- read_csv("amesHousing2011.csv")
+
+# Define columns
+numeric_cols <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", 
+                  "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", 
+                  "PoolArea", "YearBuilt", "Fireplaces")
+
+categorical_cols <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
+
+# Select and clean data
+selected_cols <- c(numeric_cols, categorical_cols, "SalePrice")
+model_data <- df %>%
+  select(all_of(selected_cols)) %>%
+  na.omit()
+
+# Convert categorical variables to factors
+model_data[categorical_cols] <- lapply(model_data[categorical_cols], factor)
+
+# Build full model
+full_formula <- as.formula(paste("SalePrice ~", paste(c(numeric_cols, categorical_cols), collapse = " + ")))
+full_model <- lm(full_formula, data = model_data)
+model_summary <- summary(full_model)
+
+# Extract coefficients and p-values
+coefs <- coef(model_summary)
+p_values <- coefs[, "Pr(>|t|)"]
+term_names <- names(p_values)
+
+# Remove intercept
+term_names <- term_names[term_names != "(Intercept)"]
+p_values <- p_values[names(p_values) != "(Intercept)"]
+
+# Create a data frame of term and p-value
+pval_df <- data.frame(term = term_names, p_value = p_values, stringsAsFactors = FALSE)
+
+# Map indicator terms back to original variables
+map_to_original <- function(term) {
+  for (cat in categorical_cols) {
+    if (str_detect(term, fixed(cat))) return(cat)
+  }
+  return(term)
+}
+
+pval_df$original_var <- sapply(pval_df$term, map_to_original)
+
+# For each original variable, take the smallest p-value of its indicators
+reduced_df <- pval_df %>%
+  group_by(original_var) %>%
+  summarise(min_p = min(p_value)) %>%
+  arrange(min_p)
+
+# Select top 5 variables
+top5_vars <- head(reduced_df$original_var, 5)
+
+cat("🔍 Top 5 predictors by lowest p-value:\n")
+print(top5_vars)
+
+# Build reduced model
+reduced_formula <- as.formula(paste("SalePrice ~", paste(top5_vars, collapse = " + ")))
+reduced_model_5 <- lm(reduced_formula, data = model_data)
+
+cat("\n📉 Summary of reduced model with top 5 predictors:\n")
+summary(reduced_model_5)
+```
+```
+---
+
+### ✅ Output:
+- Prints the **5 most statistically significant predictors**
+- Builds and summarizes a reduced regression model with those 5 predictors
+
+---
+
+Let me know if you’d like to:
+- Compare model performance (e.g. R², RMSE)
+- Visualize residuals
+- Export the model or use it for predictions
+```
+
+## Analysis
+
+| Model | # Numerical Columns | # Categorical Columns | Multiple R-squared | Adjusted R-squared |
+|-------|---------------------|-----------------------|--------------------|--------------------|
+| Initial | 13 | 5 | 0.9003 | 0.8979 |
+| Refined | 10 | 4 | 0.8999 | 0.8977 |
+| Refined - 5 Columns | 4 | 1 | 0.8322 | 0.8317 |
+
+The refined model has a very comparable Adjusted R-squared performance compared to the initial model, while having 4 less columns. This demonstrates that more columns aren't always better, as they result in greater overhead and lower interpretability. The refined (more simple) model is able to achieve about the same performance with less columns. This demonstrates the power f using p-value to filter out unnecessary columns.
+
+However, if I limit the column count to 5 (keeping only the columns with the least p-values), then my performance suffers quite a bit, resulting in an Adjusted R-squared value of 0.8317. This demonstrates that there needs to be a balance between reducing the number of columns while capturing as much important information as possible.
+
+
+# Step three: Regression diagnostics
+
+I will now analyze the regression model that I created. To do so, I will create 4 diagnostic plots.
+
+```{r}
+plot(model)
+```
+
+# Step four: results
+
+$\langle$ replace this with your determination of the list of variables that determine sales price $\rangle$
+
+# Conclusion
+
+$\langle$ replace this with your reflections $\rangle$
