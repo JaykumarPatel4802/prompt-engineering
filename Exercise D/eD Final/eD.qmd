@@ -20,13 +20,13 @@ To get started, I prompt GPT-4o with what I am trying to do (statistical analysi
 
 ## Ask GPT-4o for Initial Ideas
 
-### Prompt:
+### Prompt
 
 I have the Ames Housing Dataset. I want to perform some analysis where I gather statistics and and graphics describing the individual variables (the columns) and the relationships between pairs of variables (the columns).
 
 Firstly, can I get ideas on what kind of analysis I can do? I have also attached a `amesHousing2011doc.txt` file, which provides descriptions of the columns and their values in the dataset.
 
-### Response:
+### Response
 
 ```
 Great! The Ames Housing dataset is very rich and well-suited for exploratory data analysis (EDA), regression modeling, and feature engineering. Given the wide mix of variable types (nominal, ordinal, discrete, continuous), you can explore it from multiple perspectives. Here are ideas for the kinds of analysis you can perform, split into **univariate**, **bivariate**, and **multivariate** analysis categories:
@@ -111,7 +111,7 @@ If you'd like, I can help generate specific visualizations or code for some of t
 
 First, I will determine which columns I should analyze, because not all columns are important in predicting the house price. I will do this using 2 approaches.
 
-### Approach 1:
+### Approach 1
 
 I will look at the `amesHousing2011doc.txt` and `amesHousing2011.csv` data manually to determine the important columns. I will also use my personal knowledge to determine which columns are useful.
 
@@ -127,11 +127,11 @@ The columns I determined to be useful are:
 - GarageArea - This number not only indirectly captures the number of cars that can fit in the garage, but also indicates potential storage space. I suspect that people like a large garage for that additional storage space. This could help indicate the price.
 - PoolArea - Houses that have pools are more expensive than those that don't. Thus, this could be useful in determining house price.
 
-### Approach 2:
+### Approach 2
 
 I will ask GPT-4o to determine which columns are important by passing it the `amesHousing2011doc.txt` and `amesHousing2011.csv` as context. I hope that this context helps GPT-4o determine which columns are important in determining house prices.
 
-#### Prompt:
+#### Prompt
 
 I have uploaded 2 files. One is `amesHousing2011.csv` which contains data about houses - along with their feature (columns) and price data. The other file is `amesHousing2011doc.txt` which provides descriptions for each of the columns.
 
@@ -139,7 +139,7 @@ I want to create a regression model to predict house prices given a set of featu
 
 Give your response in a bulleted list and keep your descriptions concise.
 
-#### Response:
+#### Response
 
 ```
 Here are **10 important features** selected from the Ames Housing dataset, along with **brief explanations** for why they are useful in predicting house prices:
@@ -177,19 +177,23 @@ Here are **10 important features** selected from the Ames Housing dataset, along
 Let me know if you'd like help preprocessing these features or building the model!
 ```
 
-### Combining Approach 1 and Approach 2:
+### Combining Approach 1 and Approach 2
 
-When I combine the set of columns from Approach 1 and Approach 2 (by taking the union), I get these columns: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, `OverallQual`, `OverallCond`, `KitchenQual`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, `Fireplaces`
+When I combine the set of columns from Approach 1 and Approach 2 (by taking the union), I get these columns: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, `OverallQual`, `OverallCond`, `KitchenQual`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, `Fireplaces`.
+
+I will remove the column `Fireplaces` since it isn't typically a priority for homeowners (from personal experience, which may be biased). I will also remove `OverallQual` since I believe that `OverallCond` may capture similar quality/condition information. Additionally, I will remove `LotArea` as I believe the living area square feet of the actual building, captured by `GrLivArea` and `TotalBsmtSF`, are more important. Finally, I will remove `GarageCars` as `GarageArea` indirectly captures how many cars can fit in it.
+
+Thus, the final list of columns is: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, `OverallCond`, `KitchenQual`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `PoolArea`, `YearBuilt`.
 
 ### Determine Numerical and Categorical Columns
 
 Firstly, I will determine which columns are Numerical and which are Categorical. I will do this by asking GPT-4o to write me a R script to do so.
 
-#### Prompt: 
+#### Prompt
 
 The `amesHousing2011.csv` file contains a database of house information, containing its features (columns) and prices. Some columns contain numerical data and some contain categorical data. Can you write me an R script that takes a list of column names, and prints which columns contain numerical data and which contain categorical data?
 
-#### Response:
+#### Response
 
 ```
 Absolutely! Here's an R script that takes a list of column names and prints whether each column is **numerical** or **categorical**, based on the actual data types in the `amesHousing2011.csv` file.
@@ -208,20 +212,16 @@ selected_columns <- c(
   "Neighborhood",
   "BldgType",
   "HouseStyle",
-  "OverallQual",
   "OverallCond",
   "KitchenQual",
   "BedroomAbvGr",
   "HalfBath",
   "FullBath",
   "GarageArea",
-  "GarageCars",
   "GrLivArea",
   "TotalBsmtSF",
-  "LotArea",
   "PoolArea",
-  "YearBuilt",
-  "Fireplaces"
+  "YearBuilt"
 )
 
 # Check and print whether each selected column is numerical or categorical
@@ -250,7 +250,7 @@ for (col in selected_columns) {
 Let me know if you want to convert categorical columns to factors or preprocess them for modeling too!
 ```
 
-The numerical columns are: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`.
+The numerical columns are: `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `PoolArea`, and `YearBuilt`.
 
 The categorical columns are: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
 
@@ -258,7 +258,7 @@ The categorical columns are: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseSty
 
 ### Numerical Columns
 
-The numerical columns are: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`.
+The numerical columns are: `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `PoolArea`, and `YearBuilt`.
 
 #### Visualizing Distribution of Values
 
@@ -310,7 +310,7 @@ plot_distributions <- function(data, columns) {
 }
 
 # Example usage
-columns_to_plot <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces")
+columns_to_plot <- c("OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GrLivArea", "TotalBsmtSF", "PoolArea", "YearBuilt")
 plot_distributions(data, columns_to_plot)
 ```
 
@@ -324,16 +324,16 @@ Let me know if you want to arrange the plots in a grid layout or save them to fi
 
 #### Getting numerical metrics
 
-I'll now getting some statistical information of numerical columns, such as mean, median, and variance.
+I'll now getting some statistical information of numerical columns, such as mean, median, variance, and standard deviation.
 
 ##### Prompt
 
-The charts are a little hard to interpret. I would like some concrete numerical data. Can you write me R code that determines the mean, median, and variance of a column. I want to pass a list of columns, and get the results for all the columns. The dataset is in `amesHousing2011.csv` file.
+The charts are a little hard to interpret. I would like some concrete numerical data. Can you write me R code that determines the mean, median, variance, and standard deviation of a column. I want to pass a list of columns, and get the results for all the columns. The dataset is in `amesHousing2011.csv` file.
 
 ##### Response 
 
 ```
-Absolutely! Here's an R script that allows you to pass a **list of column names** and computes the **mean**, **median**, and **variance** for **each of them**, then outputs the results in a tidy table:
+Absolutely! Here's an R script that allows you to pass a **list of column names** and computes the **mean**, **median**, **variance**, and **standard deviation** for **each of them**, then outputs the results in a tidy table:
 ```
 
 ```{r}
@@ -346,7 +346,8 @@ library(tibble)  # for tidy output
 ames_data <- read_csv("amesHousing2011.csv")
 
 # Define the columns you want to analyze
-columns_to_analyze <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces")  # Change as needed
+columns_to_analyze <- c("OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", 
+                        "GarageArea", "GrLivArea", "TotalBsmtSF", "PoolArea", "YearBuilt")  # Change as needed
 
 # Function to compute summary stats for one column
 compute_stats <- function(df, col) {
@@ -355,7 +356,8 @@ compute_stats <- function(df, col) {
     Column = col,
     Mean = mean(data, na.rm = TRUE),
     Median = median(data, na.rm = TRUE),
-    Variance = var(data, na.rm = TRUE)
+    Variance = var(data, na.rm = TRUE),
+    Std_Dev = sd(data, na.rm = TRUE)
   )
 }
 
@@ -371,7 +373,7 @@ print(summary_table)
 ```
 ### ✅ How to use:
 - Modify the `columns_to_analyze` list to include the numeric columns you want.
-- This will give you a nice table with rows for each column and columns for Mean, Median, and Variance.
+- This will give you a nice table with rows for each column and columns for Mean, Median, Variance, and Standard Deviation.
 
 Let me know if you want to export the result to CSV or visualize it too!
 ```
@@ -450,7 +452,8 @@ compute_cv <- function(df, columns) {
 }
 
 # Columns to analyze
-columns_to_analyze <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces")
+columns_to_analyze <- c("OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", 
+                        "GarageArea", "GrLivArea", "TotalBsmtSF", "PoolArea", "YearBuilt")
 
 # Compute and print CV for each column
 cv_table <- compute_cv(df, columns_to_analyze)
@@ -543,7 +546,7 @@ Let me know if you want:
 
 #### Determine Mode for Each Column
 
-Statistics like mean, median, and variance cannot be calculated for categorical columns. However, we can calculate the mode, which will show which category appears the most for each column.
+Statistics like mean, median, variance, and standard deviation cannot be calculated for categorical columns. However, we can calculate the mode, which will show which category appears the most for each column.
 
 ##### Prompt
 
@@ -608,7 +611,7 @@ Now that I have analyzed the columns, I will analyze the columns in relation to 
 
 ### Numerical Columns
 
-The numerical columns are: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`.
+The numerical columns are: `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `PoolArea`, and `YearBuilt`.
 
 #### Determining Correlation Coefficient and Covariance
 
@@ -658,7 +661,7 @@ compute_correlation_matrix <- function(df, columns, method = "pearson") {
 
 # Example usage:
 df <- read_csv("amesHousing2011.csv")
-selected_columns <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", "PoolArea", "YearBuilt", "Fireplaces", "SalePrice")
+selected_columns <- c("OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GrLivArea", "TotalBsmtSF", "PoolArea", "YearBuilt", "SalePrice")
 cor_matrix <- compute_correlation_matrix(df, selected_columns)
 print(cor_matrix)
 ```
@@ -676,9 +679,9 @@ library(corrplot)
 corrplot(cor_matrix, method = "color", addCoef.col = "black", tl.cex = 0.8)
 ```
 
-The result above shows me that certain columns, such as `GarageCars` and `GarageArea` are very correlated. This may suggest that in the final regression model, only one columns, perhaps `GarageArea` needs to be included.
+The result above shows me that certain columns, such as `YearBuilt` and `OverallCond` are negatively correlated. This makes sense as older houses are typically in worse conditions. However, `GrLivArea` and `FullBath` are positively correlated. This also makes sense as houses that have a larger living area have more bathrooms.
 
-The results also show that `OverallQual` is highly correlated with `SalePrice`, which makes sense. This indicates that `OverallQual` may be a good variable in helping determining `SalePrice` in the regression model.
+The results also show that `GrLivArea` is highly correlated with `SalePrice`, which makes sense. Larger homes are typically more expensive. This indicates that `GrLivArea` may be a good variable in helping determining `SalePrice` in the regression model.
 
 #### Function to get variance and correlation information
 
@@ -743,7 +746,9 @@ plot_ggpairs_two_columns(df, "SalePrice", "GrLivArea")
 Let me know if you'd like to support **non-numeric (categorical)** columns or want a version that handles **more than 2 columns**!
 ```
 
-The `ggpairs` function is useful. For example, when comparing `SalePrice` and `GrLivArea`, we see that the correlation coefficient is `0.719` and the scatter plot shows that the 2 columns are positively correlated with each other. This can be used to determine the importance of `GrLivArea` in helping predict the `SalePrice`.
+The `ggpairs` function is useful. For example, when comparing `SalePrice` and `GrLivArea`, we see that the correlation coefficient is `0.719` (similar to what we saw in the heatmap) and the scatter plot shows that the 2 columns are positively correlated with each other. This can be used to determine the importance of `GrLivArea` in helping predict the `SalePrice`.
+
+Any 2 columns can be compared by changing the column names passed to the `plot_ggpairs_two_columns()` function.
 
 ### Categorial Columns
 
@@ -826,15 +831,13 @@ Now that I have analyzed the numerical columns and categorical columns using uni
 
 ### Prompt
 
-Here are the numerical columns of interest: `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GarageCars`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `PoolArea`, `YearBuilt`, and `Fireplaces`. Here are the categorical columns of interest: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
+Here are the numerical columns of interest: `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `PoolArea`, and `YearBuilt`. Here are the categorical columns of interest: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
 
 I know that not all of the columns are important in helping determine the target `SalePrice`. I want you to write a R script that helps me make inferences about the determinants of the sale price of a house. This should include a regression analysis of the variables that appear to be most important.
 
 You should use the `lm()` function in R to form a regression model.
 
 Remember to account for the fact that some columns are numerical and some are categorical. For the categorical columns, you should use indicator variables.
-
-$\langle$ replace this with your regression analysis  $\rangle$.
 
 The output of the R script should show the regression summary.
 
@@ -861,9 +864,7 @@ library(dplyr)
 df <- read_csv("amesHousing2011.csv")
 
 # Define numerical and categorical columns of interest
-numerical_columns <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath",
-                       "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea",
-                       "PoolArea", "YearBuilt", "Fireplaces")
+numerical_columns <- c("OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GrLivArea", "TotalBsmtSF", "PoolArea", "YearBuilt")
 
 categorical_columns <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
 
@@ -905,9 +906,18 @@ summary(model)
 Let me know if you’d like help refining the model or creating diagnostic plots!
 ```
 
-## Refining Model
+### Recap
 
-GPT-4o suggested that predictors that have a high p-value may not be as useful. Thus, I will ask GPT-4o to write me a script that creates a linear regression model, filters out columns that have a high p-value, and returns the remaining columns
+The initial model `model` consists of the following columns:
+
+  - Numerical Columns: `OverallCond`, `BedroomAbvGr`, `HalfBath`, `FullBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `PoolArea`, and `YearBuilt`.
+  - Categorical Columns: `MSSubClass`, `Neighborhood`, `BldgType`, `HouseStyle`, and `KitchenQual`.
+  
+This model has an adjusted r-squared value of 0.8855.
+
+## Reduced Model
+
+GPT-4o suggested that predictors that have a high p-value may not be as useful. Thus, I will ask GPT-4o to write me a script that creates a linear regression model, filters out columns that have a high p-value, and returns the remaining columns. Specifically, I will ask it to keep columns that have a p-value of less than 0.05.
 
 ### Prompt
 
@@ -942,9 +952,7 @@ library(stringr)
 df <- read_csv("amesHousing2011.csv")
 
 # Define columns
-numeric_cols <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", 
-                  "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", 
-                  "PoolArea", "YearBuilt", "Fireplaces")
+numeric_cols <- c("OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GrLivArea", "TotalBsmtSF", "PoolArea", "YearBuilt")
 
 categorical_cols <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
 
@@ -1010,11 +1018,26 @@ summary(reduced_model)
 Let me know if you'd like to also compare the performance (like R² or RMSE) of the reduced vs full model, or visualize residuals!
 ```
 
-## Prompt
+### Recap
+
+The reduced model `reduced_model` consists of the following columns:
+
+  - Numerical Columns: `OverallCond`, `BedroomAbvGr`, `HalfBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, and `YearBuilt`.
+  - Categorical Columns: `MSSubClass`, `Neighborhood`, `HouseStyle`, and `KitchenQual`.
+  
+This model has an adjusted r-squared value of 0.8852.
+
+The performance of this model (`reduced_model`) is very similar to that of `model`.
+
+## Further Reduced Model
+
+I then further reduce the model by keeping the top 5 columns with the highest p-values. This will allow me to see if a simple model (with just 5 columns) can perform similarily with the `reduced_model`, in which the columns were chosen if they had a p-value of less than 0.05.
+
+### Prompt
 
 I would like to further simplify the model. Can you modify the previous script such that it sorts the columns by p-value and then returns the 5 columns with the least p-values?
 
-## Response
+### Response
 
 ```
 Absolutely! Here's an updated version of the previous script that:
@@ -1040,9 +1063,7 @@ library(stringr)
 df <- read_csv("amesHousing2011.csv")
 
 # Define columns
-numeric_cols <- c("OverallQual", "OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", 
-                  "GarageArea", "GarageCars", "GrLivArea", "TotalBsmtSF", "LotArea", 
-                  "PoolArea", "YearBuilt", "Fireplaces")
+numeric_cols <- c("OverallCond", "BedroomAbvGr", "HalfBath", "FullBath", "GarageArea", "GrLivArea", "TotalBsmtSF", "PoolArea", "YearBuilt")
 
 categorical_cols <- c("MSSubClass", "Neighborhood", "BldgType", "HouseStyle", "KitchenQual")
 
@@ -1116,17 +1137,28 @@ Let me know if you’d like to:
 - Export the model or use it for predictions
 ```
 
+### Recap
+
+The reduced model `reduced_model_5` consists of the following columns:
+
+  - Numerical Columns: `OverallCond`, `GrLivArea`, `TotalBsmtSF`, and `YearBuilt`.
+  - Categorical Columns: `KitchenQual`.
+  
+This model has an adjusted r-squared value of 0.8289.
+
+The performance of this model (`reduced_model_5`) is noticably lower than that of `reduced_model`.
+
 ## Analysis
 
 | Model | # Numerical Columns | # Categorical Columns | Multiple R-squared | Adjusted R-squared |
 |-------|---------------------|-----------------------|--------------------|--------------------|
-| Initial | 13 | 5 | 0.9003 | 0.8979 |
-| Refined | 10 | 4 | 0.8999 | 0.8977 |
-| Refined - 5 Columns | 4 | 1 | 0.8322 | 0.8317 |
+| Initial | 9 | 5 | 0.888 | 0.8855 |
+| Reduced (p < 0.05) | 7 | 4 | 0.8876 | 0.8852 |
+| Reduced to 5 Columns | 4 | 1 | 0.8293 | 0.8289 |
 
-The refined model has a very comparable Adjusted R-squared performance compared to the initial model, while having 4 less columns. This demonstrates that more columns aren't always better, as they result in greater overhead and lower interpretability. The refined (more simple) model is able to achieve about the same performance with less columns. This demonstrates the power f using p-value to filter out unnecessary columns.
+The `reduced_model` has a very comparable adjusted r-squared performance compared to the initial model (`model`), while having 3 less columns. This demonstrates that more columns aren't always better, as they result in greater overhead and lower interpretability. The reduced (and slightly more simple) model is able to achieve about the same performance with less columns. This demonstrates the power of using p-value to filter out unnecessary columns.
 
-However, if I limit the column count to 5 (keeping only the columns with the least p-values), then my performance suffers quite a bit, resulting in an Adjusted R-squared value of 0.8317. This demonstrates that there needs to be a balance between reducing the number of columns while capturing as much important information as possible.
+However, if I limit the column count to 5 (keeping only the columns with the lowest p-values), then my performance suffers quite a bit, resulting in an adjusted r-squared value of 0.8289. This demonstrates that there needs to be a balance between reducing the number of columns while capturing as much important information as possible.
 
 
 # Step three: Regression diagnostics
@@ -1235,21 +1267,81 @@ plot_residual_diagnostics(reduced_model)
 plot_residual_diagnostics(reduced_model_5)
 ```
 
-# Step four: results
+## Analysis of Plots
 
-Looking at the Residuals vs Fitted plots for the three models, `model` and `reduced_model` produce similar results, with residuals showing a fairly random spread around the horizontal line at 0—though there is a slight convex curvature. However, the plot for `reduced_model_5` shows a more pronounced convex pattern. This stronger curvature suggests a nonlinear relationship between the predictors (feature columns) and the response variable (`SalePrice`). Since linear regression assumes a linear relationship, such nonlinearity can lead to poorer model performance. This is supported by the notably lower adjusted R-squared value for `reduced_model_5` compared to both `model` and `reduced_model`.
+Firstly, I didn't have prior understanding of what Scale-Location and Residuals vs Leverage plots are, so I asked GPT-4o to help me understand them:
 
-Looking at the Q-Q Residuals plot for all models, most of the the residuals fall fairly close to the line. This suggess that the bulk of the residuals are approximately normally distributed. However, both the left and right tails deviate significantly from the line. This suggests the presence of outliers, which can impact inference accuracy. This problem can be mitigated by preprocessing the data by identifying and removing outliers.
+### Prompt
+
+Can you give me a concise understanding of Scale-Location plot and Residuals vs Leverage plot?
+
+### Response
+
+```
+Absolutely — here’s a **concise understanding** of both:
+
+---
+
+### 📊 **Scale-Location Plot (a.k.a. Spread-Location Plot)**
+
+- **X-axis:** Fitted values (predicted values from the model)  
+- **Y-axis:** Square root of standardized residuals  
+- **Purpose:** Checks if residuals have **equal spread** across all levels of predicted values  
+- **What you want to see:** A **horizontal line** with evenly spread points  
+- **Bad signs:**  
+  - **Fan shape** (points spread out as fitted values increase) → suggests **heteroscedasticity** (non-constant variance), which can lead to biased standard errors
+
+✅ **Good for checking assumption**: constant variance (homoscedasticity)
+
+---
+
+### 📈 **Residuals vs. Leverage Plot**
+
+- **X-axis:** Leverage (how far an observation’s values are from the mean of predictors)  
+- **Y-axis:** Studentized residuals  
+- **Purpose:** Identifies **influential observations**  
+- **What you want to see:** Most points close to center; no points in outer **Cook’s distance circles**  
+- **Bad signs:**  
+  - Points far to the right (high leverage) **and** far up/down (large residual) → may **distort your model**
+
+✅ **Good for identifying dangerous outliers** that affect model fit
+
+---
+
+### 🧠 In 1 sentence each:
+- **Scale-Location:** "Are the residuals spread out evenly across predicted values?"
+- **Residuals vs Leverage:** "Are there any data points that have an outsized influence on the model?"
+
+Let me know if you want examples or help reading one of your plots!
+```
+
+### Residuals vs Fitted Analysis
+
+Looking at the Residuals vs Fitted plots for the three models, `model` and `reduced_model` produce similar results, with residuals showing a fairly random spread around the horizontal line at 0 —- though there is a slight convex curvature. However, the plot for `reduced_model_5` shows a slightly more pronounced convex pattern. This stronger curvature suggests a nonlinear relationship between the predictors (feature columns) and the response variable (`SalePrice`). Since linear regression assumes a linear relationship, such nonlinearity can lead to poorer model performance. This is supported by the notably lower adjusted R-squared value for `reduced_model_5` compared to both `model` and `reduced_model`.
+
+### Q-Q Analysis
+
+Looking at the Q-Q Residuals plot for all models, most of the the residuals fall fairly close to the line. This suggests that the bulk of the residuals are approximately normally distributed. However, both the left and right tails deviate significantly from the line. This suggests the presence of outliers, which can impact inference accuracy. This problem can be mitigated by preprocessing the data by identifying and removing outliers.
+
+### Residuals vs Leverage Analysis
+
+This plot helps identify datapoints that have a abnormal influence on the model. Ideally, we'd want the points to be close to the center, and points far to the right or further up/down may distort the model. From the plots, we see that `model` and `reduced_model` have a very similar result, where most of the points are near the center with some spreading to the right and up/down. However, for the `reduced_model_5`, there appears to be a cluster of points further to the right and the points appear to be more horizontally spread out. THis shows that some residuals have a high influence on the model. This can result in a degradation of the model's performance. This is supported by the fact that `reduced_model_5` had a noticably lower adjusted r-squared value than `model` and `reduced_model`.
+
+### Histogram of Residuals Analysis
 
 Looking at the Histogram of Residuals for all models, the residuals are centered around 0, which is expected. The distribution is also symmetric and resembles the "bell-shape". Some of the tail bins have somewhat high frequency, which aligns with what we saw in the Q-Q Residuals.
 
+### Residuals vs Order Analysis
+
 Finally, looking at the Residuals vs Order plots, most of the residuals are randomly scattered around 0. However, residuals earlier in the observation order seem to have a higher variance in residual (wider spread around 0), whereas the residuals later in the observation order are more tightly spread around 0. This means that the models are making bigger mistakes earlier in the dataset compared to the end. An analysis into the dataset itself may provide explanations why this is the case. Maybe the data is noisier at the start, or the dataset has a non-random order, where certain types of houses (that the model struggles with) are grouped near the beginning. A deeper look into the structure and ordering of the dataset might help explain this behavior.
 
-Considering that `model` and `reduced_model` had very similar (almost same) adjusted r-squared value, and that `reduced_model_5` had a noticable lower adjusted r-squared value, I would select the featured (columns) used for the `reduced_model` as the final list of variables that best determine the sale price. These features are `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `YearBuilt`, `Fireplaces`, `MSSubClass`, `Neighborhood`, `HouseStyle`, and `KitchenQual`. This constitutes a total of 14 columns. These columns were selected because they had a p-value of less than 0.5 from the original set of columns. This is still a lot of columns; however, reducing it further to 5 columns results in a significant performance drop.
+# Step four: results
 
-It is interesting to note that even the `reduced_model_5`, which had the columns `GrLivArea`, `KitchenQual`, `TotalBsmtSF`, `OverallQual`, and `OverallCond`, had an adjusted r-squared value of `0.8317`, which is still better than the adjusted r-squared value of `0.703` from this [paper](https://jse.amstat.org/v19n3/decock.pdf) by Dean De Cock.
+Considering that `model` and `reduced_model` had very similar (almost same) adjusted r-squared value, and that `reduced_model_5` had a noticable lower adjusted r-squared value, I would select the featured (columns) used for the `reduced_model` as the final list of variables that best determine the sale price. These features are `OverallCond`, `BedroomAbvGr`, `HalfBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `YearBuilt`, `MSSubClass`, `Neighborhood`, `HouseStyle`, and `KitchenQual`. This constitutes a total of 11 columns. These columns were selected because they had a p-value of less than 0.05 from the original set of columns. This is still a lot of columns; however, reducing it further to 5 columns results in a significant performance drop.
 
-My final set of columns that best determine the sale price are `OverallQual`, `OverallCond`, `BedroomAbvGr`, `HalfBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `LotArea`, `YearBuilt`, `Fireplaces`, `MSSubClass`, `Neighborhood`, `HouseStyle`, and `KitchenQual`. If I had to reduce that set to 5 columns, then I would choose `GrLivArea`, `KitchenQual`, `TotalBsmtSF`, `OverallQual`, and `OverallCond`.
+It is interesting to note that even the `reduced_model_5`, which had the columns `OverallCond`,`GrLivArea`, `TotalBsmtSF`, `YearBuilt`, and `KitchenQual`, had an adjusted r-squared value of `0.8289`, which is still better than the adjusted r-squared value of `0.703` shown in Figure 5 of this [paper](https://jse.amstat.org/v19n3/decock.pdf) by Dean De Cock.
+
+My final set of columns that best determine the sale price are `OverallCond`, `BedroomAbvGr`, `HalfBath`, `GarageArea`, `GrLivArea`, `TotalBsmtSF`, `YearBuilt`, `MSSubClass`, `Neighborhood`, `HouseStyle`, and `KitchenQual`. If I had to reduce that set to 5 columns, then I would choose `OverallCond`,`GrLivArea`, `TotalBsmtSF`, `YearBuilt`, and `KitchenQual`.
 
 # Conclusion
 
@@ -1259,7 +1351,7 @@ I first determined which columns to explore, as not all columns are beneficial t
 
 Then, I used **univariate and bivariate analysis** to understand the distribution and relationships (such as correlation) between the features (columns) as well and the target variable, `SalePrice`. I examined both **numerical columns** (using histograms, boxplots, and correlation coefficients) and **categorical columns** (using distribution charts, cross-tabulations, and modes). This allowed me to build an intuitive understanding of the data and observe potential feature interactions.
 
-From there, I moved on to **regression modeling** to formally assess how each variable impacts sale price. I began with a comprehensive model that included 18 variables (13 numerical and 5 categorical), then systematically reduced the number of features using **p-values** to evaluate statistical significance. The final refined model, which used 14 features, achieved nearly the same adjusted r-squared value as the full model, demonstrating that many predictors were redundant or non-contributive. A smaller 5-variable model, while more interpretable, did show a performance drop, highlighting the need to balance simplicity and accuracy.
+From there, I moved on to **regression modeling** to formally assess how each variable impacts sale price. I began with a comprehensive model that included 14 variables (9 numerical and 5 categorical), then systematically reduced the number of features using **p-values** to evaluate statistical significance. The final refined model, which used 11 features, achieved nearly the same adjusted r-squared value as the model with all 14 features, demonstrating that many predictors were redundant or non-contributive. A smaller 5-variable model, while more interpretable, did show a performance drop, highlighting the need to balance simplicity and accuracy.
 
 The final diagnostics included **residual analysis** using Q-Q plots, histograms, and residuals vs. fitted/order plots. These diagnostics confirmed that while the models generally adhered to regression assumptions, there were signs of nonlinearity and outliers, particularly in the tails of the residual distributions. This pointed to potential improvements through data preprocessing or nonlinear modeling techniques.
 
@@ -1274,4 +1366,44 @@ A critical part of this project was leveraging **GPT-4o** to assist throughout t
 
 The LLM was not just a passive tool, it acted like a **real-time statistical consultant**, significantly accelerating my workflow and reducing time spent on boilerplate code. It also encouraged deeper reflection by suggesting alternative perspectives (such as cross-tabulations for categorial data and standardized variance to account for differences in units between columns), many of which I may not have initially considered.
 
-Overall, this project demonstrated the power of combining **human intuition and domain knowledge** with **LLM-assisted analysis**. I was able to build and refine a meaningful model, interpret results with statistical rigor, and gain deeper insights into how different housing features influence price—all while maintaining a strong degree of control and understanding throughout the process.
+Overall, this project demonstrated the power of combining **human intuition and domain knowledge** with **LLM-assisted analysis**. I was able to build and refine a meaningful model, interpret results with statistical rigor, and gain deeper insights into how different housing features influence price, all while maintaining a strong degree of control and understanding throughout the process.
+
+
+# Side
+
+The following is the performance of the model using the columns suggested by the professor. The variables were: `YearBuilt`, `GrLivArea`, `MSSubClass`, `Neighborhood`, `ExterQual`, `BsmtExposure`, and`KitchenQual`.
+
+```{r}
+# Load necessary libraries
+library(readr)
+library(dplyr)
+
+# Load the dataset
+df <- read_csv("amesHousing2011.csv")
+
+# Define numerical and categorical columns of interest
+numerical_columns <- c("GrLivArea", "YearBuilt")
+
+categorical_columns <- c("MSSubClass", "Neighborhood", "KitchenQual", "ExterQual", "BsmtExposure")
+
+# Convert categorical columns to factors
+df <- df %>%
+  mutate(across(all_of(categorical_columns), as.factor))
+
+# Select only relevant columns + SalePrice
+model_data <- df %>%
+  select(SalePrice, all_of(numerical_columns), all_of(categorical_columns)) %>%
+  na.omit()  # Remove rows with NA
+
+# Build the formula: SalePrice ~ all predictors
+formula_string <- paste("SalePrice ~", paste(c(numerical_columns, categorical_columns), collapse = " + "))
+regression_formula <- as.formula(formula_string)
+
+# Fit the regression model
+suggested_model <- lm(regression_formula, data = model_data)
+
+# Output the regression summary
+summary(model)
+```
+
+I created a `suggested_model` using the suggested columns by the professor. The adjusted r-squared value for `suggested_model` is `0.88`. This is slightly less than the values I got using my `model` ([initial model](#initial-model)) and `reduced_model` ([reduced model](#reduced-model)). However, it is still very comparable since the `suggested_model` consists of 7 columns and my `reduced_model` consists of 11 columns.
